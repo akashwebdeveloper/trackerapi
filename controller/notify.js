@@ -1,6 +1,7 @@
 require('dotenv').config()
 
-const GOOGLE_APPLICATION_CREDENTIALS = process.env.GOOGLE_APPLICATION_CREDENTIALS
+const path = require('path');
+const GOOGLE_APPLICATION_CREDENTIALS = path.join(__dirname, '/firebasefile.json');
 const FIREBASE_SERVER_KEY = process.env.FIREBASE_SERVER_KEY
 var admin = require("firebase-admin");
 const request = require('request');
@@ -9,7 +10,6 @@ var serviceAccount = require(GOOGLE_APPLICATION_CREDENTIALS);
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 });
-
 
 module.exports = {
     oneUser: (req, res) => {

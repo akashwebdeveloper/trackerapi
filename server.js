@@ -35,7 +35,6 @@ app.use(bodyparser.json())
 // app.use(express.json())
 
 
-
 app.use('/', require('./routers/api'))
 
 app.listen(port, ()=> console.log(`Connected to port ${port}`))
