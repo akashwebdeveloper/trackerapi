@@ -8,12 +8,13 @@ const User = require('../../models/user')
 function init(client) {
     module.exports = {
         signup(req, res) {
-            const { type, fname, lname, username, dob, countrycode, phone, email, gender, weight, height, token } = req.body
+            const { type, fname, lname, username, dob, countrycode, phone, email, gender, weight, height, token, photos } = req.body
 
             User.findOne({ $or: [ { phone: phone }, { email: email } ] }, (err, users) => {
                 if (err) {
                     return res.status(502).json({
                         success: "0",
+                        status:502,
                         messsage: "err from database"
                     })
                 }
@@ -21,6 +22,7 @@ function init(client) {
                 if (users) {
                     return res.status(403).json({
                         success: "0",
+                        status:403,
                         messsage: "user Already exist",
                         user: users
                     })
@@ -33,6 +35,7 @@ function init(client) {
                     dob: dob|| "",
                     gender: gender|| "",
                     email: email || "",
+                    photos: photos || "",
                     weight: weight|| "",
                     height: height|| "",
                     countrycode: countrycode|| "",
@@ -44,12 +47,14 @@ function init(client) {
                     // login
                     return res.status(200).json({
                         success: 1,
+                        status: 200,
                         message: "verfied data save in to database",
                         data: user,
                     })
                 }).catch(err => {
                     return res.status(503).json({
                         success: 0,
+                        status: 503,
                         message: "err from database",
                         err
                     })
@@ -70,12 +75,12 @@ function init(client) {
                 .then((data) => {
                     res.status(200).json({
                         message: "go to url and enter otp",
-                        url: `http://localhost:5000/verify/`
+                        status: 200
                     })
                 }).catch((err) => {
                     res.status(503).json({
                         message: "please Enter correct country code/ mobile number",
-                        url: `http://localhost:5000/phone/`,
+                        status: 503,
                         err
                     })
                 })
@@ -87,7 +92,7 @@ function init(client) {
             if (!code) {
                 res.status(400).json({
                     message: "can't go ahead without enter correct code",
-                    url: `http://localhost:5000/verify/`
+                    status: 400,
                 })
             }
             client
@@ -111,6 +116,7 @@ function init(client) {
                                 if (err) {
                                     return res.status(502).json({
                                         success: "0",
+                                        status: 502,
                                         messsage: "err from database"
                                     })
                                 }
@@ -118,6 +124,7 @@ function init(client) {
                                 if (user) {
                                     return res.status(200).json({
                                         success: "1",
+                                        status: 200,
                                         messsage: "Number verified successfully",
                                         userdata: user,
                                         token
@@ -125,18 +132,18 @@ function init(client) {
                                 } else {
                                     return res.status(200).json({
                                         success: 1,
+                                        status: 200,
                                         message: "Number verified successfully Now Create Account",
                                         countryCode: country,
-                                        phone,
-                                        url: `http://localhost:5000/signup/`
+                                        phone
                                     })
                                 }
                             })
                         });
                 }).catch((err) => {
                     res.status(500).json({
-                        message: "Code is wrong please Enter again",
-                        url: `http://localhost:5000/verify/`
+                        status: 500,
+                        message: "Code is wrong please Enter again"
                     })
                 })
         }
