@@ -64,6 +64,7 @@ function init(client) {
         phone(req, res) {
             const { phone, country } = req.query
 
+            console.log(phone, country)
             client
                 .verify
                 .services(serviceID)
