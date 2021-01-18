@@ -10,11 +10,11 @@ function init(client) {
         signup(req, res) {
             const { type, fname, lname, username, dob, countrycode, phone, email, gender, weight, height, token, photos } = req.body
 
-            User.findOne({ $or: [ { phone: phone }, { email: email } ] }, (err, users) => {
+            User.findOne({ $or: [{ phone: phone }, { email: email }] }, (err, users) => {
                 if (err) {
                     return res.status(502).json({
                         success: "0",
-                        status:502,
+                        status: 502,
                         messsage: "err from database"
                     })
                 }
@@ -22,25 +22,25 @@ function init(client) {
                 if (users) {
                     return res.status(403).json({
                         success: "0",
-                        status:403,
+                        status: 403,
                         messsage: "user Already exist",
                         user: users
                     })
                 }
                 const user = new User({
-                    type: type|| "",
-                    fname: fname|| "",
-                    lname: lname|| "",
-                    username: username|| "",
-                    dob: dob|| "",
-                    gender: gender|| "",
+                    type: type || "",
+                    fname: fname || "",
+                    lname: lname || "",
+                    username: username || "",
+                    dob: dob || "",
+                    gender: gender || "",
                     email: email || "",
                     photos: photos || "",
-                    weight: weight|| "",
-                    height: height|| "",
-                    countrycode: countrycode|| "",
-                    phone: phone|| "",
-                    token: token|| "",
+                    weight: weight || "",
+                    height: height || "",
+                    countrycode: countrycode || "",
+                    phone: phone || "",
+                    token: token || "",
                 })
                 // New User Save to database
                 user.save().then(user => {
@@ -64,13 +64,13 @@ function init(client) {
         phone(req, res) {
             const { phone, country } = req.query
 
-            console.log(phone, country)
+            console.log(`+${country}${phone}`)
             client
                 .verify
                 .services(serviceID)
                 .verifications
                 .create({
-                    to: `+${country}${phone}`,
+                    to: `${country}${phone}`,
                     channel: "sms"
                 })
                 .then((data) => {
@@ -90,7 +90,7 @@ function init(client) {
 
             const { phone, country, code } = req.query
 
-            if (!code) {
+            if (!code || code.length != '6') {
                 res.status(400).json({
                     message: "can't go ahead without enter correct code",
                     status: 400,
@@ -101,51 +101,67 @@ function init(client) {
                 .services(serviceID)
                 .verificationChecks
                 .create({
-                    to: `+${country}${phone}`,
+                    to: `${country}${phone}`,
                     code: code
                 })
-                .then((data) => {
+                .then(verification_check => {
+                    if (verification_check.status === 'pending') {
+                        return res.status(500).json({
+                            status: 500,
+                            message: "Code is wrong please Enter again"
+                        })
+                    }
+                    // // genrate Token
+                    // client.verify.services(serviceID)
+                    //     .accessTokens
+                    //     .create({ identity: 'identity', factorType: 'push' })
+                    //     .then(access_token => {
+                    //         const token = access_token.token
+                    //         // console.log(access_token.token)
+                    //         User.findOne({ phone: phone }, (err, user) => {
+                    //             if (err) {
+                    //                 return res.status(502).json({
+                    //                     success: "0",
+                    //                     status: 502,
+                    //                     messsage: "err from database"
+                    //                 })
+                    //             }
 
-                    // genrate Token
-                    client.verify.services(serviceID)
-                        .accessTokens
-                        .create({ identity: 'identity', factorType: 'push' })
-                        .then(access_token => {
-                            const token = access_token.token
-                            // console.log(access_token.token)
-                            User.findOne({ phone: phone }, (err, user) => {
-                                if (err) {
-                                    return res.status(502).json({
-                                        success: "0",
-                                        status: 502,
-                                        messsage: "err from database"
-                                    })
-                                }
-
-                                if (user) {
-                                    return res.status(200).json({
-                                        success: "1",
-                                        status: 200,
-                                        messsage: "Number verified successfully",
-                                        userdata: user,
-                                        token
-                                    })
-                                } else {
-                                    return res.status(200).json({
-                                        success: 1,
-                                        status: 200,
-                                        message: "Number verified successfully Now Create Account",
-                                        countryCode: country,
-                                        phone
-                                    })
-                                }
-                            })
-                        });
-                }).catch((err) => {
-                    res.status(500).json({
-                        status: 500,
-                        message: "Code is wrong please Enter again"
-                    })
+                    //             if (user) {
+                    //                 return res.status(200).json({
+                    //                     success: "1",
+                    //                     status: 200,
+                    //                     messsage: "Number verified successfully",
+                    //                     userdata: user,
+                    //                     token
+                    //                 })
+                    //             } else {
+                    //                 return res.status(200).json({
+                    //                     success: 1,
+                    //                     status: 200,
+                    //                     message: "Number verified successfully Now Create Account",
+                    //                     countryCode: country,
+                    //                     phone
+                    //                 })
+                    //             }
+                    //         })
+                    //     });
+                    // console.log(data)
+                    // return res.status(200).json({
+                    //     success: 1,
+                    //     status: 200,
+                    //     message: "Number verified successfully Now Create Account",
+                    //     countryCode: country,
+                    //     phone
+                    // })
+                    console.log(verification_check.status)
+                    res.status(200).json({
+                            success: 1,
+                            status: 200,
+                            message: "Number verified successfully Now Create Account",
+                            countryCode: country,
+                            phone
+                        })
                 })
         }
 
