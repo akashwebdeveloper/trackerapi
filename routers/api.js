@@ -6,14 +6,16 @@ const { getdata } = require('../controller/users/users')
 
 
 
-
+// Phone OTP verification
 router.get('/phone/', phone)
 router.get('/verify/', verify)
+
+// Insert data inti database
 router.post('/signup', signup)
 
+router.post('/getinfo', getdata)
 
 router.post('/oneuser', oneUser)
-router.post('/getinfo', getdata)
 // router.post('/multiuser', multiUser)
 
 
