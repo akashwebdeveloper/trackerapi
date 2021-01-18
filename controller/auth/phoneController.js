@@ -90,7 +90,7 @@ function init(client) {
 
             const { phone, country, code } = req.query
 
-            if (!code || code.length != '6') {
+            if (!code || code.length != '4') {
                 res.status(400).json({
                     message: "can't go ahead without enter correct code",
                     status: 400,
