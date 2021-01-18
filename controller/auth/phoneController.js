@@ -75,7 +75,7 @@ function init(client) {
                 })
                 .then((data) => {
                     res.status(200).json({
-                        message: "go to url and enter otp",
+                        message: "please check your mobile Number for otp verification",
                         status: 200
                     })
                 }).catch((err) => {
@@ -92,7 +92,7 @@ function init(client) {
 
             if (!code || code.length != '4') {
                 res.status(400).json({
-                    message: "can't go ahead without enter correct code",
+                    message: "can't go ahead without enter correct OTP and OTP should four digit",
                     status: 400,
                 })
             }

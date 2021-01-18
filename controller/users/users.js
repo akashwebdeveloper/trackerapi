@@ -11,7 +11,7 @@ module.exports = {
                 return res.status(502).json({
                     success: "0",
                     status: 502,
-                    messsage: "err from database"
+                    message: "err from database"
                 })
             }
 
@@ -19,14 +19,14 @@ module.exports = {
                 return res.status(403).json({
                     success: "0",
                     status: 403,
-                    messsage: "user doesn't exist"
+                    message: "user doesn't exist"
                 })
             }
 
             res.status(200).json({
-                success: "0",
+                success: "1",
                 status: 200,
-                messsage: "user Details are here",
+                message: "user data Available",
                 user: users
             })
         })
