@@ -70,7 +70,7 @@ function init(client) {
                 .services(serviceID)
                 .verifications
                 .create({
-                    to: `${country}${phone}`,
+                    to: `+${country}${phone}`,
                     channel: "sms"
                 })
                 .then((data) => {
