@@ -15,15 +15,14 @@ module.exports = {
                 })
             }
 
-            if (!users) {
+            if (!users[0]) {
                 return res.status(403).json({
                     success: "0",
                     status: 403,
                     message: "user doesn't exist"
                 })
             }
-
-            res.status(200).json({
+            return res.status(200).json({
                 success: "1",
                 status: 200,
                 message: "user data Available",
