@@ -9,7 +9,7 @@ module.exports = {
         User.find({ $or: [{ _id: id }, { email: email }] }, (err, users) => {
             if (err) {
                 return res.status(502).json({
-                    success: "0",
+                    success: false,
                     status: 502,
                     message: "err from database"
                 })
@@ -17,13 +17,13 @@ module.exports = {
 
             if (!users[0]) {
                 return res.status(403).json({
-                    success: "0",
+                    success: false,
                     status: 403,
                     message: "user doesn't exist"
                 })
             }
             return res.status(200).json({
-                success: "1",
+                success: true,
                 status: 200,
                 message: "user data Available",
                 user: users

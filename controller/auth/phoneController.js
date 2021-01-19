@@ -13,7 +13,7 @@ function init(client) {
             User.findOne({ $or: [{ phone: phone }, { email: email }] }, (err, users) => {
                 if (err) {
                     return res.status(502).json({
-                        success: "0",
+                        success: false,
                         status: 502,
                         messsage: "err from database"
                     })
@@ -21,7 +21,7 @@ function init(client) {
 
                 if (users) {
                     return res.status(403).json({
-                        success: "0",
+                        success: false,
                         status: 403,
                         messsage: "user Already exist",
                         user: users
@@ -121,7 +121,7 @@ function init(client) {
                     //         User.findOne({ phone: phone }, (err, user) => {
                     //             if (err) {
                     //                 return res.status(502).json({
-                    //                     success: "0",
+                    //                     success: false,
                     //                     status: 502,
                     //                     messsage: "err from database"
                     //                 })
@@ -129,7 +129,7 @@ function init(client) {
 
                     //             if (user) {
                     //                 return res.status(200).json({
-                    //                     success: "1",
+                    //                     success: true,
                     //                     status: 200,
                     //                     messsage: "Number verified successfully",
                     //                     userdata: user,
