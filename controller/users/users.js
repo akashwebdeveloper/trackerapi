@@ -16,9 +16,9 @@ module.exports = {
             }
 
             if (!users[0]) {
-                return res.status(403).json({
+                return res.status(201).json({
                     success: false,
-                    status: 403,
+                    status: 201,
                     message: "user doesn't exist"
                 })
             }

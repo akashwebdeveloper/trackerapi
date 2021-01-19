@@ -75,11 +75,13 @@ function init(client) {
                 })
                 .then((data) => {
                     res.status(200).json({
+                        success: true,
                         message: "please check your mobile Number for otp verification",
                         status: 200
                     })
                 }).catch((err) => {
                     res.status(503).json({
+                        success: false,
                         message: "please Enter correct country code/ mobile number",
                         status: 503,
                         err
@@ -91,7 +93,7 @@ function init(client) {
             const { phone, country, code } = req.query
 
             if (!code || code.length != '4') {
-                res.status(400).json({
+               return res.status(400).json({
                     message: "can't go ahead without enter correct OTP and OTP should four digit",
                     status: 400,
                 })
@@ -101,12 +103,13 @@ function init(client) {
                 .services(serviceID)
                 .verificationChecks
                 .create({
-                    to: `${country}${phone}`,
+                    to: `+${country}${phone}`,
                     code: code
                 })
                 .then(verification_check => {
                     if (verification_check.status === 'pending') {
                         return res.status(500).json({
+                            success: false,
                             status: 500,
                             message: "Code is wrong please Enter again"
                         })
@@ -155,13 +158,20 @@ function init(client) {
                     //     phone
                     // })
                     console.log(verification_check.status)
-                    res.status(200).json({
-                            success: 1,
+                    return res.status(200).json({
+                            success: true,
                             status: 200,
                             message: "Number verified successfully Now Create Account",
                             countryCode: country,
                             phone
                         })
+                }).catch((err) => {
+                    res.status(503).json({
+                        success: false,
+                        message: "wrong OTP please enter correct OTP",
+                        status: 503,
+                        err
+                    })
                 })
         }
 
