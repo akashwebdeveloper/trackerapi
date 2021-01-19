@@ -10,7 +10,8 @@ function init(client) {
         signup(req, res) {
             const { type, fname, lname, username, dob, countrycode, phone, email, gender, weight, height, token, photos } = req.body
 
-            User.findOne({ $or: [{ phone: phone }, { email: email }] }, (err, users) => {
+            // User.findOne({ $or: [{ phone: phone }, { email: email }] }, (err, users) => {
+            User.findOne( { email: email } , (err, users) => {
                 if (err) {
                     return res.status(502).json({
                         success: false,
@@ -20,9 +21,9 @@ function init(client) {
                 }
 
                 if (users) {
-                    return res.status(403).json({
+                    return res.status(202).json({
                         success: false,
-                        status: 403,
+                        status: 202,
                         messsage: "user Already exist",
                         user: users
                     })
