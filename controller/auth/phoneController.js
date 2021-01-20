@@ -50,7 +50,7 @@ function init(client) {
                         success: 1,
                         status: 200,
                         message: "verfied data save in to database",
-                        user,
+                        user: [user],
                     })
                 }).catch(err => {
                     return res.status(503).json({
