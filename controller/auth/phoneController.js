@@ -16,7 +16,7 @@ function init(client) {
                     return res.status(502).json({
                         success: false,
                         status: 502,
-                        messsage: "err from database"
+                        message: "err from database"
                     })
                 }
 
@@ -24,7 +24,7 @@ function init(client) {
                     return res.status(202).json({
                         success: false,
                         status: 202,
-                        messsage: "user Already exist",
+                        message: "user Already exist",
                         user: [users]
                     })
                 }
