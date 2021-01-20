@@ -9,7 +9,7 @@ module.exports = {
         if (id.length == '24') {
             var ID = req.body.id
         }
-        const EMAIL = req.body.id
+        var EMAIL = req.body.id
         User.find({ $or: [{ _id: ID }, { email: EMAIL }] }, (err, users) => {
             if (err) {
                 return res.status(502).json({
