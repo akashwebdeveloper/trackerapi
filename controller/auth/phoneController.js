@@ -25,7 +25,7 @@ function init(client) {
                         success: false,
                         status: 202,
                         messsage: "user Already exist",
-                        user: users
+                        user: [users]
                     })
                 }
                 const user = new User({
