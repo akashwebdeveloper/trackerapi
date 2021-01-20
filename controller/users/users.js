@@ -4,9 +4,13 @@ const User = require('../../models/user')
 
 module.exports = {
     getdata: (req, res) => {
-        const { id, email } = req.body
+        const { id } = req.body
 
-        User.find({ $or: [{ _id: id }, { email: email }] }, (err, users) => {
+        if (id.length == '24') {
+            var ID = req.body.id
+        }
+        const EMAIL = req.body.id
+        User.find({ $or: [{ _id: ID }, { email: EMAIL }] }, (err, users) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
