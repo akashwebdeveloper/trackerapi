@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { signup, phone, verify } = require('../controller/auth/phoneController')
+const { signup, phone, verify, register } = require('../controller/auth/phoneController')
 
 const { oneUser, multiUser } = require('../controller/notify')
 const { getdata } = require('../controller/users/users')
@@ -17,6 +17,11 @@ router.post('/getinfo', getdata)
 
 router.post('/oneuser', oneUser)
 // router.post('/multiuser', multiUser)
+
+
+router.post('/register', register)
+
+
 
 
 

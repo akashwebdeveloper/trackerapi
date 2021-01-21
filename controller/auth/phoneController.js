@@ -11,7 +11,7 @@ function init(client) {
             const { type, fname, lname, username, dob, countrycode, phone, email, gender, weight, height, token, photos } = req.body
 
             // User.findOne({ $or: [{ phone: phone }, { email: email }] }, (err, users) => {
-            User.findOne( { email: email } , (err, users) => {
+            User.findOne({ email: email }, (err, users) => {
                 if (err) {
                     return res.status(502).json({
                         success: false,
@@ -62,6 +62,54 @@ function init(client) {
                 })
             })
         },
+        register(req, res) {
+            const { countryCode, phone } = req.body
+
+            // User.findOne({ $or: [{ phone: phone }, { email: email }] }, (err, users) => {
+            User.findOne({ phone: phone }, (err, users) => {
+                if (err) {
+                    return res.status(502).json({
+                        success: false,
+                        status: 502,
+                        message: "err from database"
+                    })
+                }
+
+                if (users) {
+                    client
+                        .verify
+                        .services(serviceID)
+                        .verifications
+                        .create({
+                            to: `+${countryCode}${phone}`,
+                            channel: "sms"
+                        })
+                        .then((data) => {
+                            return res.status(200).json({
+                                success: true,
+                                message: "please check your mobile Number for otp verification",
+                                status: 200,
+                                user: [users]
+                            })
+                        }).catch((err) => {
+                            res.status(503).json({
+                                success: false,
+                                message: "please Enter correct country code/ mobile number",
+                                status: 503,
+                                err
+                            })
+                        })
+
+                } else {
+                    return res.status(202).json({
+                        success: true,
+                        status: 202,
+                        message: "Mobile number is not registered",
+                    })
+                } 
+                
+            })
+        },
         phone(req, res) {
             const { phone, country } = req.query
 
@@ -94,7 +142,7 @@ function init(client) {
             const { phone, country, code } = req.query
 
             if (!code || code.length != '4') {
-               return res.status(400).json({
+                return res.status(400).json({
                     message: "can't go ahead without enter correct OTP and OTP should four digit",
                     status: 400,
                 })
@@ -160,12 +208,12 @@ function init(client) {
                     // })
                     console.log(verification_check.status)
                     return res.status(200).json({
-                            success: true,
-                            status: 200,
-                            message: "Number verified successfully Now Create Account",
-                            countryCode: country,
-                            phone
-                        })
+                        success: true,
+                        status: 200,
+                        message: "Number verified successfully Now Create Account",
+                        countryCode: country,
+                        phone
+                    })
                 }).catch((err) => {
                     res.status(503).json({
                         success: false,
