@@ -213,10 +213,10 @@ function init(client) {
                         phone
                     })
                 }).catch((err) => {
-                    res.status(503).json({
+                    res.status(202).json({
                         success: false,
                         message: "wrong OTP please enter correct OTP",
-                        status: 503,
+                        status: 202,
                         err
                     })
                 })
