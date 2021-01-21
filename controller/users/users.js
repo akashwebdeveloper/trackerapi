@@ -6,10 +6,13 @@ module.exports = {
     getdata: (req, res) => {
         const { id } = req.body
 
-        if (id.length == '24') {
+        if (id.substr(id.length - 3) == 'com') {
+            var EMAIL = req.body.id
+        }else if (id.substr(id.length - 2) == 'in') {
+            var EMAIL = req.body.id
+        }else {
             var ID = req.body.id
         }
-        var EMAIL = req.body.id
         User.find({ $or: [{ _id: ID }, { email: EMAIL }] }, (err, users) => {
             if (err) {
                 return res.status(502).json({
