@@ -99,15 +99,13 @@ function init(client) {
                                 err
                             })
                         })
-
                 } else {
                     return res.status(202).json({
                         success: true,
                         status: 202,
                         message: "Mobile number is not registered",
                     })
-                } 
-                
+                }
             })
         },
         phone(req, res) {

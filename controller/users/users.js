@@ -6,7 +6,9 @@ module.exports = {
     getdata: (req, res) => {
         const { id } = req.body
 
-        if (id.substr(id.length - 3) == 'com' || '.in') {
+        if (id.substr(id.length - 3) == 'com') {
+            var EMAIL = req.body.id
+        }else if (id.substr(id.length - 2) == 'in') {
             var EMAIL = req.body.id
         }else {
             var ID = req.body.id

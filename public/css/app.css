@@ -1,0 +1,23 @@
+
+input[type=email].new {
+    border: 2px solid white;
+   border-bottom: 2px solid #326fbf6e;
+   border-radius: 10px;
+}
+input[type=email].new:focus {
+   border: 2px solid white;
+   border-bottom: 2px solid #326fbf; 
+   outline: none !important;
+   box-shadow: none;
+}
+input[type=password].new {
+    border: 2px solid white;
+   border-bottom: 2px solid #326fbf6e;
+   border-radius: 10px;
+}
+input[type=password].new:focus {
+   border: 2px solid white;
+   border-bottom: 2px solid #326fbf; 
+   outline: none !important;
+   box-shadow: none;
+}
