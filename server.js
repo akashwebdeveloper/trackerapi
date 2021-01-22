@@ -29,13 +29,15 @@ const twilioInit = require('./controller/auth/phoneController')
 twilioInit(client)
 
 
+
 // Body parser middleware
 app.use(bodyparser.urlencoded({extended: false}))
 app.use(bodyparser.json())
 
 
 // // Assets
-app.use(express.static('public'))
+app.use('/profilephoto', express.static('profilephoto'));
+app.use(express.static('public'));
 // app.use(express.urlencoded({ extended: false }))
 // app.use(express.json())
 
