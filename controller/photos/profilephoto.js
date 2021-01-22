@@ -68,7 +68,7 @@ module.exports = {
                             success: true,
                             status: 200,
                             message: "Created product successfully",
-                            photourl: `http://localhost:5000/${docs.photos}`
+                            photourl: `http://3.140.194.252/${docs.photos}`
                         });
                     }
                 })
