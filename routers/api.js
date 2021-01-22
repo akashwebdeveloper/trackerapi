@@ -28,8 +28,6 @@ router.post('/update', update)
 
 // Update user data
 router.post('/updatephoto', upload.single('photos'), updatephoto)
-// getting photo by id
-// router.post('/', upload.single('photos'), updatephoto)
 
 
 
