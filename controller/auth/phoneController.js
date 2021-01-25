@@ -220,6 +220,51 @@ function init(client) {
                         err
                     })
                 })
+        },
+        register1(req, res) {
+            const { countryCode, phone } = req.body
+
+            // User.findOne({ $or: [{ phone: phone }, { email: email }] }, (err, users) => {
+            User.findOne({ phone: phone }, (err, users) => {
+                if (err) {
+                    return res.status(502).json({
+                        success: false,
+                        status: 502,
+                        message: "err from database"
+                    })
+                }
+
+                if (users) {
+                    client
+                        .verify
+                        .services(serviceID)
+                        .verifications
+                        .create({
+                            to: `+${countryCode}${phone}`,
+                            channel: "sms"
+                        })
+                        .then((data) => {
+                            return res.status(200).json({
+                                success: true,
+                                message: "please check your mobile Number for otp verification",
+                                status: 200
+                            })
+                        }).catch((err) => {
+                            res.status(503).json({
+                                success: false,
+                                message: "please Enter correct country code/ mobile number",
+                                status: 503,
+                                err
+                            })
+                        })
+                } else {
+                    return res.status(202).json({
+                        success: true,
+                        status: 202,
+                        message: "Mobile number is not registered",
+                    })
+                }
+            })
         }
 
     }

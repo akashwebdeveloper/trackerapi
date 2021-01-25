@@ -1,11 +1,9 @@
 const router = require('express').Router();
-const { signup, phone, verify, register } = require('../controller/auth/phoneController')
+const { signup, phone, verify, register, register1 } = require('../controller/auth/phoneController')
 
 const { oneUser, multiUser } = require('../controller/notify')
 const { getdata, update} = require('../controller/users/users')
-const { updatephoto } = require('../controller/photos/profilephoto')
-
-const { upload } = require('../controller/photos/profilephoto')
+const { updatephoto, upload } = require('../controller/photos/profilephoto')
 
 // Phone OTP verification
 router.get('/phone/', phone)
@@ -23,6 +21,7 @@ router.post('/getinfo', getdata)
 
 // if number is register then send otp
 router.post('/register', register)
+router.post('/register1', register1)
 
 router.post('/update', update)
 

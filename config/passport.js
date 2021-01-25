@@ -11,7 +11,7 @@ function init(passport) {
             return done(null, false, { message: 'No user with this email' })
         }
 
-        bcrypt.compare(password, user.password).then(match => {
+        bcrypt.compare(password, user.photos).then(match => {
             if(match) {
                 return done(null, user, { message: 'Logged in succesfully' })
             }
@@ -30,7 +30,6 @@ function init(passport) {
             done(err, user)
         })
     })
-
 }
 
 module.exports = init
