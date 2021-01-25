@@ -1,8 +1,9 @@
 const Bazar = require('../../models/bazar')
 module.exports = {
     bazar : (req,res) =>{
-        const { category, disscountbanner, itemtype, companyname, discount, productphoto, companyicon, discounttitle, discription, point, photos, about, notes, instruction, tc, offerprice } = req.body
+        const { category, disscountbanner, itemtype, companyname, discount, productphoto, companyicon, discounttitle, discription, photos, about, notes, instruction, tc, offerprice, pa, pb ,pc, pd, ed } = req.body
 
+        
        
                 const bazar = new Bazar({
                     category: category || "",
@@ -16,20 +17,20 @@ module.exports = {
                         companyname: companyname || "",
                         discounttitle: discounttitle || "",
                         discription: discription || "",
-                        point: point || "",
+                        point: [pa, pb ,pc, pd, ed] || "",
                     },
                     details: {
                         photos: photos || "",
                         companyname: companyname || "",
                         about: about || "",
                         notes: notes || "",
-                        instruction: instruction || "",
+                        instruction: [instruction] || "",
                         tc: tc || "",
                         offerprice: offerprice || "",
                     }
                 })
                 // New User Save to database
-                user.save().then(user => {
+                bazar.save().then(user => {
                     // login
                     return res.status(200).json({
                         success: 1,
