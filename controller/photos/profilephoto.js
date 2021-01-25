@@ -1,6 +1,5 @@
 const User = require('../../models/user')
 const multer = require('multer');
-const { findById } = require('../../models/user');
 fs = require('fs')
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
