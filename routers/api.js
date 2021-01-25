@@ -23,9 +23,9 @@ router.post('/getinfo', getdata)
 router.post('/register', register)
 router.post('/register1', register1)
 
-router.post('/update', update)
 
 // Update user data
+router.post('/update', update)
 router.post('/updatephoto', upload.single('photos'), updatephoto)
 
 
