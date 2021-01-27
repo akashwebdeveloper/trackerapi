@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { signup, phone, verify, register, register1 } = require('../controller/auth/phoneController')
 
 const { oneUser, multiUser } = require('../controller/notify')
-const { getdata, update} = require('../controller/users/users')
+const { getdata, update, emailverification} = require('../controller/users/users')
 const { updatephoto, upload } = require('../controller/photos/profilephoto')
 
 // Phone OTP verification
@@ -28,7 +28,8 @@ router.post('/register1', register1)
 router.post('/updateprofile', update)
 router.post('/updatephoto', upload.single('photos'), updatephoto)
 
-
+// just for testing
+router.post('/emailverification', emailverification)
 
 
 

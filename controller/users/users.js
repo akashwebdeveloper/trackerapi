@@ -120,5 +120,35 @@ module.exports = {
             })
         })
     },
+    emailverification: (req, res) =>{
+        const {phone, email } = req.body
+
+            User.findOne({ $or: [{ phone: phone }, { email: email }] }, (err, users) => {
+            // User.findOne({ email: email }, (err, users) => {
+                if (err) {
+                    return res.status(502).json({
+                        success: false,
+                        status: 502,
+                        message: "err from database"
+                    })
+                }
+
+                if (users) {
+                    return res.status(202).json({
+                        success: false,
+                        status: 202,
+                        message: "user Already exist"
+                    })
+                }
+
+                return res.status(200).json({
+                    success: true,
+                    status: 200,
+                    message: "New user",
+                })
+                
+            })
+                
+    }
 }
 

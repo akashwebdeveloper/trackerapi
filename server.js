@@ -62,6 +62,7 @@ app.use((req, res, next) => {
 
 // // Assets
 app.use('/profilephoto', express.static('profilephoto'));
+app.use('/bazarphoto', express.static('bazarphoto'));
 app.use(express.static('public'));
 
 

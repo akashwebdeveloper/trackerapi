@@ -208,7 +208,7 @@ function init(client) {
                     return res.status(200).json({
                         success: true,
                         status: 200,
-                        message: "Number verified successfully Now Create Account",
+                        message: "Number verified successfully",
                         countryCode: country,
                         phone
                     })
