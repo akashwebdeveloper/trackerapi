@@ -205,13 +205,41 @@ function init(client) {
                     //     phone
                     // })
                     console.log(verification_check.status)
-                    return res.status(200).json({
-                        success: true,
-                        status: 200,
-                        message: "Number verified successfully",
-                        countryCode: country,
-                        phone
+
+                    User.find({phone: phone}, (err, data) =>{
+                        if (err) {
+                            return res.status(502).json({
+                                success: false,
+                                status: 502,
+                                message: "err from database"
+                            })
+                        }
+
+                        if (data) {
+                            return res.status(200).json({
+                                success: true,
+                                status: 200,
+                                message: "Number verified successfully",
+                                countryCode: country,
+                                phone,
+                                user: data
+                            })
+                        }
+
+                        return res.status(200).json({
+                            success: true,
+                            status: 200,
+                            message: "Number is New",
+                            countryCode: country,
+                            phone,
+                            user: data
+                        })
+
+                        
                     })
+                    
+                    
+                    
                 }).catch((err) => {
                     res.status(202).json({
                         success: false,

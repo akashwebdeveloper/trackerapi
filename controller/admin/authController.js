@@ -8,7 +8,7 @@ const _getRedirectUrl = (req) => {
 }
 module.exports = {
     login: (req, res) => {
-        res.render('auth/login')
+        res.render('auth/login', {page_name: ''})
     },
     postLogin: (req, res, next) => {
         const { email, password } = req.body

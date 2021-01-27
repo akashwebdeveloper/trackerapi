@@ -25,6 +25,9 @@ const upload = multer({
 
 
 module.exports = {
+    getbazarform: (req, res) => {
+        return res.render('form', {page_name: 'form'} )
+    },
     bazar: (req, res, next) => {
         const { category, itemtype, companyname, discount, discounttitle, discription, about, notes, instruction, tc, offerprice, pa, pb, pc, pd, ed } = req.body
 
@@ -61,12 +64,7 @@ module.exports = {
         // New User Save to database
         bazar.save().then(user => {
             // login
-            return res.status(200).json({
-                success: 1,
-                status: 200,
-                message: "verfied data save in to database",
-                user: [user],
-            })
+            return res.redirect('/admin')
         }).catch(err => {
             return res.status(503).json({
                 success: 0,
