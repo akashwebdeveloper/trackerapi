@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Login</title>
+  <title>Step Set Go</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -61,15 +61,19 @@
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item dropdown">
-          <a class="nav-link" data-toggle="dropdown" href="#">
-            Hello, Admin
-          </a>
+        <li class="nav-item dropdown mt-2">
+            Hello,  <%= user.fname %>
+          <!-- 
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <div class="dropdown-divider"></div>
             <a href="#" class="dropdown-item dropdown-footer">Log Out</a>
-          </div>
+          </div> -->
         </li>
+        <li class="ml-6">
+          <form id="logout" action="/admin/logout" method="POST">
+              <a onclick="document.getElementById('logout').submit()" href="#"><button type="button" class="btn btn-outline-primary mr-2">Logout</button></a>
+          </form>
+      </li>
       </ul>
     </nav>
     <!-- topbar ends-->
@@ -109,6 +113,23 @@
                   Forms
                 </p>
               </a>
+            </li>
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link <%= page_name === 'btable' && 'active' %> ">
+                <i class="nav-icon fas fa-edit"></i>
+                <p>
+                  Table
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="/admin/bazartable" class="nav-link active">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Banner Table</p>
+                  </a>
+                </li>
+              </ul>
             </li>
           </ul>
         </nav>
@@ -180,16 +201,20 @@
 <script type="text/javascript">
   // For Notes Start
     $(document).ready(function () {
-      var max_input = 5;
+      var max_input = 25;
       var x = 1;
       $('.add-btn3').click(function (e) {
         e.preventDefault();
         if (x < max_input) { 
           x++;
           $('.wrapper3').append(`
-            <div class="input-box">
-              <input type="text" name="input_name[]" class="form mb-2" style="width:90%;" />
+          <div class="input-box">
+            <div class="row">
+            <div class="col-lg-10">
+              <input type="text" name="notes" class="form-control mb-2" />
+              </div>
               <a href="#" class="remove-lnk3" alt="Remove" title="Remove"><i class="fa fa-minus minus"></i></a>
+              </div>
             </div>
           `);
         }
@@ -212,9 +237,13 @@
         if (x < max_input) { 
           x++;
           $('.wrapper1').append(`
-            <div class="input-box">
-              <input type="text" name="input_name[]" class="form" style="width:90%;" />
+          <div class="input-box">
+            <div class="row">
+            <div class="col-lg-10">
+              <input type="text" name="instruction" class="form-control mb-2" />
+              </div>
               <a href="#" class="remove-lnk1" alt="Remove" title="Remove"><i class="fa fa-minus minus"></i></a>
+              </div>
             </div>
           `);
         }
@@ -237,9 +266,13 @@
         if (x < max_input) { 
           x++;
           $('.wrapper2').append(`
-            <div class="input-box">
-              <input type="text" name="input_name[]"  class="form" style="width:90%;" />
+          <div class="input-box">
+            <div class="row">
+            <div class="col-lg-10">
+              <input type="text" name="tc"  class="form-control mb-2" />
+              </div>
               <a href="#" class="remove-lnk2" alt="Remove" title="Remove"><i class="fa fa-minus minus"></i></a>
+              </div>
             </div>
           `);
         }

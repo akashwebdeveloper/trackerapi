@@ -26,10 +26,25 @@ const upload = multer({
 
 module.exports = {
     getbazarform: (req, res) => {
-        return res.render('form', {page_name: 'form'} )
+        return res.render('form', { page_name: 'form' })
     },
     bazar: (req, res, next) => {
-        const { category, itemtype, companyname, discount, discounttitle, discription, about, notes, instruction, tc, offerprice, pa, pb, pc, pd, ed } = req.body
+        const { category, itemtype, companyname, discount, discounttitle, discription, website, about, notes, instruction, tc, offerprice, pa, pb, pc, pd, ed } = req.body
+
+
+
+
+
+        // // Change ED to second for saving ito database
+        // // Your input date
+        // var expireDate = new Date(ed);
+        // var current = new Date();
+
+        // var totaltime = Math.abs((expireDate.getTime() - 19800000) - current.getTime());
+        // // var dt = totaltime / 1000
+        // var dt = '1m'
+        // console.log(dt);
+
 
         var element = []
         for (let i = 0; i < req.files.photos.length; i++) {
@@ -50,6 +65,7 @@ module.exports = {
                 discounttitle: discounttitle || "",
                 discription: discription || "",
                 point: [pa, pb, pc, pd, ed] || "",
+                website: website || ""
             },
             details: {
                 photos: element,
@@ -59,12 +75,15 @@ module.exports = {
                 instruction: instruction || "",
                 tc: tc || "",
                 offerprice: offerprice || "",
-            }
+            },
+            expireAt: ed
         })
+
+        // bazar.index({createdAt: 1},{expireAfterSeconds: dt})
         // New User Save to database
         bazar.save().then(user => {
             // login
-            return res.redirect('/admin')
+            return res.redirect('/admin/bazartable')
         }).catch(err => {
             return res.status(503).json({
                 success: 0,
@@ -76,7 +95,7 @@ module.exports = {
     },
     upload,
     updatebazar: (req, res, next) => {
-        const { id, category, itemtype, companyname, discount, discounttitle, discription, about, notes, instruction, tc, offerprice, pa, pb, pc, pd, ed } = req.body
+        const { id, category, itemtype, companyname, discount, discounttitle, discription, website, about, notes, instruction, tc, offerprice, pa, pb, pc, pd, ed } = req.body
 
 
         Bazar.find({ _id: id }, (err, items) => {
@@ -97,35 +116,93 @@ module.exports = {
             }
 
 
+            // Deleting file
+            var pp = items[0].fullview.productphoto.substr(('http://3.140.194.252/').length, items[0].fullview.productphoto.length);
+            var ci = items[0].fullview.companyicon.substr(('http://3.140.194.252/').length, items[0].fullview.companyicon.length);
+            var db = items[0].disscountbanner.substr(('http://3.140.194.252/').length, items[0].disscountbanner.length);
             var element = []
-            for (let i = 0; i < req.files.photos.length; i++) {
-                element.push(`http://3.140.194.252/${req.files.photos[i].path}`)
+            var disb, coi, prop;
+            if (req.files.photos) {
+                for (let i = 0; i < req.files.photos.length; i++) {
+                    element.push(`http://3.140.194.252/${req.files.photos[i].path}`)
+                }
+                for (let i = 0; i < items[0].details.photos.length; i++) {
+                    fs.unlink(items[0].details.photos[i].substr(('http://3.140.194.252/').length, items[0].details.photos[i].length), function (err) {
+                        if (err) throw err;
+                        console.log(`${i + 1} deleted successfully`);
+                    })
+                }
+            }
+
+            if (req.files.disscountbanner) {
+                disb = `http://3.140.194.252/${req.files.disscountbanner[0].path}`
+                if (fs.existsSync(db)) {
+                    fs.unlink(db, function (err) {
+                        if (err) throw err;
+                        console.log('file deleted successfully');
+                    })
+                } else {
+                    console.log("File does not exist.")
+                }
+            } else {
+                disb = items[0].fullview.disscountbanner
+            }
+
+            if (req.files.companyicon) {
+                coi = `http://3.140.194.252/${req.files.companyicon[0].path}`
+                if (fs.existsSync(ci)) {
+                    fs.unlink(ci, function (err) {
+                        if (err) throw err;
+                        console.log('file deleted successfully');
+                    })
+                } else {
+                    console.log("File does not exist.")
+                }
+            } else {
+                coi = items[0].fullview.companyicon
+            }
+
+
+            if (req.files.productphoto) {
+                prop = `http://3.140.194.252/${req.files.productphoto[0].path}`
+                if (fs.existsSync(pp)) {
+                    fs.unlink(pp, function (err) {
+                        if (err) throw err;
+                        console.log('file deleted successfully');
+                    })
+                } else {
+                    console.log("File does not exist.")
+                }
+            } else {
+                prop =  items[0].fullview.productphoto
             }
 
 
             const bazar = new Bazar({
                 category: category || "",
-                disscountbanner: `http://3.140.194.252/${req.files.disscountbanner[0].path}` || "",
+                disscountbanner: disb,
                 itemtype: itemtype || "",
                 companyname: companyname || "",
                 discount: discount || "",
                 fullview: {
-                    productphoto: `http://3.140.194.252/${req.files.productphoto[0].path}` || "",
-                    companyicon: `http://3.140.194.252/${req.files.companyicon[0].path}` || "",
+                    productphoto: prop,
+                    companyicon: coi,
                     companyname: companyname || "",
                     discounttitle: discounttitle || "",
                     discription: discription || "",
                     point: [pa, pb, pc, pd, ed] || "",
+                    website: website || ""
                 },
                 details: {
-                    photos: element,
+                    photos: element || items[0].details.photos,
                     companyname: companyname || "",
                     about: about || "",
                     notes: notes || "",
                     instruction: instruction || "",
                     tc: tc || "",
                     offerprice: offerprice || "",
-                }
+                },
+                expireAt: ed
             })
 
             // Convert the Model instance to a simple object using Model's 'toObject' function
@@ -141,35 +218,35 @@ module.exports = {
                 if (err) {
                     console.log(err);
                 }
-                
-                // Deleting file
-                var pp = items.fullview.productphoto.substr(('http://3.140.194.252/').length, items.fullview.productphoto.length);
-                var ci = items.fullview.companyicon.substr(('http://3.140.194.252/').length, items.fullview.companyicon.length);
-                var db = items.disscountbanner.substr(('http://3.140.194.252/').length, items.disscountbanner.length);
+
+                // // Deleting file
+                // var pp = items.fullview.productphoto.substr(('http://3.140.194.252/').length, items.fullview.productphoto.length);
+                // var ci = items.fullview.companyicon.substr(('http://3.140.194.252/').length, items.fullview.companyicon.length);
+                // var db = items.disscountbanner.substr(('http://3.140.194.252/').length, items.disscountbanner.length);
 
 
-                for (let i = 0; i < items.details.photos.length; i++) {
-                    fs.unlink(items.details.photos[i].substr(('http://3.140.194.252/').length, items.details.photos[i].length), function (err) {
-                        if (err) throw err;
-                        console.log(`${i + 1} deleted successfully`);
-                    })
-                }
-                if (fs.existsSync(pp && ci && db)) {
-                    fs.unlink(pp, function (err) {
-                        if (err) throw err;
-                        console.log('file deleted successfully');
-                    })
-                    fs.unlink(ci, function (err) {
-                        if (err) throw err;
-                        console.log('file deleted successfully');
-                    })
-                    fs.unlink(db, function (err) {
-                        if (err) throw err;
-                        console.log('file deleted successfully');
-                    })
-                } else {
-                    console.log("File does not exist.")
-                }
+                // for (let i = 0; i < items.details.photos.length; i++) {
+                //     fs.unlink(items.details.photos[i].substr(('http://3.140.194.252/').length, items.details.photos[i].length), function (err) {
+                //         if (err) throw err;
+                //         console.log(`${i + 1} deleted successfully`);
+                //     })
+                // }
+                // if (fs.existsSync(pp && ci && db)) {
+                //     fs.unlink(pp, function (err) {
+                //         if (err) throw err;
+                //         console.log('file deleted successfully');
+                //     })
+                //     fs.unlink(ci, function (err) {
+                //         if (err) throw err;
+                //         console.log('file deleted successfully');
+                //     })
+                //     fs.unlink(db, function (err) {
+                //         if (err) throw err;
+                //         console.log('file deleted successfully');
+                //     })
+                // } else {
+                //     console.log("File does not exist.")
+                // }
 
 
                 if (items) {
@@ -182,20 +259,15 @@ module.exports = {
                             })
                         }
 
-                        // Returning json data
-                        return res.status(202).json({
-                            success: true,
-                            status: 200,
-                            message: "User updated successfuly ",
-                            item: items
-                        })
+                        // Returning to table
+                        return res.redirect('/admin/bazartable')
                     })
                 }
             })
         })
     },
     deletebazar: (req, res) => {
-        Bazar.findOneAndRemove({ _id: req.body.id }, function (err, items) {
+        Bazar.findOneAndRemove({ _id: req.params.id }, function (err, items) {
             if (err) throw err
 
             // Deleting file
@@ -223,16 +295,23 @@ module.exports = {
                     console.log('file deleted successfully');
                 })
 
-                // Returning json data
-                return res.status(202).json({
-                    success: true,
-                    status: 200,
-                    message: "User deleted successfuly ",
-                    item: items
-                })
+                // Returning to table
+                return res.redirect('/admin/bazartable')
             } else {
                 console.log("File does not exist.")
             }
         })
+    },
+    bazartable: (req, res) => {
+        Bazar.find({}, function (err, items) {
+            if (err) throw err
+            return res.render('table', { page_name: 'btable', items })
+        });
+    },
+    updatebazarform: (req, res) => {
+        Bazar.find({ _id: req.params.id }, function (err, item) {
+            if (err) throw err
+            return res.render('updatebazar', { page_name: 'form', item: item[0] })
+        });
     }
 }

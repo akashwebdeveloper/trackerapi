@@ -37,10 +37,10 @@ module.exports = {
             })
         })(req, res, next)
     },
-    //         logout(req, res) {
-    //           req.logout()
-    //           return res.redirect('/login')  
-    //         }
+            logout(req, res) {
+              req.logout()
+              return res.redirect('/admin/login')  
+            }
     //     }
     // }
 }
