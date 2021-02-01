@@ -33,7 +33,17 @@ module.exports = {
 
 
 
-
+        const invertSlashes = str => {
+            let res = '';
+            for(let i = 0; i < str.length; i++){
+               if(str[i] !== '\\'){
+                  res += str[i];
+                  continue;
+               };
+               res += '\/';
+            };
+            return res;
+         };
 
         // // Change ED to second for saving ito database
         // // Your input date
@@ -48,19 +58,19 @@ module.exports = {
 
         var element = []
         for (let i = 0; i < req.files.photos.length; i++) {
-            element.push(`http://3.140.194.252/${req.files.photos[i].path}`)
+            element.push(`http://3.140.194.252/${invertSlashes(req.files.photos[i].path)}`)
         }
 
 
         const bazar = new Bazar({
             category: category || "",
-            disscountbanner: `http://3.140.194.252/${req.files.disscountbanner[0].path}` || "",
+            disscountbanner: `http://3.140.194.252/${invertSlashes(req.files.disscountbanner[0].path)}` || "",
             itemtype: itemtype || "",
             companyname: companyname || "",
             discount: discount || "",
             fullview: {
-                productphoto: `http://3.140.194.252/${req.files.productphoto[0].path}` || "",
-                companyicon: `http://3.140.194.252/${req.files.companyicon[0].path}` || "",
+                productphoto: `http://3.140.194.252/${invertSlashes(req.files.productphoto[0].path)}` || "",
+                companyicon: `http://3.140.194.252/${invertSlashes(req.files.companyicon[0].path)}` || "",
                 companyname: companyname || "",
                 discounttitle: discounttitle || "",
                 discription: discription || "",
