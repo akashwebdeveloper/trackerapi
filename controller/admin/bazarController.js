@@ -174,7 +174,7 @@ module.exports = {
                     console.log("File does not exist.")
                 }
             } else {
-                prop =  items[0].fullview.productphoto
+                prop = items[0].fullview.productphoto
             }
 
 
@@ -303,10 +303,36 @@ module.exports = {
         })
     },
     bazartable: (req, res) => {
-        Bazar.find({}, function (err, items) {
-            if (err) throw err
-            return res.render('table', { page_name: 'btable', items })
-        });
+        try {
+            var query = {};
+            var page = 1;
+            var perpage = 10;
+            if (req.query.page != null) {
+                page = req.query.page
+            }
+            query.skip = (perpage * page) - perpage;
+            query.limit = perpage;
+            //    getting data in limit for pagination
+            Bazar.find({}, {}, query, (err, data) => {
+                if (err) {
+                    console.log(err);
+                }
+                Bazar.estimatedDocumentCount((err, count) => {
+                    if (err) {
+                        console.log(err)
+                    }
+                    return res.render('table', {
+                        data: data,
+                        current: page,
+                        pages: Math.ceil(count / perpage),
+                        page_name: 'table',
+                        perpage
+                    })
+                });
+            });
+        } catch (error) {
+            console.log(error);
+        }
     },
     updatebazarform: (req, res) => {
         Bazar.find({ _id: req.params.id }, function (err, item) {

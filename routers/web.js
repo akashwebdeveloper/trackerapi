@@ -4,6 +4,7 @@ const {guest} = require('../middleware/guest')
 const router = require('express').Router();
 const { login, postLogin, logout  } = require('../controller/admin/authController')
 const { home } = require('../controller/admin/homeController')
+const { usertable } = require('../controller/admin/userController')
 const { getbazarform, bazar, updatebazar, deletebazar, bazartable, updatebazarform, upload, } = require('../controller/admin/bazarController')
 
 router.get('/', auth, home)
@@ -23,6 +24,7 @@ router.post('/updatebazar',upload, updatebazar)
 
 // Tables
 router.get('/bazartable',auth, bazartable)
+router.get('/usertable',auth, usertable)
 // router.get('/bazartable', bazartable)
 
 

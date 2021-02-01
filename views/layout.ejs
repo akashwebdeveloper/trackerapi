@@ -36,6 +36,8 @@
   <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
   <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.css">
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+  <script src="/js/sorttable.js"></script>
 </head>
 <style type="text/css">
   i.minus {
@@ -45,6 +47,8 @@
     cursor: pointer;
 }
 </style>
+
+
   
 </head>
 <style>
@@ -115,7 +119,7 @@
               </a>
             </li>
             <li class="nav-item has-treeview">
-              <a href="#" class="nav-link <%= page_name === 'btable' && 'active' %> ">
+              <a href="#" class="nav-link <%= page_name === 'table' && 'active' %> ">
                 <i class="nav-icon fas fa-edit"></i>
                 <p>
                   Table
@@ -124,9 +128,17 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/admin/bazartable" class="nav-link active">
-                    <i class="far fa-circle nav-icon"></i>
+                  <a href="/admin/bazartable" class="nav-link <%= page_name === 'table' && 'active' %>">
+                    <!-- <i class="far fa-circle nav-icon"></i> -->
                     <p>Banner Table</p>
+                  </a>
+                </li>
+              </ul>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="/admin/usertable" class="nav-link <%= page_name === 'table' && 'active' %>">
+                    <!-- <i class="far fa-circle nav-icon"></i> -->
+                    <p>User Table</p>
                   </a>
                 </li>
               </ul>
@@ -197,6 +209,7 @@
       });
     });
   </script>
+
 
 <script type="text/javascript">
   // For Notes Start
