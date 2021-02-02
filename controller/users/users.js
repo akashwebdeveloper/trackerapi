@@ -5,7 +5,7 @@ const User = require('../../models/user')
 module.exports = {
     getalldata: (req, res) => {
 
-        User.find({ }, (err, users) => {
+        User.find({ type: { $ne: 'admin' }}, [ 'email', 'fname', 'lname', 'username', 'photos' ], (err, users) => {
             if (err) {
                 return res.status(502).json({
                     success: false,

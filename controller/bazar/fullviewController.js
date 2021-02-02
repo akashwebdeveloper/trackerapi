@@ -28,7 +28,7 @@ module.exports = {
                 return res.status(200).json({
                     success: true,
                     status: 200,
-                    // message: `data available in ${datas[0].category}`,
+                    message: `data available in ${datas[0].category}`,
                     data: [datas[0].fullview,datas[0].details]
                 })
                 

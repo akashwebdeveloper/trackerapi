@@ -18,7 +18,7 @@ router.post('/signup', signup)
 
 // get data from database
 router.post('/getinfo', getdata)
-router.get('/getalldata', getalldata)
+router.get('/getalluser', getalldata)
 
 // router.post('/oneuser', oneUser)
 // router.post('/multiuser', multiUser)
