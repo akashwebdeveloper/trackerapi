@@ -34,11 +34,11 @@ module.exports = {
                 data: {
                     point: datas[0].fullview.point,
                     productphoto: datas[0].fullview.productphoto,
-                    companyicon: datas[0].fullview.productphoto,
-                    companyname: datas[0].fullview.productphoto,
-                    discounttitle: datas[0].fullview.productphoto,
-                    discription: datas[0].fullview.productphoto,
-                    website: datas[0].fullview.productphoto,
+                    companyicon: datas[0].fullview.companyicon,
+                    companyname: datas[0].fullview.companyname,
+                    discounttitle: datas[0].fullview.discounttitle,
+                    discription: datas[0].fullview.discription,
+                    website: datas[0].fullview.website,
                     offerprice: datas[0].details.offerprice
                 }
             })
