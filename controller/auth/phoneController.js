@@ -249,6 +249,33 @@ function init(client) {
                     })
                 })
         },
+        resendotp(req, res) {
+            const { phone, country } = req.query
+
+            console.log(`+${country}${phone}`)
+            client
+                .verify
+                .services(serviceID)
+                .verifications
+                .create({
+                    to: `+${country}${phone}`,
+                    channel: "sms"
+                })
+                .then((data) => {
+                    res.status(200).json({
+                        success: true,
+                        message: "please check your mobile Number for otp verification",
+                        status: 200
+                    })
+                }).catch((err) => {
+                    res.status(503).json({
+                        success: false,
+                        message: "please Enter correct country code/ mobile number",
+                        status: 503,
+                        err
+                    })
+                })
+        },
         register1(req, res) {
             const { countryCode, phone } = req.body
 

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { signup, phone, verify, register, register1 } = require('../controller/auth/phoneController')
+const { signup, phone, verify, register, register1, resendotp } = require('../controller/auth/phoneController')
 
 const { oneUser, multiUser } = require('../controller/notify')
 const { getdata, update, emailverification} = require('../controller/users/users')
@@ -11,6 +11,7 @@ const { productfullview } = require('../controller/bazar/fullviewController')
 // Phone OTP verification
 router.get('/phone/', phone)
 router.get('/verify/', verify)
+router.get('/resendotp/', resendotp)
 
 // Insert data into database
 router.post('/signup', signup)
