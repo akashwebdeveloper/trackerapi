@@ -5,6 +5,8 @@ const { oneUser, multiUser } = require('../controller/notify')
 const { getdata, update, emailverification} = require('../controller/users/users')
 const { updatephoto, upload } = require('../controller/photos/profilephoto')
 const { free, appexclusive, accessories, apparel, electronics, food_beverage, footwear, health_wellness, jewellery, personalcare, sleepsolution, subscription, others } = require('../controller/bazar/bannerController')
+const { addbookmark, removebookmark } = require('../controller/bazar/bookmarkController')
+const { productfullview } = require('../controller/bazar/fullviewController')
 
 // Phone OTP verification
 router.get('/phone/', phone)
@@ -52,6 +54,14 @@ router.get('/bannersubscription', subscription)
 router.get('/bannerothers', others)
 
 
+
+// Full view Banner data getting
+router.post('/productinfo', productfullview)
+
+
+
+router.post('/addbookmark', addbookmark)
+router.post('/removebookmark', removebookmark)
 
 
 module.exports = router;

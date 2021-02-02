@@ -32,7 +32,7 @@ module.exports = {
         const { category, itemtype, companyname, discount, discounttitle, discription, website, about, notes, instruction, tc, offerprice, pa, pb, pc, pd, ed } = req.body
 
 
-
+    //   for replacing slash 
         const invertSlashes = str => {
             let res = '';
             for(let i = 0; i < str.length; i++){
@@ -44,16 +44,6 @@ module.exports = {
             };
             return res;
          };
-
-        // // Change ED to second for saving ito database
-        // // Your input date
-        // var expireDate = new Date(ed);
-        // var current = new Date();
-
-        // var totaltime = Math.abs((expireDate.getTime() - 19800000) - current.getTime());
-        // // var dt = totaltime / 1000
-        // var dt = '1m'
-        // console.log(dt);
 
 
         var element = []

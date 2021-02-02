@@ -1,28 +1,6 @@
 const Bazar = require('../../models/bazar')
 const multer = require('multer');
 fs = require('fs')
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './bazarphoto');
-    },
-    filename: function (req, file, cb) {
-        cb(null, new Date().toISOString().replace(/[\/\\:]/g, "_") + file.originalname);
-    }
-});
-
-const upload = multer({
-    storage: storage,
-}).fields([{
-    name: 'disscountbanner', maxCount: 1
-}, {
-    name: 'productphoto', maxCount: 1
-}, {
-    name: 'companyicon', maxCount: 1
-}, {
-    name: 'photos', maxCount: 5
-}])
-
-
 
 module.exports = {
     free: (req, res) => {

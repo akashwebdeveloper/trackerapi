@@ -16,6 +16,7 @@ const userSchema = new Schema ({
     countrycode: {type: String},
     phone: {type: String},
     token: {type: String},
+    bookmarks: {type: Array}
 }, { timestamps: true });
 
 
