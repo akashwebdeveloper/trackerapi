@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+const {ObjectId} = mongoose.Schema.Types
 const Schema = mongoose.Schema
 
 const userSchema = new Schema ({
@@ -16,7 +16,8 @@ const userSchema = new Schema ({
     countrycode: {type: String},
     phone: {type: String},
     token: {type: String},
-    bookmarks: {type: Array}
+    followers:[{type:ObjectId,ref:"User"}],
+    following:[{type:ObjectId,ref:"User"}]
 }, { timestamps: true });
 
 

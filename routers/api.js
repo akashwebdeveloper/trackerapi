@@ -6,6 +6,7 @@ const { getalldata, getdata, update, emailverification} = require('../controller
 const { updatephoto, upload } = require('../controller/photos/profilephoto')
 const { free, appexclusive, accessories, apparel, electronics, food_beverage, footwear, health_wellness, jewellery, personalcare, sleepsolution, subscription, others } = require('../controller/bazar/bannerController')
 const { addbookmark, removebookmark } = require('../controller/bazar/bookmarkController')
+const { like, unlike } = require('../controller/bazar/likeController')
 const { productfullview } = require('../controller/bazar/fullviewController')
 
 // Phone OTP verification
@@ -64,6 +65,10 @@ router.post('/productinfo', productfullview)
 
 router.post('/addbookmark', addbookmark)
 router.post('/removebookmark', removebookmark)
+
+
+router.post('/like', like)
+router.post('/unlike', unlike)
 
 
 module.exports = router;

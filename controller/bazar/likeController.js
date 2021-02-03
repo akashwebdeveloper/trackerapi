@@ -1,21 +1,21 @@
 const User = require('../../models/user')
 const Bazar = require('../../models/bazar')
 module.exports = {
-    addbookmark: (req, res) => {
+    like: (req, res) => {
         const { id, pid } = req.body
 
-        Bazar.findById(pid,['bookmarks'], (err, result) =>{
+        Bazar.findById(pid,['fullview.likes'], (err, result) =>{
             if (err) throw err
-            if(result.bookmarks.indexOf(id) !== -1){
+            if(result.fullview.likes.indexOf(id) !== -1){
                 return res.status(202).json({
                     success: false,
                     status: 202,
-                    message: "You have already bookmarked this product",
-                    data: result.bookmarks
+                    message: "You have already liked this product",
+                    data: result.fullview.likes
                 })
             } else{
                 Bazar.findByIdAndUpdate(pid,{
-                    $push:{bookmarks: id}
+                    $push: { "fullview.likes": id }
                 },{
                     new:true
                 }).exec((err,result)=>{
@@ -30,19 +30,19 @@ module.exports = {
                         return res.status(200).json({
                             success: true,
                             status: 200,
-                            message: `bookmarked successfully this product`,
-                            data: result.bookmarks
+                            message: `liked successfully this product`,
+                            data: result.fullview.likes
                         })
                     }
                 })
             }
         })
     },
-    removebookmark: (req, res) => {
+    unlike: (req, res) => {
         const { id, pid } = req.body
 
         Bazar.findByIdAndUpdate(pid,{
-            $pull:{bookmarks: id}
+            $pull: { "fullview.likes": id }
         },{
             new:true
         }).exec((err,result)=>{
@@ -57,8 +57,8 @@ module.exports = {
                 return res.status(200).json({
                     success: true,
                     status: 200,
-                    message: `remove bookmarked successfully this product`,
-                    data: result.bookmarks
+                    message: `unlike successfully this product`,
+                    data: result.fullview.likes
                 })
             }
         })

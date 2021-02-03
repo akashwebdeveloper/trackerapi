@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+const {ObjectId} = mongoose.Schema.Types
 const Schema = mongoose.Schema
 
 const bazarSchema = new Schema({
@@ -8,6 +8,7 @@ const bazarSchema = new Schema({
     itemtype: { type: String },
     companyname: { type: String },
     discount: { type: String },
+    bookmarks: [{type: ObjectId, ref:"User"}],
     fullview: {
         productphoto: [String],
         // companyicon: { type: String },
@@ -17,6 +18,7 @@ const bazarSchema = new Schema({
         point: [String],
         website: { type: String },
         offerprice: { type: String },
+        likes:[{type: ObjectId, ref:"User"}],
     },
     details: {
         photos: [String],
