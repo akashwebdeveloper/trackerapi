@@ -5,7 +5,7 @@ const { oneUser, multiUser } = require('../controller/notify')
 const { getalldata, getdata, update, emailverification} = require('../controller/users/users')
 const { updatephoto, upload } = require('../controller/photos/profilephoto')
 const { free, appexclusive, accessories, apparel, electronics, food_beverage, footwear, health_wellness, jewellery, personalcare, sleepsolution, subscription, others } = require('../controller/bazar/bannerController')
-const { addbookmark, removebookmark } = require('../controller/bazar/bookmarkController')
+const { addbookmark, removebookmark, bookmarklist } = require('../controller/bazar/bookmarkController')
 const { like, unlike } = require('../controller/bazar/likeController')
 const { productfullview } = require('../controller/bazar/fullviewController')
 
@@ -57,18 +57,21 @@ router.get('/bannersubscription', subscription)
 router.get('/bannerothers', others)
 
 
-
-// Full view Banner data getting
+// Banner Full view data
 router.post('/productinfo', productfullview)
 
 
+// Bookmarks
+router.put('/addbookmark', addbookmark)
+router.put('/removebookmark', removebookmark)
+router.post('/bookmarklist', bookmarklist)
 
-router.post('/addbookmark', addbookmark)
-router.post('/removebookmark', removebookmark)
+// Likes
+router.put('/like', like)
+router.put('/unlike', unlike)
 
-
-router.post('/like', like)
-router.post('/unlike', unlike)
-
+// Follow & follwers
+router.put('/follow', like)
+router.put('/unfollow', unlike)
 
 module.exports = router;

@@ -63,4 +63,34 @@ module.exports = {
             }
         })
     },
+    bookmarklist: (req, res) => {
+        const { id } = req.body
+        Bazar.find({bookmarks: { $in: [ id ] } }, ['itemtype', 'disscountbanner', 'companyname'], (err, datas) => {
+            // User.findOne({ email: email }, (err, users) => {
+
+            if (err) {
+                return res.status(502).json({
+                    success: false,
+                    status: 502,
+                    message: "err from database"
+                })
+            }
+
+            if (!datas) {
+                return res.status(202).json({
+                    success: false,
+                    status: 202,
+                    message: "not bookmarked any product"
+                })
+            }
+
+            
+            return res.status(200).json({
+                success: true,
+                status: 200,
+                message: `bookmarked products are here`,
+                data: datas
+            })
+        })
+    },
 }
