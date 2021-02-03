@@ -6,8 +6,9 @@ const fs = require('fs')
 module.exports = {
     productfullview: (req, res) => {
         const { id } = req.body
+console.log(id);
 
-        Bazar.find({ _id: id }, ['category', 'fullview', 'companyname', 'details.offerprice'], (err, datas) => {
+        Bazar.find({ _id: id }, ['category', 'fullview' ], (err, datas) => {
             // User.findOne({ email: email }, (err, users) => {
 
             if (err) {
@@ -31,16 +32,7 @@ module.exports = {
                 success: true,
                 status: 200,
                 message: `data available in ${datas[0].category}`,
-                data: {
-                    point: datas[0].fullview.point,
-                    productphoto: datas[0].fullview.productphoto,
-                    companyicon: datas[0].fullview.companyicon,
-                    companyname: datas[0].fullview.companyname,
-                    discounttitle: datas[0].fullview.discounttitle,
-                    discription: datas[0].fullview.discription,
-                    website: datas[0].fullview.website,
-                    offerprice: datas[0].details.offerprice
-                }
+                data: datas[0].fullview
             })
 
         })

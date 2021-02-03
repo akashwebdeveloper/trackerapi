@@ -110,41 +110,24 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                               <label for="">Product Photo</label>
-                                                <input type="file" name="productphoto" class="form-control" id="" >
+                                                <input type="file" name="productphoto" class="form-control" id="" multiple>
                                             </div>
                                           </div>
+                                          <% item.fullview.productphoto.forEach((photo)=> { %>
                                           <div class="col-lg-2">
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <div class="input-group-append">
-                                                        <% if(item) { 
-                                                            var pp = item.fullview.productphoto.substr(('http://3.140.194.252/').length, item.fullview.productphoto.length)
-                                                            %>
-                                                            <img src="/../<%= pp %>" width="70px" height="70px;">
-                                                            <% } %>
+                                                            <% if(item) { 
+                                                                var pp = photo.substr(('http://3.140.194.252/').length, photo.length)
+                                                                %>
+                                                                <img src="/../<%= pp %>" width="70px" height="70px;">
+                                                                <% } %>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                          <div class="col-lg-12">
-                                            <div class="form-group">
-                                              <label for="">Company Logo</label>
-                                                <input type="file"  name="companyicon" class="form-control" id="">
-                                            </div>
-                                          </div>
-                                          <div class="col-lg-2">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <div class="input-group-append">
-                                                        <% if(item) { 
-                                                            var ci = item.fullview.companyicon.substr(('http://3.140.194.252/').length, item.fullview.companyicon.length)
-                                                            %>
-                                                            <img src="/../<%= ci %>" width="70px" height="70px;">
-                                                            <% } %>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <% }) %>
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label for="">Company Website</label>

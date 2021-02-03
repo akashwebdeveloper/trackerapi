@@ -28,7 +28,7 @@ module.exports = {
             var ID = req.body.id
         }
 
-        User.findOneAndUpdate({ $or: [{ _id: ID }, { email: EMAIL }] }, { $set: { photos: `http://3.140.194.252/${req.file.path}` || "" } }, function (err, result) {
+        User.findOneAndUpdate({ $or: [{ _id: ID }, { email: EMAIL }] }, { $set: { photos: `http://13.213.4.147/${req.file.path}` || "" } }, function (err, result) {
             if (err) {
                 console.log(err);
                 return res.status(202).json({

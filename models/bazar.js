@@ -9,13 +9,14 @@ const bazarSchema = new Schema({
     companyname: { type: String },
     discount: { type: String },
     fullview: {
-        productphoto: { type: String },
-        companyicon: { type: String },
+        productphoto: [String],
+        // companyicon: { type: String },
         companyname: { type: String },
         discounttitle: { type: String },
         discription: { type: String },
         point: [String],
         website: { type: String },
+        offerprice: { type: String },
     },
     details: {
         photos: [String],

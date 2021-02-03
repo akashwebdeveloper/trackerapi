@@ -4,8 +4,10 @@ fs = require('fs')
 
 module.exports = {
     free: (req, res) => {
+        console.log('connected');
         
         Bazar.find({category: "Free" },['category', 'disscountbanner', 'companyname'], (err, datas) => {
+            console.log(err);
             // User.findOne({ email: email }, (err, users) => {
                 if (err) {
                     return res.status(502).json({
@@ -15,7 +17,7 @@ module.exports = {
                     })
                 }
 
-                if (!datas) {
+                if (!datas[0]) {
                     return res.status(202).json({
                         success: false,
                         status: 202,
@@ -26,7 +28,7 @@ module.exports = {
                 return res.status(200).json({
                     success: true,
                     status: 200,
-                    message: `data available in ${datas[0].category}`,
+                    message: `data available in free`,
                     data: datas
                 })
                 
@@ -43,7 +45,7 @@ module.exports = {
                     })
                 }
 
-                if (!datas) {
+                if (!datas[0]) {
                     return res.status(202).json({
                         success: false,
                         status: 202,
@@ -71,7 +73,7 @@ module.exports = {
                     })
                 }
 
-                if (!datas) {
+                if (!datas[0]) {
                     return res.status(202).json({
                         success: false,
                         status: 202,
@@ -92,6 +94,8 @@ module.exports = {
         Bazar.find({category: "Apparel" },['itemtype', 'disscountbanner', 'companyname'], (err, datas) => {
             // User.findOne({ email: email }, (err, users) => {
                 if (err) {
+                    console.log(err);
+                    
                     return res.status(502).json({
                         success: false,
                         status: 502,
@@ -99,7 +103,7 @@ module.exports = {
                     })
                 }
 
-                if (!datas) {
+                if (!datas[0]) {
                     return res.status(202).json({
                         success: false,
                         status: 202,
@@ -127,7 +131,7 @@ module.exports = {
                     })
                 }
 
-                if (!datas) {
+                if (!datas[0]) {
                     return res.status(202).json({
                         success: false,
                         status: 202,
@@ -155,7 +159,7 @@ module.exports = {
                     })
                 }
 
-                if (!datas) {
+                if (!datas[0]) {
                     return res.status(202).json({
                         success: false,
                         status: 202,
@@ -183,7 +187,7 @@ module.exports = {
                     })
                 }
 
-                if (!datas) {
+                if (!datas[0]) {
                     return res.status(202).json({
                         success: false,
                         status: 202,
@@ -211,7 +215,7 @@ module.exports = {
                     })
                 }
 
-                if (!datas) {
+                if (!datas[0]) {
                     return res.status(202).json({
                         success: false,
                         status: 202,
@@ -239,7 +243,7 @@ module.exports = {
                     })
                 }
 
-                if (!datas) {
+                if (!datas[0]) {
                     return res.status(202).json({
                         success: false,
                         status: 202,
@@ -267,7 +271,7 @@ module.exports = {
                     })
                 }
 
-                if (!datas) {
+                if (!datas[0]) {
                     return res.status(202).json({
                         success: false,
                         status: 202,
@@ -295,7 +299,7 @@ module.exports = {
                     })
                 }
 
-                if (!datas) {
+                if (!datas[0]) {
                     return res.status(202).json({
                         success: false,
                         status: 202,
@@ -323,7 +327,7 @@ module.exports = {
                     })
                 }
 
-                if (!datas) {
+                if (!datas[0]) {
                     return res.status(202).json({
                         success: false,
                         status: 202,
@@ -351,7 +355,7 @@ module.exports = {
                     })
                 }
 
-                if (!datas) {
+                if (!datas[0]) {
                     return res.status(202).json({
                         success: false,
                         status: 202,
@@ -365,7 +369,6 @@ module.exports = {
                     message: `data available in Others`,
                     data: datas
                 })
-                
             })
     },
 }
