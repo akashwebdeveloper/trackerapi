@@ -2,10 +2,12 @@ const User = require('../../models/user')
 const Bazar = require('../../models/bazar')
 module.exports = {
     home: (req, res) =>{
-        User.estimatedDocumentCount((err, ucount) => {
+        // it will capible with condition
+        User.countDocuments({ type: { $ne: 'admin' }},(err, ucount) => {
             if (err) {
                 console.log(err)
             }
+            // it will not capible with condition
             Bazar.estimatedDocumentCount((err, bcount) => {
                 if (err) {
                     console.log(err)

@@ -12,7 +12,7 @@ module.exports = {
             query.skip = (perpage * page) - perpage;
             query.limit = perpage;
             //    getting data in limit for pagination
-            User.find({}, {}, query, (err, data) => {
+            User.find({ type: { $ne: 'admin' }}, {}, query, (err, data) => {
                 if (err) {
                     console.log(err);
                 }
