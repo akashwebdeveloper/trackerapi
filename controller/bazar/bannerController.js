@@ -6,60 +6,53 @@ module.exports = {
     free: (req, res) => {
         const { userid } = req.body
         
-        Bazar.find({category: "Free" },['category', 'disscountbanner', 'companyname', 'bookmarks'], (err, datas) => {
-            // console.log(err);
-            // // User.findOne({ email: email }, (err, users) => {
-            //     datas.forEach(result => {
-            //         console.log(result);
-            //         const bookmark;
-            //         if(result.bookmarks.indexOf(userid) !== -1){
-            //             console.log(result.bookmark = true);
-                        
-            //             return res.status(202).json({
-            //                 success: false,
-            //                 status: 202,
-            //                 message: "You have already bookmarked this product",
-            //                 data: result.bookmark = true
-            //             })
-            //         } else {
-            //             return res.status(502).json({
-            //                 success: false,
-            //                 status: 502,
-            //                 message: "err from database"
-            //             })
-            //         }
-            //     });
+        Bazar.find({category: "Free" },['category', 'disscountbanner', 'companyname', 'bookmarks', 'itemtype'], (err, datas) => {
 
+
+            if (err) {
+                return res.status(502).json({
+                    success: false,
+                    status: 502,
+                    message: "err from database"
+                })
+            }
+
+            if (!datas[0]) {
+                return res.status(202).json({
+                    success: false,
+                    status: 202,
+                    message: "No data in this Category"
+                })
+            }
+
+
+
+                datas.forEach((result, index) => {
+                    console.log(result);
+                    if(result.bookmarks.indexOf(userid) !== -1){
+
+                        datas[index].bookmark = true
+                    } else {
+                        datas[index].bookmark = false
+                    }
+                });
                 
-
-                if (err) {
-                    return res.status(502).json({
-                        success: false,
-                        status: 502,
-                        message: "err from database"
-                    })
-                }
-
-                if (!datas[0]) {
-                    return res.status(202).json({
-                        success: false,
-                        status: 202,
-                        message: "No data in this Category"
-                    })
-                }
+                
+                
 
                 return res.status(200).json({
                     success: true,
                     status: 200,
                     message: `data available in free`,
-                    data: datas
+                    data: datas, 
                 })
                 
             })
     },
     appexclusive: (req, res) => {
-        Bazar.find({category: "App Exclusive" },['itemtype', 'disscountbanner', 'companyname'], (err, datas) => {
-            // User.findOne({ email: email }, (err, users) => {
+        const { userid } = req.body
+        Bazar.find({category: "App Exclusive" },['category','itemtype', 'disscountbanner','bookmarks', 'companyname'], (err, datas) => {
+
                 if (err) {
                     return res.status(502).json({
                         success: false,
@@ -75,6 +68,17 @@ module.exports = {
                         message: "No data in this Category"
                     })
                 }
+
+                datas.forEach((result, index) => {
+                    console.log(result);
+                    if(result.bookmarks.indexOf(userid) !== -1){
+
+                        datas[index].bookmark = true
+                    } else {
+                        datas[index].bookmark = false
+                    }
+                });
+                
 
                 return res.status(200).json({
                     success: true,
@@ -86,7 +90,8 @@ module.exports = {
             })
     },
     accessories: (req, res) => {
-        Bazar.find({category: "Accessories" },['itemtype', 'disscountbanner', 'companyname'], (err, datas) => {
+        const { userid } = req.body
+        Bazar.find({category: "Accessories" },['category','itemtype', 'disscountbanner','bookmarks', 'companyname'], (err, datas) => {
             // User.findOne({ email: email }, (err, users) => {
                 if (err) {
                     return res.status(502).json({
@@ -104,6 +109,17 @@ module.exports = {
                     })
                 }
 
+                datas.forEach((result, index) => {
+                    console.log(result);
+                    if(result.bookmarks.indexOf(userid) !== -1){
+
+                        datas[index].bookmark = true
+                    } else {
+                        datas[index].bookmark = false
+                    }
+                });
+
+
                 return res.status(200).json({
                     success: true,
                     status: 200,
@@ -114,7 +130,8 @@ module.exports = {
             })
     },
     apparel: (req, res) => {
-        Bazar.find({category: "Apparel" },['itemtype', 'disscountbanner', 'companyname'], (err, datas) => {
+        const { userid } = req.body
+        Bazar.find({category: "Apparel" },['category','itemtype', 'disscountbanner','bookmarks', 'companyname'], (err, datas) => {
             // User.findOne({ email: email }, (err, users) => {
                 if (err) {
                     console.log(err);
@@ -134,6 +151,17 @@ module.exports = {
                     })
                 }
 
+                datas.forEach((result, index) => {
+                    console.log(result);
+                    if(result.bookmarks.indexOf(userid) !== -1){
+
+                        datas[index].bookmark = true
+                    } else {
+                        datas[index].bookmark = false
+                    }
+                });
+
+
                 return res.status(200).json({
                     success: true,
                     status: 200,
@@ -144,7 +172,8 @@ module.exports = {
             })
     },
     electronics: (req, res) => {
-        Bazar.find({category: "Electronics" },['itemtype', 'disscountbanner', 'companyname'], (err, datas) => {
+        const { userid } = req.body
+        Bazar.find({category: "Electronics" },['category','itemtype', 'disscountbanner','bookmarks', 'companyname'], (err, datas) => {
             // User.findOne({ email: email }, (err, users) => {
                 if (err) {
                     return res.status(502).json({
@@ -161,6 +190,17 @@ module.exports = {
                         message: "No data in this Category"
                     })
                 }
+
+                datas.forEach((result, index) => {
+                    console.log(result);
+                    if(result.bookmarks.indexOf(userid) !== -1){
+
+                        datas[index].bookmark = true
+                    } else {
+                        datas[index].bookmark = false
+                    }
+                });
+
 
                 return res.status(200).json({
                     success: true,
@@ -172,7 +212,8 @@ module.exports = {
             })
     },
     food_beverage: (req, res) => {
-        Bazar.find({category: "Food & Beverage" },['itemtype', 'disscountbanner', 'companyname'], (err, datas) => {
+        const { userid } = req.body
+        Bazar.find({category: "Food & Beverage" },['category','itemtype', 'disscountbanner','bookmarks', 'companyname'], (err, datas) => {
             // User.findOne({ email: email }, (err, users) => {
                 if (err) {
                     return res.status(502).json({
@@ -189,6 +230,17 @@ module.exports = {
                         message: "No data in this Category"
                     })
                 }
+
+                datas.forEach((result, index) => {
+                    console.log(result);
+                    if(result.bookmarks.indexOf(userid) !== -1){
+
+                        datas[index].bookmark = true
+                    } else {
+                        datas[index].bookmark = false
+                    }
+                });
+
 
                 return res.status(200).json({
                     success: true,
@@ -200,7 +252,8 @@ module.exports = {
             })
     },
     footwear: (req, res) => {
-        Bazar.find({category: "Footwear" },['itemtype', 'disscountbanner', 'companyname'], (err, datas) => {
+        const { userid } = req.body
+        Bazar.find({category: "Footwear" },['category','itemtype', 'disscountbanner','bookmarks', 'companyname'], (err, datas) => {
             // User.findOne({ email: email }, (err, users) => {
                 if (err) {
                     return res.status(502).json({
@@ -217,6 +270,18 @@ module.exports = {
                         message: "No data in this Category"
                     })
                 }
+
+
+                datas.forEach((result, index) => {
+                    console.log(result);
+                    if(result.bookmarks.indexOf(userid) !== -1){
+
+                        datas[index].bookmark = true
+                    } else {
+                        datas[index].bookmark = false
+                    }
+                });
+
 
                 return res.status(200).json({
                     success: true,
@@ -228,7 +293,8 @@ module.exports = {
             })
     },
     health_wellness: (req, res) => {
-        Bazar.find({category: "Health & Wellness" },['itemtype', 'disscountbanner', 'companyname'], (err, datas) => {
+        const { userid } = req.body
+        Bazar.find({category: "Health & Wellness" },['category','itemtype', 'disscountbanner','bookmarks', 'companyname'], (err, datas) => {
             // User.findOne({ email: email }, (err, users) => {
                 if (err) {
                     return res.status(502).json({
@@ -245,6 +311,17 @@ module.exports = {
                         message: "No data in this Category"
                     })
                 }
+
+                datas.forEach((result, index) => {
+                    console.log(result);
+                    if(result.bookmarks.indexOf(userid) !== -1){
+
+                        datas[index].bookmark = true
+                    } else {
+                        datas[index].bookmark = false
+                    }
+                });
+
 
                 return res.status(200).json({
                     success: true,
@@ -256,7 +333,8 @@ module.exports = {
             })
     },
     jewellery: (req, res) => {
-        Bazar.find({category: "Jewellery" },['itemtype', 'disscountbanner', 'companyname'], (err, datas) => {
+        const { userid } = req.body
+        Bazar.find({category: "Jewellery" },['category','itemtype', 'disscountbanner','bookmarks', 'companyname'], (err, datas) => {
             // User.findOne({ email: email }, (err, users) => {
                 if (err) {
                     return res.status(502).json({
@@ -273,6 +351,19 @@ module.exports = {
                         message: "No data in this Category"
                     })
                 }
+
+
+                datas.forEach((result, index) => {
+                    console.log(result);
+                    if(result.bookmarks.indexOf(userid) !== -1){
+
+                        datas[index].bookmark = true
+                    } else {
+                        datas[index].bookmark = false
+                    }
+                });
+
+
 
                 return res.status(200).json({
                     success: true,
@@ -284,7 +375,8 @@ module.exports = {
             })
     },
     personalcare: (req, res) => {
-        Bazar.find({category: "Personal Care" },['itemtype', 'disscountbanner', 'companyname'], (err, datas) => {
+        const { userid } = req.body
+        Bazar.find({category: "Personal Care" },['category','itemtype', 'disscountbanner','bookmarks', 'companyname'], (err, datas) => {
             // User.findOne({ email: email }, (err, users) => {
                 if (err) {
                     return res.status(502).json({
@@ -301,6 +393,17 @@ module.exports = {
                         message: "No data in this Category"
                     })
                 }
+
+                datas.forEach((result, index) => {
+                    console.log(result);
+                    if(result.bookmarks.indexOf(userid) !== -1){
+
+                        datas[index].bookmark = true
+                    } else {
+                        datas[index].bookmark = false
+                    }
+                });
+
 
                 return res.status(200).json({
                     success: true,
@@ -312,7 +415,8 @@ module.exports = {
             })
     },
     sleepsolution: (req, res) => {
-        Bazar.find({category: "Sleep Solution" },['itemtype', 'disscountbanner', 'companyname'], (err, datas) => {
+        const { userid } = req.body
+        Bazar.find({category: "Sleep Solution" },['category','itemtype', 'disscountbanner','bookmarks', 'companyname'], (err, datas) => {
             // User.findOne({ email: email }, (err, users) => {
                 if (err) {
                     return res.status(502).json({
@@ -329,6 +433,18 @@ module.exports = {
                         message: "No data in this Category"
                     })
                 }
+
+
+                datas.forEach((result, index) => {
+                    console.log(result);
+                    if(result.bookmarks.indexOf(userid) !== -1){
+
+                        datas[index].bookmark = true
+                    } else {
+                        datas[index].bookmark = false
+                    }
+                });
+
 
                 return res.status(200).json({
                     success: true,
@@ -340,7 +456,8 @@ module.exports = {
             })
     },
     subscription: (req, res) => {
-        Bazar.find({category: "Subscription" },['itemtype', 'disscountbanner', 'companyname'], (err, datas) => {
+        const { userid } = req.body
+        Bazar.find({category: "Subscription" },['category','itemtype', 'disscountbanner','bookmarks', 'companyname'], (err, datas) => {
             // User.findOne({ email: email }, (err, users) => {
                 if (err) {
                     return res.status(502).json({
@@ -357,6 +474,17 @@ module.exports = {
                         message: "No data in this Category"
                     })
                 }
+
+                datas.forEach((result, index) => {
+                    console.log(result);
+                    if(result.bookmarks.indexOf(userid) !== -1){
+
+                        datas[index].bookmark = true
+                    } else {
+                        datas[index].bookmark = false
+                    }
+                });
+
 
                 return res.status(200).json({
                     success: true,
@@ -368,7 +496,8 @@ module.exports = {
             })
     },
     others: (req, res) => {
-        Bazar.find({category: "Others" },['itemtype', 'disscountbanner', 'companyname'], (err, datas) => {
+        const { userid } = req.body
+        Bazar.find({category: "Others" },['category','itemtype', 'disscountbanner','bookmarks', 'companyname'], (err, datas) => {
             // User.findOne({ email: email }, (err, users) => {
                 if (err) {
                     return res.status(502).json({
@@ -385,6 +514,17 @@ module.exports = {
                         message: "No data in this Category"
                     })
                 }
+
+                datas.forEach((result, index) => {
+                    console.log(result);
+                    if(result.bookmarks.indexOf(userid) !== -1){
+
+                        datas[index].bookmark = true
+                    } else {
+                        datas[index].bookmark = false
+                    }
+                });
+                
 
                 return res.status(200).json({
                     success: true,

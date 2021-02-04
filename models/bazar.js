@@ -9,6 +9,7 @@ const bazarSchema = new Schema({
     companyname: { type: String },
     discount: { type: String },
     bookmarks: [{type: ObjectId, ref:"User"}],
+    bookmark: {type: Boolean, default: false },
     fullview: {
         productphoto: [String],
         // companyicon: { type: String },
