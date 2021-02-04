@@ -1,4 +1,3 @@
-const User = require('../../models/user')
 const Bazar = require('../../models/bazar')
 module.exports = {
     like: (req, res) => {

@@ -4,11 +4,34 @@ fs = require('fs')
 
 module.exports = {
     free: (req, res) => {
-        console.log('connected');
+        const { userid } = req.body
         
-        Bazar.find({category: "Free" },['category', 'disscountbanner', 'companyname'], (err, datas) => {
-            console.log(err);
-            // User.findOne({ email: email }, (err, users) => {
+        Bazar.find({category: "Free" },['category', 'disscountbanner', 'companyname', 'bookmarks'], (err, datas) => {
+            // console.log(err);
+            // // User.findOne({ email: email }, (err, users) => {
+            //     datas.forEach(result => {
+            //         console.log(result);
+            //         const bookmark;
+            //         if(result.bookmarks.indexOf(userid) !== -1){
+            //             console.log(result.bookmark = true);
+                        
+            //             return res.status(202).json({
+            //                 success: false,
+            //                 status: 202,
+            //                 message: "You have already bookmarked this product",
+            //                 data: result.bookmark = true
+            //             })
+            //         } else {
+            //             return res.status(502).json({
+            //                 success: false,
+            //                 status: 502,
+            //                 message: "err from database"
+            //             })
+            //         }
+            //     });
+
+                
+
                 if (err) {
                     return res.status(502).json({
                         success: false,
