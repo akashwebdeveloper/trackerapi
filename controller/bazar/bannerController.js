@@ -28,7 +28,7 @@ module.exports = {
 
 
                 datas.forEach((result, index) => {
-                    console.log(result);
+                    
                     if(result.bookmarks.indexOf(userid) !== -1){
 
                         datas[index].bookmark = true
@@ -70,7 +70,7 @@ module.exports = {
                 }
 
                 datas.forEach((result, index) => {
-                    console.log(result);
+                    
                     if(result.bookmarks.indexOf(userid) !== -1){
 
                         datas[index].bookmark = true
@@ -110,7 +110,7 @@ module.exports = {
                 }
 
                 datas.forEach((result, index) => {
-                    console.log(result);
+                    
                     if(result.bookmarks.indexOf(userid) !== -1){
 
                         datas[index].bookmark = true
@@ -152,7 +152,7 @@ module.exports = {
                 }
 
                 datas.forEach((result, index) => {
-                    console.log(result);
+                    
                     if(result.bookmarks.indexOf(userid) !== -1){
 
                         datas[index].bookmark = true
@@ -192,7 +192,7 @@ module.exports = {
                 }
 
                 datas.forEach((result, index) => {
-                    console.log(result);
+                    
                     if(result.bookmarks.indexOf(userid) !== -1){
 
                         datas[index].bookmark = true
@@ -232,7 +232,7 @@ module.exports = {
                 }
 
                 datas.forEach((result, index) => {
-                    console.log(result);
+                    
                     if(result.bookmarks.indexOf(userid) !== -1){
 
                         datas[index].bookmark = true
@@ -273,7 +273,7 @@ module.exports = {
 
 
                 datas.forEach((result, index) => {
-                    console.log(result);
+                    
                     if(result.bookmarks.indexOf(userid) !== -1){
 
                         datas[index].bookmark = true
@@ -313,7 +313,7 @@ module.exports = {
                 }
 
                 datas.forEach((result, index) => {
-                    console.log(result);
+                    
                     if(result.bookmarks.indexOf(userid) !== -1){
 
                         datas[index].bookmark = true
@@ -354,7 +354,7 @@ module.exports = {
 
 
                 datas.forEach((result, index) => {
-                    console.log(result);
+                    
                     if(result.bookmarks.indexOf(userid) !== -1){
 
                         datas[index].bookmark = true
@@ -395,7 +395,7 @@ module.exports = {
                 }
 
                 datas.forEach((result, index) => {
-                    console.log(result);
+                    
                     if(result.bookmarks.indexOf(userid) !== -1){
 
                         datas[index].bookmark = true
@@ -436,7 +436,7 @@ module.exports = {
 
 
                 datas.forEach((result, index) => {
-                    console.log(result);
+                    
                     if(result.bookmarks.indexOf(userid) !== -1){
 
                         datas[index].bookmark = true
@@ -476,7 +476,7 @@ module.exports = {
                 }
 
                 datas.forEach((result, index) => {
-                    console.log(result);
+                    
                     if(result.bookmarks.indexOf(userid) !== -1){
 
                         datas[index].bookmark = true
@@ -516,7 +516,6 @@ module.exports = {
                 }
 
                 datas.forEach((result, index) => {
-                    console.log(result);
                     if(result.bookmarks.indexOf(userid) !== -1){
 
                         datas[index].bookmark = true
@@ -524,7 +523,7 @@ module.exports = {
                         datas[index].bookmark = false
                     }
                 });
-                
+
 
                 return res.status(200).json({
                     success: true,

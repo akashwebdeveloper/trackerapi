@@ -5,10 +5,9 @@ const fs = require('fs')
 
 module.exports = {
     productfullview: (req, res) => {
-        const { id } = req.body
-console.log(id);
+        const { pid, userid } = req.body
 
-        Bazar.find({ _id: id }, ['category', 'fullview' ], (err, datas) => {
+        Bazar.findById({ _id: pid }, ['category', 'fullview' ], (err, data) => {
             // User.findOne({ email: email }, (err, users) => {
 
             if (err) {
@@ -19,7 +18,7 @@ console.log(id);
                 })
             }
 
-            if (!datas) {
+            if (!data) {
                 return res.status(202).json({
                     success: false,
                     status: 202,
@@ -27,12 +26,20 @@ console.log(id);
                 })
             }
 
+
+            if(data.fullview.likes.indexOf(userid) !== -1){
+
+                data.fullview.like = true
+            } else {
+                data.fullview.like = false
+            }
+
             
             return res.status(200).json({
                 success: true,
                 status: 200,
-                message: `data available in ${datas[0].category}`,
-                data: datas[0].fullview
+                message: `data available in ${data.category}`,
+                data: data.fullview
             })
 
         })
