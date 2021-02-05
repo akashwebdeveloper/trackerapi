@@ -8,7 +8,7 @@ const { updatephoto, upload } = require('../controller/photos/profilephoto')
 const { free, appexclusive, accessories, apparel, electronics, food_beverage, footwear, health_wellness, jewellery, personalcare, sleepsolution, subscription, others } = require('../controller/bazar/bannerController')
 const { addbookmark, removebookmark, bookmarklist } = require('../controller/bazar/bookmarkController')
 const { like, unlike } = require('../controller/bazar/likeController')
-const { productfullview } = require('../controller/bazar/fullviewController')
+const { productfullview, details } = require('../controller/bazar/fullviewController')
 
 // Phone OTP verification
 router.get('/phone/', phone)
@@ -61,6 +61,8 @@ router.post('/bannerothers', others)
 // Banner Full view data
 router.post('/productinfo', productfullview)
 
+// Company details
+router.post('/companyinfo', details)
 
 // Bookmarks
 router.post('/addbookmark', addbookmark)

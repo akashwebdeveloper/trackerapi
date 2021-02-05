@@ -46,4 +46,37 @@ module.exports = {
 
         })
     },
+    details: (req, res) => {
+        const { pid } = req.body
+
+        Bazar.findById({ _id: pid }, ['category', 'details'], (err, data) => {
+            // User.findOne({ email: email }, (err, users) => {
+
+            if (err) {
+                return res.status(502).json({
+                    success: false,
+                    status: 502,
+                    message: "err from database"
+                })
+            }
+
+            if (!data) {
+                return res.status(202).json({
+                    success: false,
+                    status: 202,
+                    message: "No data in this Category"
+                })
+            }
+
+
+        
+
+            return res.status(200).json({
+                success: true,
+                status: 200,
+                message: `data available in ${data.category}`,
+                data: data.details
+            })
+        })
+    }
 }

@@ -30,6 +30,7 @@ const bazarSchema = new Schema({
         instruction: [String],
         tc: [String],
         offerprice: { type: String },
+        website: { type: String }
     },
     expireAt: {
         type: Date,
