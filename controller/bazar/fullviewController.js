@@ -26,7 +26,7 @@ module.exports = {
                 })
             }
 
-            if (data.fullview.like) {
+            if (data.fullview.like == 0) {
                 if (data.fullview.likes.indexOf(userid) !== -1) {
 
                     data.fullview.like = 1
