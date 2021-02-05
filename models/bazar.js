@@ -20,7 +20,7 @@ const bazarSchema = new Schema({
         website: { type: String },
         offerprice: { type: String },
         likes:[{type: ObjectId, ref:"User"}],
-        like: {type: Boolean, default: false },
+        like: {type: Boolean},
     },
     details: {
         photos: [String],
