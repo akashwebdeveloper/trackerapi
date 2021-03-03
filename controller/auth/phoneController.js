@@ -92,10 +92,10 @@ function init(client) {
                                 user: [users]
                             })
                         }).catch((err) => {
-                            res.status(503).json({
+                            res.json({
                                 success: false,
                                 message: "please Enter correct country code/ mobile number",
-                                status: 503,
+                                status: 404,
                                 err
                             })
                         })

@@ -1,6 +1,5 @@
 const User = require('../../models/user')
 
-console.log('');
 
 module.exports = {
     follow: (req, res) => {

@@ -17,7 +17,10 @@ const userSchema = new Schema ({
     phone: {type: String},
     token: {type: String},
     followers:[{type:ObjectId,ref:"User"}],
-    following:[{type:ObjectId,ref:"User"}]
+    following:[{type:ObjectId,ref:"User"}],
+    todaysteps: {type: Number, default: 0},
+    todaykm: {type: Number, default: 0},
+    calorie: {type: String, default: 0}
 }, { timestamps: true });
 
 

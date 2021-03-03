@@ -9,6 +9,7 @@ const { free, appexclusive, accessories, apparel, electronics, food_beverage, fo
 const { addbookmark, removebookmark, bookmarklist } = require('../controller/bazar/bookmarkController')
 const { like, unlike } = require('../controller/bazar/likeController')
 const { productfullview, details } = require('../controller/bazar/fullviewController')
+const { todayprogress } = require('../controller/users/steps')
 
 // Phone OTP verification
 router.get('/phone/', phone)
@@ -76,5 +77,9 @@ router.post('/unlike', unlike)
 // Follow & follwers
 router.post('/follow', follow)
 router.post('/unfollow', unfollow)
+
+// steps data
+router.post('/todayprogress', todayprogress)
+
 
 module.exports = router;
