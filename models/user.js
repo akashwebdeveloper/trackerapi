@@ -21,7 +21,7 @@ const userSchema = new Schema ({
     todaysteps: {type: Number, default: 0},
     todaykm: {type: Number, default: 0},
     calorie: {type: String, default: 0},
-    progress: {type:Object}
+    progress: {type:Array}
 }, { timestamps: true });
 
 

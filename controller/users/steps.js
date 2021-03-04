@@ -7,15 +7,15 @@ module.exports = {
     todayprogress: (req, res) => {
         const { uid, step, km, calorie } = req.body
 
-// const todaysteps = {};
-// todaysteps[todayDate] = step
-// console.log(todaysteps);
+const todaysteps = {};
+todaysteps[todayDate] = step
+console.log(todaysteps);
 
 
         const user = new User({
             todaysteps: step || "",
             todaykm: km,
-            calorie: calorie || "",
+            calorie: calorie || ""
         })
 
         // Convert the Model instance to a simple object using Model's 'toObject' function
@@ -34,8 +34,11 @@ module.exports = {
                     error: err
                 })
             }
+
             
-            // User.findOneAndUpdate({ _id: uid }, { $push: { progress: todaysteps  } }, {new: true}, (err, items) => {
+
+
+            // User.findOneAndUpdate({ _id: uid }, { $set: { "progress.$[element]" : 100 } }, {new: true}, (err, items) => {
             //     if (err) {
             //         return res.status(502).json({
             //             success: false,
@@ -44,6 +47,14 @@ module.exports = {
             //         })
             //     }
             // }) 
+
+            // User.updateOne(
+            //     { _id: uid },
+            //     { $set: { "progress.$[element]" : 100 } },
+            //     { multi: true,
+            //       arrayFilters: [ { "element": { $gte: 100 } } ]
+            //     }
+            //  )
             
 
             return res.status(201).json({

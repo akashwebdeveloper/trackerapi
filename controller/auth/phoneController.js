@@ -47,7 +47,7 @@ function init(client) {
                 user.save().then(user => {
                     // login
                     return res.status(200).json({
-                        success: 1,
+                        success: true,
                         status: 200,
                         message: "verfied data save in to database",
                         user: [user],
