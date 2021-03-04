@@ -20,7 +20,8 @@ const userSchema = new Schema ({
     following:[{type:ObjectId,ref:"User"}],
     todaysteps: {type: Number, default: 0},
     todaykm: {type: Number, default: 0},
-    calorie: {type: String, default: 0}
+    calorie: {type: String, default: 0},
+    progress: {type:Object}
 }, { timestamps: true });
 
 
