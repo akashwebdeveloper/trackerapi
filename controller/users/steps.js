@@ -1,16 +1,14 @@
 const User = require('../../models/user')
 const moment = require('moment');
 const m = moment();
-const todayDate = m.format('yy.MM.DD');
+const todayDate = m.format('yy.MM.DD')
+// const todayDate = '2021.03.01'
+console.log(todayDate);
+
 
 module.exports = {
     todayprogress: (req, res) => {
         const { uid, step, km, calorie } = req.body
-
-const todaysteps = {};
-todaysteps[todayDate] = step
-console.log(todaysteps);
-
 
         const user = new User({
             todaysteps: step || "",
@@ -26,7 +24,72 @@ console.log(todaysteps);
         delete upsertData._id;
 
 
-        User.findOneAndUpdate({ _id: uid }, upsertData, {new: true}, (err, items) => {
+        User.findOneAndUpdate({ _id: uid }, upsertData, { new: true }, (err, items) => {
+            if (err) {
+                return res.status(502).json({
+                    success: false,
+                    message: "err from database",
+                    error: err
+                })
+            }
+            return res.status(201).json({
+                success: false,
+                message: "succesfully Updated Steps data",
+                data: items
+            })
+        })
+    },
+    updates: (req, res) => {
+        const { uid, step } = req.body
+
+        User.findOne({ _id: uid }, (err, items) => {
+
+            //    console.log(items);
+
+            const todaysteps = { date: todayDate, step: step };
+
+
+            var allProgress;
+            let progress = items.progress.filter(prog => (prog.date == todayDate));
+
+
+            if (items.progress.length === 0) {
+                allProgress = [];
+                allProgress.push(todaysteps)
+                console.log('!items.progress.date');
+
+            } else if (progress.length === 0) {
+                allProgress = items.progress;
+                allProgress.push(todaysteps)
+                console.log('!progress');
+
+            } else {
+                allProgress = items.progress;
+                allProgress.forEach((element, index) => {
+
+                    if (element.date == todayDate) {
+                        allProgress[index].step = step
+                    }
+                });
+
+            }
+            User.findOneAndUpdate({ _id: uid }, { $set: { progress: allProgress } }, { new: true }, (err, items) => {
+                console.log(items);
+
+                return res.status(201).json({
+                    success: false,
+                    message: "succesfully Updated Steps data for graph",
+                })
+
+            })
+
+        })
+
+    },
+    progressgraph: (req, res) => {
+        const { uid } = req.body
+
+        User.findById(uid, (err, result) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -35,33 +98,57 @@ console.log(todaysteps);
                 })
             }
 
-            
+            const graph = [];
+            result.progress.forEach((daily, index) => {
+                const li = result.progress[result.progress.length - (index + 1)]
+                graph.push(li)
+                if (index === 6) { return false }
+            });
 
-
-            // User.findOneAndUpdate({ _id: uid }, { $set: { "progress.$[element]" : 100 } }, {new: true}, (err, items) => {
-            //     if (err) {
-            //         return res.status(502).json({
-            //             success: false,
-            //             message: "err from database",
-            //             error: err
-            //         })
-            //     }
-            // }) 
-
-            // User.updateOne(
-            //     { _id: uid },
-            //     { $set: { "progress.$[element]" : 100 } },
-            //     { multi: true,
-            //       arrayFilters: [ { "element": { $gte: 100 } } ]
-            //     }
-            //  )
-            
 
             return res.status(201).json({
                 success: false,
-                message: "succesfully Updated Steps data",
-                data: items
+                message: "weekly progress graph are here",
+                graph
             })
-        }) 
+
+
+        })
+    },
+    totalstep: (req, res) => {
+        const { uid } = req.body
+
+        User.findById(uid, (err, result) => {
+            if (err) {
+                return res.status(502).json({
+                    success: false,
+                    message: "err from database",
+                    error: err
+                })
+            }
+
+            var totalStep = 0;
+            result.progress.forEach((daily, index) => {
+                
+                // User total Steps
+                totalStep += parseInt(daily.step)
+                
+            });
+            
+            // User Average Steps
+            const averageStep = Math.round(totalStep/result.progress.length);
+
+
+
+
+            return res.status(201).json({
+                success: true,
+                message: "Average and Total steps are here",
+                totalStep,
+                averageStep
+            })
+
+
+        })
     },
 }

@@ -9,7 +9,7 @@ const { free, appexclusive, accessories, apparel, electronics, food_beverage, fo
 const { addbookmark, removebookmark, bookmarklist } = require('../controller/bazar/bookmarkController')
 const { like, unlike } = require('../controller/bazar/likeController')
 const { productfullview, details } = require('../controller/bazar/fullviewController')
-const { todayprogress } = require('../controller/users/steps')
+const { todayprogress, updates, progressgraph, totalstep } = require('../controller/users/steps')
 
 // Phone OTP verification
 router.get('/phone/', phone)
@@ -80,6 +80,9 @@ router.post('/unfollow', unfollow)
 
 // steps data
 router.post('/todayprogress', todayprogress)
+router.post('/updates', updates)
+router.post('/progressgraph', progressgraph)
+router.post('/totalstep', totalstep)
 
 
 module.exports = router;
