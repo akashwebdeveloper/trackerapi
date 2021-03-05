@@ -21,7 +21,8 @@ const userSchema = new Schema({
     todaysteps: { type: Number, default: 0 },
     todaykm: { type: Number, default: 0 },
     calorie: { type: String, default: 0 },
-    progress: { type:Array }
+    progress: { type:Array },
+    coin: { type: Number, default: 0 },
 }, { timestamps: true });
 
 

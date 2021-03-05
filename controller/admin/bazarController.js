@@ -305,6 +305,11 @@ module.exports = {
         })
     },
     bazartable: (req, res) => {
+        
+        Bazar.find({},(err,data)=>{
+            
+            console.log(data);
+        })
         try {
             var query = {};
             var page = 1;
@@ -323,12 +328,13 @@ module.exports = {
                     if (err) {
                         console.log(err)
                     }
+                    
                     return res.render('table', {
                         data: data,
                         current: page,
                         pages: Math.ceil(count / perpage),
                         page_name: 'table',
-                        perpage
+                        perpage,
                     })
                 });
             });

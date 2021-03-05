@@ -41,18 +41,27 @@ module.exports = {
     },
     updates: (req, res) => {
         const { uid, step } = req.body
-
+        
         User.findOne({ _id: uid }, (err, items) => {
-
+            
             //    console.log(items);
-
+            
             const todaysteps = { date: todayDate, step: step };
+            var totalStep = 0;
+            items.progress.forEach((daily, index) => {
+                // User total Steps
+                totalStep += parseInt(daily.step)
+            });
+            
+
+            // Adding Coins
+            var coin = (totalStep*0.001).toFixed(2);
 
 
             var allProgress;
             let progress = items.progress.filter(prog => (prog.date == todayDate));
 
-
+            
             if (items.progress.length === 0) {
                 allProgress = [];
                 allProgress.push(todaysteps)
@@ -62,7 +71,7 @@ module.exports = {
                 allProgress = items.progress;
                 allProgress.push(todaysteps)
                 console.log('!progress');
-
+                
             } else {
                 allProgress = items.progress;
                 allProgress.forEach((element, index) => {
@@ -71,11 +80,10 @@ module.exports = {
                         allProgress[index].step = step
                     }
                 });
-
+                
             }
-            User.findOneAndUpdate({ _id: uid }, { $set: { progress: allProgress } }, { new: true }, (err, items) => {
-                console.log(items);
-
+            User.findOneAndUpdate({ _id: uid }, { $set: { progress: allProgress, coin: coin } }, { new: true }, (err, items) => {
+                
                 return res.status(201).json({
                     success: false,
                     message: "succesfully Updated Steps data for graph",
@@ -129,14 +137,14 @@ module.exports = {
 
             var totalStep = 0;
             result.progress.forEach((daily, index) => {
-                
+
                 // User total Steps
                 totalStep += parseInt(daily.step)
-                
+
             });
-            
+
             // User Average Steps
-            const averageStep = Math.round(totalStep/result.progress.length);
+            const averageStep = Math.round(totalStep / result.progress.length);
 
 
 
