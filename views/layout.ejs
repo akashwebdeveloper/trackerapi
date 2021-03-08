@@ -111,12 +111,29 @@
               </a>
             </li>
             <li class="nav-item has-treeview">
-              <a href="/admin/bazar" class="nav-link <%= page_name === 'form' && 'active' %>">
-                <i class="nav-icon fas fa-edit"></i>
+              <a href="#" class="nav-link <%= page_name === 'form' && 'active' %> ">
+                <i class="nav-icon fas fa-sticky-note"></i>
                 <p>
                   Forms
+                  <i class="fas fa-angle-left right"></i>
                 </p>
               </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="/admin/bazar" class="nav-link <%= sub_page === 'bazar' && 'active' %>">
+                    <!-- <i class="far fa-circle nav-icon"></i> -->
+                    <p>Bazar Form</p>
+                  </a>
+                </li>
+              </ul>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="/admin/referral" class="nav-link <%= sub_page === 'referral' && 'active' %>">
+                    <!-- <i class="far fa-circle nav-icon"></i> -->
+                    <p>Reffrel Form</p>
+                  </a>
+                </li>
+              </ul>
             </li>
             <li class="nav-item has-treeview">
               <a href="#" class="nav-link <%= page_name === 'table' && 'active' %> ">
@@ -128,7 +145,7 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/admin/bazartable" class="nav-link <%= page_name === 'table' && 'active' %>">
+                  <a href="/admin/bazartable" class="nav-link <%= sub_page === 'bazar' && 'active' %>">
                     <!-- <i class="far fa-circle nav-icon"></i> -->
                     <p>Bazar Table</p>
                   </a>
@@ -136,7 +153,7 @@
               </ul>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/admin/usertable" class="nav-link <%= page_name === 'table' && 'active' %>">
+                  <a href="/admin/usertable" class="nav-link <%= sub_page === 'user' && 'active' %>">
                     <!-- <i class="far fa-circle nav-icon"></i> -->
                     <p>User Table</p>
                   </a>

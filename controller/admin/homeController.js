@@ -12,7 +12,7 @@ module.exports = {
                 if (err) {
                     console.log(err)
                 }
-                return res.render('home', {page_name: 'home', ucount, bcount})
+                return res.render('home', {page_name: 'home', sub_page: '', ucount, bcount})
             });
         });
     }

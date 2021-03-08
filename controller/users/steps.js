@@ -65,12 +65,10 @@ module.exports = {
             if (items.progress.length === 0) {
                 allProgress = [];
                 allProgress.push(todaysteps)
-                console.log('!items.progress.date');
 
             } else if (progress.length === 0) {
                 allProgress = items.progress;
                 allProgress.push(todaysteps)
-                console.log('!progress');
                 
             } else {
                 allProgress = items.progress;

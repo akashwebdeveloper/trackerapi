@@ -64,7 +64,7 @@ module.exports = {
         })
     },
     update: (req, res) => {
-        const { id, type, fname, lname, username, dob, gender, weight, height, token } = req.body
+        const { id, type, fname, lname, username, dob, gender, weight, height, token, status } = req.body
 
         if (id.substr(id.length - 3) == 'com') {
             var EMAIL = req.body.id
@@ -101,6 +101,7 @@ module.exports = {
                 weight: weight || users[0].weight,
                 height: height || users[0].height,
                 token: token || users[0].token,
+                status: status || users[0].status,
             })
 
             // Convert the Model instance to a simple object using Model's 'toObject' function

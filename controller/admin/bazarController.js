@@ -17,8 +17,8 @@ const upload = multer({
 }, {
     name: 'productphoto', maxCount: 5
 }, {
-//     name: 'companyicon', maxCount: 1
-// }, {
+    //     name: 'companyicon', maxCount: 1
+    // }, {
     name: 'photos', maxCount: 5
 }])
 
@@ -26,24 +26,24 @@ const upload = multer({
 
 module.exports = {
     getbazarform: (req, res) => {
-        return res.render('form', { page_name: 'form' })
+        return res.render('form', { page_name: 'form', sub_page: 'bazar' })
     },
     bazar: (req, res, next) => {
         const { category, itemtype, companyname, discount, discounttitle, discription, website, about, notes, instruction, tc, offerprice, pa, pb, pc, pd, ed } = req.body
 
 
-    //   for replacing slash 
+        //   for replacing slash 
         const invertSlashes = str => {
             let res = '';
-            for(let i = 0; i < str.length; i++){
-               if(str[i] !== '\\'){
-                  res += str[i];
-                  continue;
-               };
-               res += '\/';
+            for (let i = 0; i < str.length; i++) {
+                if (str[i] !== '\\') {
+                    res += str[i];
+                    continue;
+                };
+                res += '\/';
             };
             return res;
-         };
+        };
 
 
         var element = []
@@ -127,7 +127,7 @@ module.exports = {
             var db = items[0].disscountbanner.substr(('http://13.213.4.147/').length, items[0].disscountbanner.length);
             var element = []
             var element1 = []
-            var disb ;
+            var disb;
             if (req.files.photos) {
                 for (let i = 0; i < req.files.photos.length; i++) {
                     element.push(`http://13.213.4.147/${req.files.photos[i].path}`)
@@ -305,9 +305,9 @@ module.exports = {
         })
     },
     bazartable: (req, res) => {
-        
-        Bazar.find({},(err,data)=>{
-            
+
+        Bazar.find({}, (err, data) => {
+
             console.log(data);
         })
         try {
@@ -328,13 +328,14 @@ module.exports = {
                     if (err) {
                         console.log(err)
                     }
-                    
+
                     return res.render('table', {
                         data: data,
                         current: page,
                         pages: Math.ceil(count / perpage),
                         page_name: 'table',
                         perpage,
+                        sub_page: 'bazar',
                     })
                 });
             });

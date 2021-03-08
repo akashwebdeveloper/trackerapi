@@ -8,6 +8,7 @@ const userSchema = new Schema({
     lname: { type: String },
     username: { type: String },
     dob: { type: String },
+    status: { type: String, default: 'If you are in a bad mood, go for a walk.' },
     weight: { type: Number },
     height: { type: Number },
     gender: { type: String },

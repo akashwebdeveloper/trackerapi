@@ -1,0 +1,60 @@
+<div class="wrapper">
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Form</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/admin">Home</a></li>
+                            <li class="breadcrumb-item">Forms</li>
+                            <!-- <% if(page_name === 'form') { %>
+                            <% } %> -->
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title"></h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form method="post" action="/admin/updatereferral">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                                <label for="">Current Referral Ammount is <%= referral %> USB coin</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                                <label>Set Referral Ammount:</label>
+                                                <input type="number" style="outline: none;" class="ml-1" value="" placeholder="123"  name="referral" >
+                                                <input type="text" value="UBS Coin" disabled >
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <!-- /.card-body -->
+                                    <div class="card-footer">
+                                        
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
