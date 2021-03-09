@@ -6,6 +6,7 @@ const { login, postLogin, logout  } = require('../controller/admin/authControlle
 const { home } = require('../controller/admin/homeController')
 const { usertable } = require('../controller/admin/userController')
 const { getreferralform, updatereferral } = require('../controller/admin/formController')
+const { getchallengeform, updatechallenge } = require('../controller/admin/formController')
 const { getbazarform, bazar, updatebazar, deletebazar, bazartable, updatebazarform, upload, } = require('../controller/admin/bazarController')
 
 router.get('/', auth, home)
@@ -19,12 +20,17 @@ router.get('/bazar',auth, getbazarform)
 // router.get('/bazar', getbazarform)
 router.post('/bazar',upload, bazar)
 
+
 router.get('/updatebazar/:id',auth, updatebazarform)
 router.post('/updatebazar',upload, updatebazar)
 
 // Referral 
 router.get('/referral',auth, getreferralform)
 router.post('/updatereferral', updatereferral)
+
+// Challenge 
+router.get('/challenge',auth, getchallengeform)
+router.post('/updatereferral', updatechallenge)
 
 // Tables
 router.get('/bazartable',auth, bazartable)

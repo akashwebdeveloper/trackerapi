@@ -1,9 +1,8 @@
 const User = require('../../models/user')
 const moment = require('moment');
 const m = moment();
-const todayDate = m.format('yy.MM.DD')
+const todayDate = m.format()
 // const todayDate = '2021.03.01'
-console.log(todayDate);
 
 
 module.exports = {
@@ -107,18 +106,19 @@ module.exports = {
             const graph = [];
             result.progress.forEach((daily, index) => {
                 const li = result.progress[result.progress.length - (index + 1)]
+                const din = moment(li.date).format('ddd')
+                
+                li.day = din
                 graph.push(li)
                 if (index === 6) { return false }
             });
 
 
             return res.status(201).json({
-                success: false,
+                success: true,
                 message: "weekly progress graph are here",
                 graph
             })
-
-
         })
     },
     totalstep: (req, res) => {

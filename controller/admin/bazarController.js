@@ -26,7 +26,7 @@ const upload = multer({
 
 module.exports = {
     getbazarform: (req, res) => {
-        return res.render('form', { page_name: 'form', sub_page: 'bazar' })
+        return res.render('form', { page_name: 'form', sub_page: 'bazarform' })
     },
     bazar: (req, res, next) => {
         const { category, itemtype, companyname, discount, discounttitle, discription, website, about, notes, instruction, tc, offerprice, pa, pb, pc, pd, ed } = req.body

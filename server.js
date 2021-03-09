@@ -14,9 +14,11 @@ const session = require('express-session')
 const flash = require('express-flash')
 const passport = require('passport')
 var admin = require("firebase-admin")
+var favicon = require('serve-favicon');
 
 
-
+// Favicon
+app.use(favicon(__dirname + '/public/img/favicon.ico'));
 
 
 // Database connection
