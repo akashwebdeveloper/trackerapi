@@ -10,6 +10,7 @@ const { addbookmark, removebookmark, bookmarklist } = require('../controller/baz
 const { like, unlike } = require('../controller/bazar/likeController')
 const { productfullview, details } = require('../controller/bazar/fullviewController')
 const { todayprogress, updates, progressgraph, totalstep } = require('../controller/users/steps')
+const { getAllChallenges } = require('../controller/users/challenges')
 
 // Phone OTP verification
 router.get('/phone/', phone)
@@ -80,9 +81,16 @@ router.post('/unfollow', unfollow)
 
 // steps data
 router.post('/todayprogress', todayprogress)
+// Updating Step graph
 router.post('/updates', updates)
 router.post('/progressgraph', progressgraph)
+// total step & average step
 router.post('/totalstep', totalstep)
+
+
+// Challenges
+router.get('/challenges', getAllChallenges)
+
 
 
 module.exports = router;

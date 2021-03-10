@@ -58,7 +58,7 @@ module.exports = {
 
 
             var allProgress;
-            let progress = items.progress.filter(prog => (prog.date == todayDate));
+            let progress = items.progress.filter(prog => (moment(prog.date).format('YYYY-MM-DD') == m.format('YYYY-MM-DD')));
 
             
             if (items.progress.length === 0) {
@@ -73,7 +73,7 @@ module.exports = {
                 allProgress = items.progress;
                 allProgress.forEach((element, index) => {
 
-                    if (element.date == todayDate) {
+                    if (moment(element.date).format('YYYY-MM-DD') == m.format('YYYY-MM-DD')) {
                         allProgress[index].step = step
                     }
                 });

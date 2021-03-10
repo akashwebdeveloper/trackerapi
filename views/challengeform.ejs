@@ -11,6 +11,7 @@
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="/admin">Home</a></li>
                             <li class="breadcrumb-item">Forms</li>
+                            <li class="breadcrumb-item">Challenges</li>
                             <!-- <% if(page_name === 'form') { %>
                             <% } %> -->
                         </ol>
@@ -31,224 +32,46 @@
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form method="post" enctype="multipart/form-data" action="/admin/bazar">
+                            <form method="post" action="/admin/createchallenge">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label for="">CATEGORY</label>
-                                                <select class="form-control" name="category" id="">
-                                                    <!-- <option value="">All Offers</option> -->
-                                                    <option value="" disabled selected>Select CATEGORY</option>
-                                                    <option value="Free">Free</option>
-                                                    <option value="App Exclusive">App Exclusive</option>
-                                                    <option value="Accessories">Accessories</option>
-                                                    <option value="Apparel">Apparel</option>
-                                                    <option value="Electronics">Electronics</option>
-                                                    <option value="Food & Beverage">Food & Beverage</option>
-                                                    <option value="Footwear">Footwear</option>
-                                                    <option value="Health & Wellness">Health & Wellness</option>
-                                                    <option value="Jewellery">Jewellery</option>
-                                                    <option value="Personal Care">Personal Care</option>
-                                                    <option value="Sleep Solution">Sleep Solution</option>
-                                                    <option value="Subscription">Subscription</option>
-                                                    <option value="Others">Others</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <h3>Banner</h3>
-                                            <hr>
-                                            <hr>
-                                        </div>
-                                        <hr>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="">Company Name</label>
-                                                <input type="text" name="companyname" class="form-control" id=""
-                                                    placeholder="Enter Company Name">
+                                                <label for="name">Name Of Challenge:</label>
+                                                <input type="text" name="name" class="form-control input-lg" id="name">
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label for="">Discount</label>
-                                                <input type="text" name="discount" class="form-control" id=""
-                                                    placeholder="Enter Discount text">
+                                                <label for="status">Status</label>
+                                                <input type="text" name="status" class="form-control input-sm" id="status">
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
-                                            <div class="form-group">
-                                              <label for="">Dicount Banner</label>
-                                                <input type="file" name="disscountbanner" class="form-control" id="" >
-                                            </div>
-                                          </div>
-                                        <!-- <div class="col-lg-2">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <div class="input-group-append">
-                                                        <img src="#" width="70px" height="70px;">
-                                                    </div>
+                                            <div class="form-group row" style="margin-left: 0.1rem;">
+                                                <div class="col-xs-3">
+                                                    <label for="status">Goal</label>
+                                                    <input type="number" name="goal" class="form-control input-sm" id="status">
+                                                    <input type="text" class="" value="Steps" disabled >
                                                 </div>
-                                            </div>
-                                        </div> -->
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="">Item Type</label>
-                                                <input type="text" name="itemtype" class="form-control" id=""
-                                                    placeholder="Enter Item Name">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <h3>Advertisment</h3>
-                                            <hr>
-                                            <hr>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                              <label for="">Product Photo</label>
-                                                <input type="file" name="productphoto" class="form-control" id="" multiple>
-                                            </div>
-                                          </div>
-                                          <!-- <div class="col-lg-12">
-                                            <div class="form-group">
-                                              <label for="">Company Logo</label>
-                                                <input type="file"  name="companyicon" class="form-control" id="">
-                                            </div>
-                                          </div> -->
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="">Company Website</label>
-                                                <input type="text" name="website" class="form-control" id=""
-                                                    placeholder="Enter Company Website">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="">Discount Title</label>
-                                                <input type="text" name="discounttitle" class="form-control" id="" placeholder="Enter Title">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="">Description</label>
-                                                <textarea class="form-control" name="discription" placeholder="Place some text here" id=""></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="">Points</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="">A</label>
-                                                <input type="text" name="pa" class="form-control" id=""
-                                                    placeholder="Enter Points">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="">B</label>
-                                                <input type="text" name="pb" class="form-control" id=""
-                                                    placeholder="Enter Points">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="">C</label>
-                                                <input type="text" name="pc" class="form-control" id=""
-                                                    placeholder="Enter Points">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="">D</label>
-                                                <input type="text" name="pd" class="form-control" id=""
-                                                    placeholder="Enter Points">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label>Expiry Date</label>
-                                                <div class="form-group">
-                                                    <input type="date" name="ed" class="form-control" id="">
+                                                <div class="col-xs-3 ml-1">
+                                                    <label for="status">Reward</label>
+                                                    <input type="number" name="reward" class="form-control input-sm" id="status">
+                                                    <input type="text" class="" value="UBS Coin" disabled >
+                                                </div>
+                                                <div class="col-xs-3 ml-1">
+                                                    <label for="status">Duration</label>
+                                                    <input type="datetime-local" min="<%= time %>" name="starttime" class="form-control input-sm"
+                                                        id="status">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
-                                            <hr>
-                                            <h3>Details</h3>
-                                            <hr>
-                                        </div>
-                                        <div class="col-lg-12">
                                             <div class="form-group">
-                                              <label for="">Photos</label>
-                                                <input type="file" class="form-control" id="" name="photos" multiple>
-                                            </div>
-                                          </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label for="">About</label>
-                                                <textarea class="form-control" name="about" placeholder="Place some text here" id=""></textarea>
+                                                <label for="status">About</label>
+                                                <textarea name="" id="" name="about" class="form-control" cols="30" rows="10"></textarea>
                                             </div>
                                         </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                            <label for="">Notes</label>
-                                            <div class="wrapper3">
-                                              <div class="input-box">
-                                                  <div class="row">
-                                                  <div class="col-lg-10">
-                                                <input type="text" class="form-control mb-2" name="notes">
-                                                </div>
-                                                <div class="col-lg-2">
-                                                <a class="add-btn3" alt="Add" title="Add"><i class="fa fa-plus mt-2"></i></a>
-                                                </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            </div>
-                                          </div>
-                                          <div class="col-lg-12">
-                                            <div class="form-group">
-                                            <label for="">Instruction</label>
-                                            <div class="wrapper1">
-                                              <div class="input-box">
-                                                  <div class="row">
-                                                  <div class="col-lg-10">
-                                                <input type="text" class="form-control mb-2" name="instruction">
-                                                </div>
-                                                <div class="col-lg-2">
-                                                <a class="add-btn1" alt="Add" title="Add"><i class="fa fa-plus mt-2"></i></a>
-                                                </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            </div>
-                                          </div>
-                                          <div class="col-lg-12">
-                                            <div class="form-group">
-                                            <label for="">Terms & Condition</label>
-                                            <div class="wrapper2">
-                                              <div class="input-box">
-                                                  <div class="row">
-                                                  <div class="col-lg-10">
-                                                <input type="text" class="form-control mb-2" name="tc">
-                                                </div>
-                                                <div class="col-lg-2">
-                                                <a class="add-btn2" alt="Add" title="Add"><i class="fa fa-plus mt-2"></i></a>
-                                                </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            </div>
-                                          </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                            <label for="">Offer Price</label>
-                                            <input type="text" name="offerprice" class="form-control" id="" placeholder="Enter Title">
-                                            </div>
-                                          </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                     <!-- /.card-body -->
