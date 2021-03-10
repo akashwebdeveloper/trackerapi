@@ -1,6 +1,7 @@
 const Challenges = require('../../models/challenge')
 const moment = require('moment');
-
+const m = moment();
+const todayDate = m.format('YYYY-MM-DDTHH:mm')
 module.exports = {
     getAllChallenges: (req, res) => {
 
@@ -34,7 +35,12 @@ module.exports = {
                 }
 
                 obj.remaining = time
-                chall.push(obj)
+                console.log(moment(challenge.starttime).format('YYYY-MM-DDTHH:mm'));
+                console.log(todayDate);
+                
+                if (moment(challenge.starttime).format('YYYY-MM-DDTHH:mm') > todayDate) {
+                    chall.push(obj)
+                }
             });
 
 
