@@ -91,7 +91,7 @@ module.exports = {
                         pages: Math.ceil(count / perpage),
                         page_name: 'table',
                         perpage,
-                        sub_page: 'challengeform',
+                        sub_page: 'challenge',
                         moment: moment
                     })
                 });
