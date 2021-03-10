@@ -131,7 +131,7 @@ module.exports = {
                             return res.status(200).json({
                                 success: true,
                                 message: `Challenges details are here`,
-                                data: chall
+                                data: chall[0]
                             })
                         })
                     })
