@@ -8,8 +8,10 @@ const challengeSchema = new Schema({
     goal: { type: String },
     reward: { type: String },
     starttime: { type: String },
+    expiretime: { type: String },
     about: { type: String },
-    started:[{type: ObjectId, ref:"User"}],
+    startstatus: { type: String, default: 'coming'},
+    joined:[{type: ObjectId, ref:"User"}],
 }, { timestamps: true });
 
 module.exports = mongoose.model('challenge', challengeSchema)

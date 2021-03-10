@@ -60,7 +60,7 @@
                                                     <input type="text" class="" value="UBS Coin" disabled >
                                                 </div>
                                                 <div class="col-xs-3 ml-1">
-                                                    <label for="status">Duration</label>
+                                                    <label for="status">Starting Time</label>
                                                     <input type="datetime-local" min="<%= time %>" name="starttime" class="form-control input-sm"
                                                         id="status">
                                                 </div>
@@ -70,6 +70,13 @@
                                             <div class="form-group">
                                                 <label for="status">About</label>
                                                 <textarea id="" name="about" class="form-control" cols="30" rows="10"></textarea>
+                                            </div>
+                                            <div class="form-group row" style="margin-left: 0.1rem;">
+                                                <div class="col-xs-3">
+                                                    <label for="status">Expiry Time</label>
+                                                    <input type="datetime-local" min="<%= time %>" name="expiretime" class="form-control input-sm"
+                                                        id="status">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

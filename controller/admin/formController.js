@@ -6,7 +6,6 @@ const todayDate = m.format('YYYY-MM-DDTHH:mm')
 
 module.exports = {
     getreferralform: (req, res) => {
-
         Admin.find({}, (err, data) => {
 
             return res.render('referral', {
@@ -33,7 +32,7 @@ module.exports = {
     },
     createchallenge: (req, res) => {
         
-        const { name, status, goal, reward, starttime, about } = req.body
+        const { name, status, goal, reward, starttime, about, expiretime } = req.body
 
         const challenge = new Challenge({
             name: name,
@@ -41,6 +40,7 @@ module.exports = {
             goal: goal,
             reward: reward,
             starttime: starttime,
+            expiretime: expiretime,
             about: about
         })
 
@@ -52,18 +52,23 @@ module.exports = {
         })
     },
     updatechallenge: (req, res) => {
-        const { referral } = req.body
-
-        Admin.updateOne({ type: "admin" }, { $set: { referral: referral } }, (err, data) => {
-
-            return res.redirect('/admin/challengeform')
-        })
+        const {  } = req.body
     },
     challengetable: (req, res) => {
         Challenge.find({}, (err, data) => {
-
-            // console.log(moment(data[0].starttime).format('DD/MM/YYYY hh:mm a'));
-
+            data.forEach(challenge => {
+                if (new Date(challenge.starttime).getTime() >= new Date().getTime()) {
+                    Challenge.updateOne({_id: challenge._id},{new: true}, {$set: {startstatus: 'coming'}}, (err)=>{
+                        if (err) throw err;
+                        // console.log('coming Successfully Updated');
+                    })
+                }else {
+                    Challenge.updateOne({_id: challenge._id}, {$set: {startstatus: 'started'}}, (err)=>{
+                        if (err) throw err;
+                        // console.log('StartStatus Successfully Updated');
+                    })
+                }
+            })
         })
         try {
             var query = {};

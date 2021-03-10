@@ -49,10 +49,15 @@
                     const minutes = (challengestart.diff(today, 'minutes') - (1440 * (days))) - (60 * hours);
 
                     var time = "";
-                    if (days > 0) {
-                    time += `${days} Days ${hours} Hours`;
-                    } else {
-                    time += `${hours} Hours ${minutes} Minutes `;
+                    if (challenge.startstatus != 'started') {
+                      if (days > 0) {
+                        time += `${days} Days ${hours} Hours`;
+                        } else {
+                        time += `${hours} Hours ${minutes} Minutes `;
+                      }
+                    } else{
+                      time += "Time is over"
+
                     }
 
                     %>
@@ -64,7 +69,7 @@
                         <%= challenge.name %>
                       </td>
                       <td>
-                        <%= challenge.status %>
+                        <%= challenge.startstatus %>
                       </td>
                       <td>
                         <%= challenge.goal %> Steps
