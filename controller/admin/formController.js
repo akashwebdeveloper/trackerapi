@@ -92,7 +92,7 @@ module.exports = {
                         page_name: 'table',
                         perpage,
                         sub_page: 'challengeform',
-                        timeset: moment
+                        moment: moment
                     })
                 });
             });
