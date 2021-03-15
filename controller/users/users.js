@@ -148,10 +148,10 @@ module.exports = {
         })
     },
     emailverification: (req, res) => {
-        const { phone, email } = req.body
+        const { email } = req.body
 
-        User.findOne({ $or: [{ phone: phone }, { email: email }] }, (err, users) => {
-            // User.findOne({ email: email }, (err, users) => {
+        // User.findOne({ $or: [{ phone: phone }, { email: email }] }, (err, users) => {
+            User.findOne({ email: email }, (err, users) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -161,15 +161,15 @@ module.exports = {
             }
 
             if (users) {
-                return res.status(202).json({
-                    success: false,
-                    status: 202,
+                return res.status(200).json({
+                    success: true,
+                    status: 200,
                     message: "user Already exist"
                 })
             }
 
             return res.status(200).json({
-                success: true,
+                success: false,
                 status: 200,
                 message: "New user",
             })

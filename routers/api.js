@@ -31,7 +31,6 @@ router.post('/searchusername', getAllUsername)
 
 // if number is register then send otp
 router.post('/register', register)
-router.post('/register1', register1)
 
 
 // Update user data

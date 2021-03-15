@@ -1,8 +1,8 @@
 require('dotenv').config()
-
 const serviceID = process.env.SERVICE_ID
 const User = require('../../models/user')
 
+const referralCodeGenerator = require('referral-code-generator')
 
 
 function init(client) {
@@ -11,7 +11,7 @@ function init(client) {
             const { type, fname, lname, username, dob, countrycode, phone, email, gender, weight, height, token, photos } = req.body
 
             User.findOne({ $or: [{ phone: phone }, { email: email }] }, (err, users) => {
-            // User.findOne({ email: email }, (err, users) => {
+                // User.findOne({ email: email }, (err, users) => {
                 if (err) {
                     return res.status(502).json({
                         success: false,
@@ -42,10 +42,14 @@ function init(client) {
                     countrycode: countrycode || "",
                     phone: phone || "",
                     token: token || "",
+                    referralcode: referralCodeGenerator.custom('uppercase', 3, 4, username)
                 })
                 // New User Save to database
                 user.save().then(user => {
-                    // login
+
+                    console.log(referralCodeGenerator.custom('uppercase', 3, 4, 'temitope'));
+
+
                     return res.status(200).json({
                         success: true,
                         status: 200,
@@ -100,9 +104,8 @@ function init(client) {
                             })
                         })
                 } else {
-                    return res.status(202).json({
-                        success: true,
-                        status: 202,
+                    return res.status(404).json({
+                        success: false,
                         message: "Mobile number is not registered",
                     })
                 }
@@ -206,7 +209,7 @@ function init(client) {
                     // })
                     console.log(verification_check.status)
 
-                    User.find({phone: phone}, (err, data) =>{
+                    User.find({ phone: phone }, (err, data) => {
                         if (err) {
                             return res.status(502).json({
                                 success: false,
@@ -235,11 +238,11 @@ function init(client) {
                             user: data
                         })
 
-                        
+
                     })
-                    
-                    
-                    
+
+
+
                 }).catch((err) => {
                     res.status(202).json({
                         success: false,
