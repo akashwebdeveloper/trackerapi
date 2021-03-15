@@ -164,7 +164,8 @@ module.exports = {
                 return res.status(200).json({
                     success: true,
                     status: 200,
-                    message: "user Already exist"
+                    message: "user Already exist",
+                    data: users
                 })
             }
 
