@@ -1,5 +1,6 @@
 require('dotenv').config()
 const serviceID = process.env.SERVICE_ID
+const Admin = require('../../models/admin')
 const User = require('../../models/user')
 
 const referralCodeGenerator = require('referral-code-generator')
@@ -8,7 +9,7 @@ const referralCodeGenerator = require('referral-code-generator')
 function init(client) {
     module.exports = {
         signup(req, res) {
-            const { type, fname, lname, username, dob, countrycode, phone, email, gender, weight, height, token, photos } = req.body
+            const { type, fname, lname, username, dob, countrycode, phone, email, gender, weight, height, token, photos, referrercode } = req.body
 
             User.findOne({ $or: [{ phone: phone }, { email: email }] }, (err, users) => {
                 // User.findOne({ email: email }, (err, users) => {
@@ -42,20 +43,25 @@ function init(client) {
                     countrycode: countrycode || "",
                     phone: phone || "",
                     token: token || "",
-                    referralcode: referralCodeGenerator.custom('uppercase', 3, 4, username)
+                    referralcode: referralCodeGenerator.custom('uppercase', 4, 5, username)
                 })
                 // New User Save to database
                 user.save().then(user => {
-
-                    console.log(referralCodeGenerator.custom('uppercase', 3, 4, 'temitope'));
-
+                    if (referrercode) {
+                        Admin.find({}, (err, result) => { 
+                            User.updateOne({ referralcode: referrercode }, { $inc: { coin: result[0].referral }}, (err, result)=>{
+                                if (err)  throw err;
+                            })
+                         })
+                    }
 
                     return res.status(200).json({
                         success: true,
                         status: 200,
                         message: "verfied data save in to database",
-                        user: [user],
+                        user: [user]
                     })
+
                 }).catch(err => {
                     return res.status(503).json({
                         success: 0,
@@ -237,8 +243,6 @@ function init(client) {
                             phone,
                             user: data
                         })
-
-
                     })
 
 
