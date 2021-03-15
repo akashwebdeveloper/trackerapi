@@ -5,7 +5,7 @@ const User = require('../../models/user')
 module.exports = {
     getalldata: (req, res) => {
 
-        User.find({ type: { $ne: 'admin' }}, [ 'email', 'fname', 'lname', 'username', 'photos' ], (err, users) => {
+        User.find({ type: { $ne: 'admin' } }, ['email', 'fname', 'lname', 'username', 'photos'], (err, users) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -147,35 +147,53 @@ module.exports = {
             })
         })
     },
-    emailverification: (req, res) =>{
-        const {phone, email } = req.body
+    emailverification: (req, res) => {
+        const { phone, email } = req.body
 
-            User.findOne({ $or: [{ phone: phone }, { email: email }] }, (err, users) => {
+        User.findOne({ $or: [{ phone: phone }, { email: email }] }, (err, users) => {
             // User.findOne({ email: email }, (err, users) => {
-                if (err) {
-                    return res.status(502).json({
-                        success: false,
-                        status: 502,
-                        message: "err from database"
-                    })
-                }
-
-                if (users) {
-                    return res.status(202).json({
-                        success: false,
-                        status: 202,
-                        message: "user Already exist"
-                    })
-                }
-
-                return res.status(200).json({
-                    success: true,
-                    status: 200,
-                    message: "New user",
+            if (err) {
+                return res.status(502).json({
+                    success: false,
+                    status: 502,
+                    message: "err from database"
                 })
-                
+            }
+
+            if (users) {
+                return res.status(202).json({
+                    success: false,
+                    status: 202,
+                    message: "user Already exist"
+                })
+            }
+
+            return res.status(200).json({
+                success: true,
+                status: 200,
+                message: "New user",
             })
-                
-    }
+        })
+    },
+    getAllUsername: (req, res) => {
+        const { username } = req.body
+        
+        User.find({username: { '$regex': `^${username}`, '$options': 'i' }},['_id','username'],(err,result)=>{
+            if (err) {
+                return res.status(502).json({
+                    success: false,
+                    message: "err from database"
+                })
+            }
+
+            if (result) {
+                return res.status(202).json({
+                    success: false,
+                    message: "All username are here",
+                    data: result
+                })
+            }
+        })  
+    },
 }
 

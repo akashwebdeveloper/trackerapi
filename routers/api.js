@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { signup, phone, verify, register, register1, resendotp } = require('../controller/auth/phoneController')
 
 const { oneUser, multiUser } = require('../controller/notify')
-const { getalldata, getdata, update, emailverification} = require('../controller/users/users')
+const { getalldata, getdata, update, emailverification, getAllUsername} = require('../controller/users/users')
 const { follow, unfollow } = require('../controller/users/followController')
 const { updatephoto, upload } = require('../controller/photos/profilephoto')
 const { free, appexclusive, accessories, apparel, electronics, food_beverage, footwear, health_wellness, jewellery, personalcare, sleepsolution, subscription, others } = require('../controller/bazar/bannerController')
@@ -23,6 +23,7 @@ router.post('/signup', signup)
 // get data from database
 router.post('/getinfo', getdata)
 router.get('/getalluser', getalldata)
+router.post('/searchusername', getAllUsername)
 
 // router.post('/oneuser', oneUser)
 // router.post('/multiuser', multiUser)
