@@ -51,8 +51,8 @@ app.use(passport.session())
 app.use(flash())
 
 // Body parser middleware
-app.use(bodyparser.urlencoded({extended: true}))
-app.use(bodyparser.json())
+app.use(bodyParser.json({limit: '2mb'}));
+app.use(bodyParser.urlencoded({limit: '2mb', extended: true, parameterLimit: 1000000}));
 // app.use(express.urlencoded({ extended: false }))
 // app.use(express.json())
 

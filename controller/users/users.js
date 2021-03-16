@@ -198,6 +198,7 @@ module.exports = {
     },
     getSyncNumber: (req, res) => {
         const { uid } = req.body
+console.log(uid);
 
         User.find({}, ['_id', 'phone', 'username'], (err, data1) => {
             User.findById(uid, ['synccontact'], (err, data2) => {
