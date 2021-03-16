@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const bodyparser = require('body-parser');
+const bodyParser = require('body-parser');
 const app = express();
 const request = require('request');
 const path = require('path')
@@ -51,8 +51,8 @@ app.use(passport.session())
 app.use(flash())
 
 // Body parser middleware
-app.use(bodyParser.json({limit: '2mb'}));
-app.use(bodyParser.urlencoded({limit: '2mb', extended: true, parameterLimit: 1000000}));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit: 1000000}));
 // app.use(express.urlencoded({ extended: false }))
 // app.use(express.json())
 
