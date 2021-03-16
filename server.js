@@ -51,7 +51,7 @@ app.use(passport.session())
 app.use(flash())
 
 // Body parser middleware
-app.use(bodyparser.urlencoded({extended: false}))
+app.use(bodyparser.urlencoded({extended: true}))
 app.use(bodyparser.json())
 // app.use(express.urlencoded({ extended: false }))
 // app.use(express.json())
