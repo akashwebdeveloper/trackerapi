@@ -52,7 +52,7 @@ module.exports = {
 
             return res.status(200).json({
                 success: true,
-                message: `Total ${result.length} Challenges are here`,
+                message: `Total ${chall.length} Challenges are here`,
                 data: chall
             })
         })

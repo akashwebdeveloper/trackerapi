@@ -151,7 +151,7 @@ module.exports = {
         const { email } = req.body
 
         // User.findOne({ $or: [{ phone: phone }, { email: email }] }, (err, users) => {
-            User.findOne({ email: email }, (err, users) => {
+        User.findOne({ email: email }, (err, users) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -178,8 +178,8 @@ module.exports = {
     },
     getAllUsername: (req, res) => {
         const { username } = req.body
-        
-        User.find({username: { '$regex': `^${username}`, '$options': 'i' }},['_id','username'],(err,result)=>{
+
+        User.find({ username: { '$regex': `^${username}`, '$options': 'i' } }, ['_id', 'username'], (err, result) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -189,12 +189,58 @@ module.exports = {
 
             if (result) {
                 return res.status(202).json({
-                    success: false,
+                    success: true,
                     message: "All username are here",
                     data: result
                 })
             }
-        })  
+        })
+    },
+    getSyncNumber: (req, res) => {
+        const { uid } = req.body
+
+        User.find({}, ['_id', 'phone', 'username'], (err, data1) => {
+            User.findById(uid, ['synccontact'], (err, data2) => {
+                if (err) throw err
+
+
+                const finalArray = [];
+                data1.forEach((e1) => data2.synccontact.forEach((e2) => {
+                    if (e1.phone === e2) {
+                        const pushObj = {uid: e1._id, username: e1.username}
+                        finalArray.push(pushObj)
+                    }
+                }))
+
+
+                return res.status(200).json({
+                    success: true,
+                    message: "mobile Number Successfully synced",
+                    data: finalArray
+                })
+            })
+        })
+    },
+    syncNumber: (req, res) => {
+        const { uid, arrayofnumber } = req.body
+
+        User.find({}, ['_id', 'phone'], (err, datas) => {
+
+            const finalArray = [];
+            datas.forEach((e1) => arrayofnumber.forEach((e2) => {
+                if (e1.phone === e2) {
+                    finalArray.push(e1.phone)
+                }
+            }))
+
+            User.findByIdAndUpdate(uid, { synccontact: finalArray }, (err, data) => {
+                if (err) throw err
+                return res.status(200).json({
+                    success: true,
+                    message: "mobile Number Successfully synced"
+                })
+            })
+        })
     },
 }
 

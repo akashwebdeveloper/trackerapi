@@ -305,11 +305,6 @@ module.exports = {
         })
     },
     bazartable: (req, res) => {
-
-        Bazar.find({}, (err, data) => {
-
-            console.log(data);
-        })
         try {
             var query = {};
             var page = 1;

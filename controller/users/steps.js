@@ -2,6 +2,8 @@ const User = require('../../models/user')
 const moment = require('moment');
 const m = moment();
 const todayDate = m.format()
+const Challenge = require('../../models/challenge')
+
 // const todayDate = '2021.03.01'
 
 
@@ -77,7 +79,6 @@ module.exports = {
                         allProgress[index].step = step
                     }
                 });
-                
             }
             User.findOneAndUpdate({ _id: uid }, { $set: { progress: allProgress, coin: coin } }, { new: true }, (err, items) => {
                 
@@ -156,5 +157,65 @@ module.exports = {
 
 
         })
+    },
+    challengeStepUpdate: (req, res) => {
+        // const { uid, step } = req.body
+
+        //     Challenge.find({joined: { $in: [ uid ] } }, ['_id', 'name', 'startstatus', 'goal','starttime', 'expiretime'], (err, datas) => {
+        //     // User.findOne({ email: email }, (err, users) => {
+
+        //     if (err) {
+        //         return res.status(502).json({
+        //             success: false,
+        //             status: 502,
+        //             message: "err from database"
+        //         })
+        //     }
+
+        //     let challenges = datas.filter(challenge => (moment(challenge.starttime).format('YYYY-MM-DD hh:mm') <= m.format('YYYY-MM-DD hh:mm')));
+        //     console.log(challenges);
+
+
+            
+            
+        //     const todaysteps = { challenge_id: name, step: step };
+
+        //     // Adding Coins
+        //     var coin = (totalStep*0.001).toFixed(2);
+
+
+        //     var allProgress;
+        //     let progress = items.progress.filter(prog => (moment(prog.date).format('YYYY-MM-DD') == m.format('YYYY-MM-DD')));
+
+            
+        //     if (items.progress.length === 0) {
+        //         allProgress = [];
+        //         allProgress.push(todaysteps)
+
+        //     } else if (progress.length === 0) {
+        //         allProgress = items.progress;
+        //         allProgress.push(todaysteps)
+                
+        //     } else {
+        //         allProgress = items.progress;
+        //         allProgress.forEach((element, index) => {
+
+        //             if (moment(element.date).format('YYYY-MM-DD') == m.format('YYYY-MM-DD')) {
+        //                 allProgress[index].step = step
+        //             }
+        //         });
+                
+        //     }
+        //     User.findOneAndUpdate({ _id: uid }, { $set: { progress: allProgress, coin: coin } }, { new: true }, (err, items) => {
+                
+        //         return res.status(201).json({
+        //             success: false,
+        //             message: "succesfully Updated Steps data for graph",
+        //         })
+
+        //     })
+
+            
+        // })  
     },
 }

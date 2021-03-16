@@ -2,14 +2,14 @@ const router = require('express').Router();
 const { signup, phone, verify, register, register1, resendotp } = require('../controller/auth/phoneController')
 
 const { oneUser, multiUser } = require('../controller/notify')
-const { getalldata, getdata, update, emailverification, getAllUsername} = require('../controller/users/users')
+const { getalldata, getdata, update, emailverification, getAllUsername, syncNumber, getSyncNumber} = require('../controller/users/users')
 const { follow, unfollow } = require('../controller/users/followController')
 const { updatephoto, upload } = require('../controller/photos/profilephoto')
 const { free, appexclusive, accessories, apparel, electronics, food_beverage, footwear, health_wellness, jewellery, personalcare, sleepsolution, subscription, others } = require('../controller/bazar/bannerController')
 const { addbookmark, removebookmark, bookmarklist } = require('../controller/bazar/bookmarkController')
 const { like, unlike } = require('../controller/bazar/likeController')
 const { productfullview, details } = require('../controller/bazar/fullviewController')
-const { todayprogress, updates, progressgraph, totalstep } = require('../controller/users/steps')
+const { todayprogress, updates, progressgraph, totalstep, challengeStepUpdate } = require('../controller/users/steps')
 const { getAllChallenges, challengedetails, joinchallenge } = require('../controller/users/challenges')
 
 // Phone OTP verification
@@ -24,6 +24,8 @@ router.post('/signup', signup)
 router.post('/getinfo', getdata)
 router.get('/getalluser', getalldata)
 router.post('/searchusername', getAllUsername)
+router.post('/syncnumber', syncNumber)
+router.post('/getsyncnumber', getSyncNumber)
 
 // router.post('/oneuser', oneUser)
 // router.post('/multiuser', multiUser)
@@ -84,6 +86,8 @@ router.post('/todayprogress', todayprogress)
 // Updating Step graph
 router.post('/updates', updates)
 router.post('/progressgraph', progressgraph)
+// Updating challenge steps
+router.post('/challengeStepUpdate', challengeStepUpdate)
 // total step & average step
 router.post('/totalstep', totalstep)
 

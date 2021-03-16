@@ -23,7 +23,9 @@ const userSchema = new Schema({
     todaykm: { type: Number, default: 0 },
     calorie: { type: String, default: 0 },
     referralcode: { type: String },
+    synccontact: { type: Array },
     progress: { type:Array },
+    challenges: { type:Array },
     coin: { type: Number, default: 0 },
 }, { timestamps: true });
 

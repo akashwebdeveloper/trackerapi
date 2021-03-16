@@ -107,7 +107,7 @@
                       <% if (current==1) { %>
                         <li class="page-item disabled"><a class="page-link">First</a></li>
                         <% } else { %>
-                          <li><a class="page-link" href="/admin/bazartable/?page=1">First</a></li>
+                          <li><a class="page-link" href="/admin/challengetable/?page=1">First</a></li>
                           <% } %>
                             <% var i=(Number(current)> 5 ? Number(current) - 4 : 1) %>
                               <% if (i !==1) { %>
@@ -119,7 +119,7 @@
                                           <%= i %>
                                         </a></li>
                                       <% } else { %>
-                                        <li><a class="page-link" href="/admin/bazartable/?page=<%= i %>">
+                                        <li><a class="page-link" href="/admin/challengetable/?page=<%= i %>">
                                             <%= i %>
                                           </a></li>
                                         <% } %>
@@ -131,7 +131,7 @@
                                                   <li class="page-item disabled"><a class="page-link">Last</a></li>
                                                   <% } else { %>
                                                     <li><a class="page-link"
-                                                        href="/admin/bazartable/?page=<%= pages %>">Last</a></li>
+                                                        href="/admin/challengetable/?page=<%= pages %>">Last</a></li>
                                                     <% } %>
                     </ul>
                     <% } %>
