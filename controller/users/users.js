@@ -198,26 +198,29 @@ module.exports = {
     },
     getSyncNumber: (req, res) => {
         const { uid } = req.body
-console.log(uid);
 
         User.find({}, ['_id', 'phone', 'username'], (err, data1) => {
-            User.findById(uid, ['synccontact'], (err, data2) => {
+            User.findById(uid, ['synccontact', 'following'], (err, data2) => {
                 if (err) throw err
 
 
                 const finalArray = [];
                 data1.forEach((e1) => data2.synccontact.forEach((e2) => {
                     if (e1.phone === e2) {
-                        const pushObj = {uid: e1._id, username: e1.username}
+                        const pushObj = { _id: e1._id, username: e1.username }
                         finalArray.push(pushObj)
                     }
                 }))
 
 
+                const final = finalArray.filter(entry1 => !data2.following.some(entry2 => entry1._id.toString() === entry2.toString()));
+
+
+
                 return res.status(200).json({
                     success: true,
                     message: "mobile Number Successfully synced",
-                    data: finalArray
+                    data: final
                 })
             })
         })
@@ -229,10 +232,12 @@ console.log(uid);
 
             const finalArray = [];
             datas.forEach((e1) => arrayofnumber.forEach((e2) => {
-                if (e1.phone === e2) {
+                if (e1.phone === e2 && e1._id != uid) {
                     finalArray.push(e1.phone)
                 }
             }))
+
+
 
             User.findByIdAndUpdate(uid, { synccontact: finalArray }, (err, data) => {
                 if (err) throw err

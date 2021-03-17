@@ -172,14 +172,26 @@ module.exports = {
                             message: "err from database",
                             error: err
                         })
-                    } else {
+                    }
+
+                    const challengeStart = {
+                        cid: result._id,
+                        cname: result.name,
+                        cgoal: result.goal,
+                        cstarttime: result.starttime,
+                        cstep: 0
+                    }
+
+
+                        
+                        
+                        User.findByIdAndUpdate(uid,)
                         return res.status(200).json({
                             success: true,
                             status: 200,
                             message: `Joined successfully this Challenge`,
                             data: result.joined
                         })
-                    }
                 })
             }
         })
