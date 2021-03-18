@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { signup, phone, verify, register, register1, resendotp } = require('../controller/auth/phoneController')
 
 const { oneUser, multiUser } = require('../controller/notify')
-const { getalldata, getdata, update, emailverification, getAllUsername, syncNumber, getSyncNumber} = require('../controller/users/users')
+const { getalldata, getdata, update, emailverification, getAllUsername, syncNumber, getSyncNumber, deleteSyncNumber, friendsRanking} = require('../controller/users/users')
 const { follow, unfollow } = require('../controller/users/followController')
 const { updatephoto, upload } = require('../controller/photos/profilephoto')
 const { free, appexclusive, accessories, apparel, electronics, food_beverage, footwear, health_wellness, jewellery, personalcare, sleepsolution, subscription, others } = require('../controller/bazar/bannerController')
@@ -24,8 +24,14 @@ router.post('/signup', signup)
 router.post('/getinfo', getdata)
 router.get('/getalluser', getalldata)
 router.post('/searchusername', getAllUsername)
+
+// Sync Contacts
 router.post('/syncnumber', syncNumber)
 router.post('/getsyncnumber', getSyncNumber)
+router.post('/deletesyncnumber', deleteSyncNumber)
+
+// Friends Activitty
+router.post('/friendsranking', friendsRanking)
 
 // router.post('/oneuser', oneUser)
 // router.post('/multiuser', multiUser)

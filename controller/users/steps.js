@@ -105,20 +105,35 @@ module.exports = {
             }
 
             const graph = [];
-            result.progress.forEach((daily, index) => {
-                const li = result.progress[result.progress.length - (index + 1)]
-                const din = moment(li.date).format('ddd')
-                
-                li.day = din
-                graph.push(li)
+            result.progress.every((daily, index) => {
+
+                const steps = result.progress[result.progress.length - (index + 1)]
+                const li = {};
+                if (moment(steps.date).format('YYYY-MM-DD') !== moment(new Date()).subtract(index-1, 'day').format('YYYY-MM-DD')) {
+
+                    li.date = moment(new Date()).subtract(index, 'd').format();
+                    li.step = 0;
+                    li.day = moment(new Date()).subtract(index, 'd').format('ddd');
+                }else{
+                    
+                    const din = moment(steps.date).format('ddd')
+                    li.date = steps.date;
+                    li.step = steps.step;
+                    li.day = din;
+                    console.log(li);
+                }
+                graph.push(li);
                 if (index === 6) { return false }
+                return true;
             });
+
+            const sortedArray  = graph.sort((a,b) => new moment(a.date).format('YYYYMMDD') - new moment(b.date).format('YYYYMMDD'))
 
 
             return res.status(201).json({
                 success: true,
                 message: "weekly progress graph are here",
-                graph
+                graph: sortedArray
             })
         })
     },

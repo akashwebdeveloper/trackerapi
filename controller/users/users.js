@@ -1,6 +1,6 @@
-
 const User = require('../../models/user')
-
+const moment = require('moment');
+const m = moment();
 
 module.exports = {
     getalldata: (req, res) => {
@@ -199,7 +199,7 @@ module.exports = {
     getSyncNumber: (req, res) => {
         const { uid } = req.body
 
-        User.find({}, ['_id', 'phone', 'username'], (err, data1) => {
+        User.find({}, ['_id', 'phone', 'username', 'phone'], (err, data1) => {
             User.findById(uid, ['synccontact', 'following'], (err, data2) => {
                 if (err) throw err
 
@@ -207,7 +207,7 @@ module.exports = {
                 const finalArray = [];
                 data1.forEach((e1) => data2.synccontact.forEach((e2) => {
                     if (e1.phone === e2) {
-                        const pushObj = { _id: e1._id, username: e1.username }
+                        const pushObj = { _id: e1._id, username: e1.username, phone: e1.phone }
                         finalArray.push(pushObj)
                     }
                 }))
@@ -247,6 +247,88 @@ module.exports = {
                 })
             })
         })
+    },
+    deleteSyncNumber: (req, res) => {
+        const { uid, snumber } = req.body
+
+        User.findById(uid, ['synccontact'], (err, data) => {
+
+            const synccontact = data.synccontact;
+            var index = synccontact.map(x => {
+                return x;
+            }).indexOf(snumber);
+            synccontact.splice(index, 1);
+
+
+
+            User.findByIdAndUpdate(uid, { synccontact }, (err, data) => {
+                if (err) throw err
+                return res.status(200).json({
+                    success: true,
+                    message: "mobile Number delete successfully from Sync Contact"
+                })
+            })
+        })
+    },
+    friendsRanking: (req, res) => {
+        const { uid } = req.body
+
+        User.find({}, ['progress', 'username', 'fname', 'lname'], (err, data1) => {
+            User.findById(uid, ['following'], (err, data2) => {
+
+                const ranking = [];
+                data2.following.forEach((e1) => data1.forEach((e2) => {
+
+                    if (e1.toString() === e2._id.toString()) {
+                        console.log(moment().day(0));
+
+
+                        e2.progress.every((daily, index) => {
+                            const steps = e2.progress[e2.progress.length - (index + 1)]
+                            const li = {};
+                            if (moment(steps.date).format('YYYY-MM-DD') !== moment(new Date()).subtract(index - 1, 'day').format('YYYY-MM-DD')) {
+
+                                li.date = moment(new Date()).subtract(index, 'd').format();
+                                li.step = 0;
+                                li.day = moment(new Date()).subtract(index, 'd').format('ddd');
+                            } else {
+
+                                const din = moment(steps.date).format('ddd')
+                                li.date = steps.date;
+                                li.step = steps.step;
+                                li.day = din;
+                                console.log(li);
+                            }
+                            ranking.push(li);
+                            if (index === 6) { return false }
+                            return true;
+                        });
+
+                    }
+                }))
+                console.log(ranking);
+            })
+
+        })
+
+        // User.findById(uid, ['synccontact'], (err, data) => {
+
+        //     const synccontact = data.synccontact;
+        //     var index = synccontact.map(x => {
+        //         return x;
+        //       }).indexOf(snumber);
+        //       synccontact.splice(index, 1);
+
+
+
+        //     User.findByIdAndUpdate(uid, { synccontact }, (err, data) => {
+        //         if (err) throw err
+        //         return res.status(200).json({
+        //             success: true,
+        //             message: "mobile Number delete successfully from Sync Contact"
+        //         })
+        //     })
+        // })
     },
 }
 
