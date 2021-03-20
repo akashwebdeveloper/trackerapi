@@ -257,10 +257,11 @@ module.exports = {
             var index = synccontact.map(x => {
                 return x;
             }).indexOf(snumber);
+
+            // deleting from array
             synccontact.splice(index, 1);
 
-
-
+            // After deleteing number from array just updating array
             User.findByIdAndUpdate(uid, { synccontact }, (err, data) => {
                 if (err) throw err
                 return res.status(200).json({
@@ -276,59 +277,60 @@ module.exports = {
         User.find({}, ['progress', 'username', 'fname', 'lname'], (err, data1) => {
             User.findById(uid, ['following'], (err, data2) => {
 
-                const ranking = [];
+                const following = [];
                 data2.following.forEach((e1) => data1.forEach((e2) => {
 
                     if (e1.toString() === e2._id.toString()) {
-                        console.log(moment().day(0));
-
-
-                        e2.progress.every((daily, index) => {
-                            const steps = e2.progress[e2.progress.length - (index + 1)]
-                            const li = {};
-                            if (moment(steps.date).format('YYYY-MM-DD') !== moment(new Date()).subtract(index - 1, 'day').format('YYYY-MM-DD')) {
-
-                                li.date = moment(new Date()).subtract(index, 'd').format();
-                                li.step = 0;
-                                li.day = moment(new Date()).subtract(index, 'd').format('ddd');
-                            } else {
-
-                                const din = moment(steps.date).format('ddd')
-                                li.date = steps.date;
-                                li.step = steps.step;
-                                li.day = din;
-                                console.log(li);
-                            }
-                            ranking.push(li);
-                            if (index === 6) { return false }
-                            return true;
-                        });
-
+                        following.push(e2)
                     }
                 }))
-                console.log(ranking);
+                // console.log(following);
+
+                const ranking = [];
+
+                following.forEach(friends => {
+                    var step = 0;
+                    let rank = {};
+                    if (friends.progress.length != 0) {
+                        for (let index = 0; index < 7; index++) {
+
+                            // Find if the array contains an object by comparing the property value
+                            if (friends.progress.some((person) => moment(person.date).format('YYYY-MM-DD') === moment(new Date()).subtract(index, 'day').format('YYYY-MM-DD'))) {
+                                // Finding index number which object date matched with last 7 days
+                                const got = friends.progress.findIndex(person => moment(person.date).format('YYYY-MM-DD') === moment(new Date()).subtract(index, 'day').format('YYYY-MM-DD'));
+                                step += Number(friends.progress[got].step)
+                            } else {
+                                step += 0;
+                            }
+                        }
+                        rank.username = friends.username,
+                            rank.name = `${friends.fname} ${friends.lname}`,
+                            rank.step = step
+                        ranking.push(rank)
+                    } else {
+                        rank.username = friends.username,
+                            rank.name = `${friends.fname} ${friends.lname}`,
+                            rank.step = 0
+                        ranking.push(rank)
+                    }
+                });
+
+                // creating last 7 days Formate
+                const currentDate = moment(new Date());
+                const before7days = moment(new Date()).subtract(6, 'day');
+                const last7dateFormate = `${before7days.format('ddd')}, ${before7days.format('D')} ${before7days.format('MMM')} - ${currentDate.format('ddd')}, ${currentDate.format('D')} ${currentDate.format('MMM')}`
+
+
+                return res.status(200).json({
+                    success: true,
+                    message: "mobile Number Successfully synced",
+                    Rank: {
+                        last7dateFormate,
+                        ranking
+                    }
+                })
             })
-
         })
-
-        // User.findById(uid, ['synccontact'], (err, data) => {
-
-        //     const synccontact = data.synccontact;
-        //     var index = synccontact.map(x => {
-        //         return x;
-        //       }).indexOf(snumber);
-        //       synccontact.splice(index, 1);
-
-
-
-        //     User.findByIdAndUpdate(uid, { synccontact }, (err, data) => {
-        //         if (err) throw err
-        //         return res.status(200).json({
-        //             success: true,
-        //             message: "mobile Number delete successfully from Sync Contact"
-        //         })
-        //     })
-        // })
     },
 }
 

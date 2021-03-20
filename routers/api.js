@@ -9,7 +9,7 @@ const { free, appexclusive, accessories, apparel, electronics, food_beverage, fo
 const { addbookmark, removebookmark, bookmarklist } = require('../controller/bazar/bookmarkController')
 const { like, unlike } = require('../controller/bazar/likeController')
 const { productfullview, details } = require('../controller/bazar/fullviewController')
-const { todayprogress, updates, progressgraph, totalstep, challengeStepUpdate } = require('../controller/users/steps')
+const { todayprogress, updates, progressgraph, totalstep, challengeStepUpdate, getActivity, reaction} = require('../controller/users/steps')
 const { getAllChallenges, challengedetails, joinchallenge } = require('../controller/users/challenges')
 
 // Phone OTP verification
@@ -96,6 +96,8 @@ router.post('/progressgraph', progressgraph)
 router.post('/challengeStepUpdate', challengeStepUpdate)
 // total step & average step
 router.post('/totalstep', totalstep)
+router.post('/activity', getActivity)
+router.post('/reaction', reaction)
 
 
 // Challenges

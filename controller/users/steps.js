@@ -2,7 +2,21 @@ const User = require('../../models/user')
 const moment = require('moment');
 const m = moment();
 const todayDate = m.format()
-const Challenge = require('../../models/challenge')
+const Activity = require('../../models/activity')
+const level = [
+    { level: 0, step: 1000 },
+    { level: 1, step: 3000 },
+    { level: 2, step: 7000 },
+    { level: 3, step: 15000 },
+    { level: 4, step: 25000 },
+    { level: 5, step: 40000 },
+    { level: 6, step: 65000 },
+    { level: 7, step: 105000 },
+    { level: 8, step: 165000 },
+    { level: 9, step: 255000 },
+    { level: 10, step: 380000 },
+    { level: 11, step: 530000 },
+]
 
 // const todayDate = '2021.03.01'
 
@@ -42,27 +56,103 @@ module.exports = {
     },
     updates: (req, res) => {
         const { uid, step } = req.body
-        
+
+        // Updating Activity level
+        Activity.find({ userid: uid }, (err, result) => {
+
+            if (err) {
+                return res.status(502).json({
+                    success: false,
+                    message: "err from database in Activity",
+                    error: err
+                })
+            }
+
+            if (result.length === 0) {
+                User.findById(uid, (err, result2) => {
+
+                    const activity = new Activity({
+                        for: `level 0`,
+                        achivement: `Welcome to United By Step Activity`,
+                        reaction: [],
+                        photo: '',
+                        userid: uid,
+                        username: result2.username
+                    })
+
+                    activity.save((err, items) => {
+                        if (err) { throw err }
+                        // console.log('Activity Added successfully');
+
+                    })
+                })
+            } else {
+                var totalStep = 0;
+                User.findById(uid, (err, result1) => {
+                    if (err) {
+                        return res.status(502).json({
+                            success: false,
+                            message: "err from database",
+                            error: err
+                        })
+                    }
+
+                    if (result1.progress.length != 0) {
+                        result1.progress.forEach((daily) => {
+                            // User total Steps
+                            totalStep += parseInt(daily.step)
+                        });
+                    }
+
+
+
+                    if (level.some((upgrade) => upgrade.step > totalStep)) {
+                        // Finding index number which object date matched with last 7 days
+                        const got = level.findIndex(upgrade => upgrade.step > totalStep);
+
+                        const found = result.some(activity => activity.for === `level ${level[got].level}`);
+                        if (!found) {
+
+                            const activity = new Activity({
+                                for: `level ${level[got].level}`,
+                                achivement: `Crossed Level ${level[got].level}`,
+                                reaction: [],
+                                photo: '',
+                                userid: uid,
+                                username: result1.username
+                            })
+
+
+                            activity.save((err, items) => {
+                                if (err) { throw err }
+                                // console.log('Activity Added successfully');
+                            })
+                        };
+                    }
+                })
+            }
+        })
+
+
+        // Updating Progress graph for step
         User.findOne({ _id: uid }, (err, items) => {
-            
-            //    console.log(items);
-            
+
             const todaysteps = { date: todayDate, step: step };
             var totalStep = 0;
             items.progress.forEach((daily, index) => {
                 // User total Steps
                 totalStep += parseInt(daily.step)
             });
-            
+
 
             // Adding Coins
-            var coin = (totalStep*0.001).toFixed(2);
+            var coin = (totalStep * 0.001).toFixed(2);
 
 
             var allProgress;
             let progress = items.progress.filter(prog => (moment(prog.date).format('YYYY-MM-DD') == m.format('YYYY-MM-DD')));
 
-            
+
             if (items.progress.length === 0) {
                 allProgress = [];
                 allProgress.push(todaysteps)
@@ -70,7 +160,7 @@ module.exports = {
             } else if (progress.length === 0) {
                 allProgress = items.progress;
                 allProgress.push(todaysteps)
-                
+
             } else {
                 allProgress = items.progress;
                 allProgress.forEach((element, index) => {
@@ -81,7 +171,7 @@ module.exports = {
                 });
             }
             User.findOneAndUpdate({ _id: uid }, { $set: { progress: allProgress, coin: coin } }, { new: true }, (err, items) => {
-                
+
                 return res.status(201).json({
                     success: false,
                     message: "succesfully Updated Steps data for graph",
@@ -104,30 +194,35 @@ module.exports = {
                 })
             }
 
+
             const graph = [];
-            result.progress.every((daily, index) => {
 
-                const steps = result.progress[result.progress.length - (index + 1)]
+            for (let index = 0; index < 7; index++) {
                 const li = {};
-                if (moment(steps.date).format('YYYY-MM-DD') !== moment(new Date()).subtract(index-1, 'day').format('YYYY-MM-DD')) {
 
+                console.log(moment(new Date()).subtract(index, 'day').format('YYYY-MM-DD'));
+
+                // Find if the array contains an object by comparing the property value
+                if (result.progress.some((person) => moment(person.date).format('YYYY-MM-DD') === moment(new Date()).subtract(index, 'day').format('YYYY-MM-DD'))) {
+                    // Finding index number which object date matched with last 7 days
+                    const got = result.progress.findIndex(person => moment(person.date).format('YYYY-MM-DD') === moment(new Date()).subtract(index, 'day').format('YYYY-MM-DD'));
+
+                    const din = moment(result.progress[got].date).format('ddd');
+                    li.date = result.progress[got].date;
+                    li.step = Number(result.progress[got].step);
+                    li.day = din;
+
+                    graph.push(li);
+
+                } else {
                     li.date = moment(new Date()).subtract(index, 'd').format();
                     li.step = 0;
                     li.day = moment(new Date()).subtract(index, 'd').format('ddd');
-                }else{
-                    
-                    const din = moment(steps.date).format('ddd')
-                    li.date = steps.date;
-                    li.step = steps.step;
-                    li.day = din;
-                    console.log(li);
+                    graph.push(li);
                 }
-                graph.push(li);
-                if (index === 6) { return false }
-                return true;
-            });
+            }
 
-            const sortedArray  = graph.sort((a,b) => new moment(a.date).format('YYYYMMDD') - new moment(b.date).format('YYYYMMDD'))
+            const sortedArray = graph.sort((a, b) => new moment(a.date).format('YYYYMMDD') - new moment(b.date).format('YYYYMMDD'))
 
 
             return res.status(201).json({
@@ -160,9 +255,6 @@ module.exports = {
             // User Average Steps
             const averageStep = Math.round(totalStep / result.progress.length);
 
-
-
-
             return res.status(201).json({
                 success: true,
                 message: "Average and Total steps are here",
@@ -172,6 +264,230 @@ module.exports = {
 
 
         })
+    },
+    reaction: (req, res) => {
+        const { uid, aid, reaction } = req.body
+
+        Activity.findById(aid, (err, data) => {
+            if (err) {
+                return res.status(502).json({
+                    success: false,
+                    message: "err from database",
+                    error: err
+                })
+            }
+
+
+            // finding that uid is already react on this activity or not
+            const found = data.reaction.some(react => react.uid === uid);
+            if (data.reaction.length === 0 || !found) {
+                Activity.findOneAndUpdate(
+                    { _id: aid },
+                    {
+                        $push: {
+                            reaction: {
+                                "uid": uid,
+                                "react": reaction
+                            }
+                        }
+                    }, (err) => {
+                        if (err) {
+                            return res.status(502).json({
+                                success: false,
+                                message: "err from database",
+                                error: err
+                            })
+                        }
+                        return res.status(201).json({
+                            success: true,
+                            message: "your reaction is submitted"
+                        })
+                    })
+            } else {
+                Activity.updateOne({ "_id": aid, "reaction.uid": uid },
+                    { $set: { "reaction.$.react": reaction } }, (err, result) => {
+                        if (err) {
+                            return res.status(502).json({
+                                success: false,
+                                message: "err from database",
+                                error: err
+                            })
+                        }
+                        return res.status(201).json({
+                            success: true,
+                            message: `your reaction changed to ${reaction}`
+                        })
+                    })
+            }
+        })
+    },
+    getActivity: (req, res) => {
+        const { uid, myactivityonly } = req.body
+
+        // Updating Activity level
+        Activity.find({ userid: uid }, (err, result) => {
+
+            if (err) {
+                return res.status(502).json({
+                    success: false,
+                    message: "err from database in Activity",
+                    error: err
+                })
+            }
+
+            if (result.length === 0) {
+                User.findById(uid, (err, result2) => {
+
+                    const activity = new Activity({
+                        for: `level 0`,
+                        achivement: `Welcome to United By Step Activity`,
+                        reaction: [],
+                        photo: '',
+                        userid: uid,
+                        username: result2.username
+                    })
+
+                    activity.save((err, items) => {
+                        if (err) { throw err }
+                        // console.log('Activity Added successfully');
+
+                    })
+                })
+            } else {
+                var totalStep = 0;
+                User.findById(uid, (err, result1) => {
+                    if (err) {
+                        return res.status(502).json({
+                            success: false,
+                            message: "err from database",
+                            error: err
+                        })
+                    }
+
+                    if (result1.progress.length != 0) {
+                        result1.progress.forEach((daily) => {
+                            // User total Steps
+                            totalStep += parseInt(daily.step)
+                        });
+                    }
+
+
+
+                    if (level.some((upgrade) => upgrade.step > totalStep)) {
+                        // Finding index number which object date matched with last 7 days
+                        const got = level.findIndex(upgrade => upgrade.step > totalStep);
+
+                        const found = result.some(activity => activity.for === `level ${level[got].level}`);
+                        if (!found) {
+
+                            const activity = new Activity({
+                                for: `level ${level[got].level}`,
+                                achivement: `Crossed Level ${level[got].level}`,
+                                reaction: [],
+                                photo: '',
+                                userid: uid,
+                                username: result1.username
+                            })
+
+
+                            activity.save((err, items) => {
+                                if (err) { throw err }
+                                // console.log('Activity Added successfully');
+                            })
+                        };
+                    }
+                })
+            }
+        })
+
+        // Function for returning all the activity data
+        function activityDetails(uid, array) {
+            User.findById(uid, ['photos'], (err, data2) => {
+                if (err) {
+                    return res.status(502).json({
+                        success: false,
+                        message: "err from database",
+                        error: err
+                    })
+                }
+
+                array.forEach(element1 => {
+                    const pushActivity = {};
+                    pushActivity.profile = data2.photos
+                    pushActivity.activityid = element1._id
+                    pushActivity.username = element1.username
+                    pushActivity.achivement = element1.achivement
+
+                    const postingTime = moment(element1.createdAt)
+                    const today = moment()
+
+                    const days = today.diff(postingTime, 'days')
+                    const hours = today.diff(postingTime, 'hours') - (24 * (days));
+                    const minutes = (today.diff(postingTime, 'minutes') - (1440 * (days))) - (60 * hours);
+
+
+                    var time = "";
+                    if (days > 0) {
+                        time += `${days} d`;
+                    } else if (hours > 0) {
+                        time += `${hours} h`;
+                    } else if (minutes > 0) {
+                        time += `${minutes} m`;
+                    } else {
+                        time += `just a second ago`;
+                    }
+
+                    pushActivity.timeago = time
+                    activity.push(pushActivity)
+                })
+
+
+                return res.status(201).json({
+                    success: true,
+                    message: `Only User Activity`,
+                    activity
+                })
+            });
+        }
+
+
+
+        const activity = [];
+        if (myactivityonly === true) {
+            Activity.find({ userid: uid }, ['achivement', 'username', 'createdAt', 'reaction'], (err, data1) => {
+                if (err) {
+                    return res.status(502).json({
+                        success: false,
+                        message: "err from database",
+                        error: err
+                    })
+                }
+
+                // returning all activity user and his following
+                activityDetails(uid, data1)
+
+            })
+        } else {
+            User.findById(uid, ['following'], (err, data) => {
+                const FollowingArray = data.following
+                FollowingArray.push(uid);
+
+                Activity.find({ userid: { $in: FollowingArray } }, function (err, array) {
+                    if (err) {
+                        return res.status(502).json({
+                            success: false,
+                            message: "err from database",
+                            error: err
+                        })
+                    }
+                    // returning all activity user and his following
+                    activityDetails(uid, array)
+                });
+            })
+        }
+
+
+
     },
     challengeStepUpdate: (req, res) => {
         // const { uid, step } = req.body
@@ -191,8 +507,8 @@ module.exports = {
         //     console.log(challenges);
 
 
-            
-            
+
+
         //     const todaysteps = { challenge_id: name, step: step };
 
         //     // Adding Coins
@@ -202,7 +518,7 @@ module.exports = {
         //     var allProgress;
         //     let progress = items.progress.filter(prog => (moment(prog.date).format('YYYY-MM-DD') == m.format('YYYY-MM-DD')));
 
-            
+
         //     if (items.progress.length === 0) {
         //         allProgress = [];
         //         allProgress.push(todaysteps)
@@ -210,7 +526,7 @@ module.exports = {
         //     } else if (progress.length === 0) {
         //         allProgress = items.progress;
         //         allProgress.push(todaysteps)
-                
+
         //     } else {
         //         allProgress = items.progress;
         //         allProgress.forEach((element, index) => {
@@ -219,10 +535,10 @@ module.exports = {
         //                 allProgress[index].step = step
         //             }
         //         });
-                
+
         //     }
         //     User.findOneAndUpdate({ _id: uid }, { $set: { progress: allProgress, coin: coin } }, { new: true }, (err, items) => {
-                
+
         //         return res.status(201).json({
         //             success: false,
         //             message: "succesfully Updated Steps data for graph",
@@ -230,7 +546,7 @@ module.exports = {
 
         //     })
 
-            
+
         // })  
     },
 }
