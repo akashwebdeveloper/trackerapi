@@ -176,11 +176,8 @@ module.exports = {
                     success: false,
                     message: "succesfully Updated Steps data for graph",
                 })
-
             })
-
         })
-
     },
     progressgraph: (req, res) => {
         const { uid } = req.body
@@ -417,6 +414,8 @@ module.exports = {
                     pushActivity.activityid = element1._id
                     pushActivity.username = element1.username
                     pushActivity.achivement = element1.achivement
+                    pushActivity.reaction = element1.reaction.length
+                    pushActivity.donotuse = element1.createdAt
 
                     const postingTime = moment(element1.createdAt)
                     const today = moment()
@@ -441,11 +440,13 @@ module.exports = {
                     activity.push(pushActivity)
                 })
 
+                const sortedArray = activity.sort((a, b) => new moment(a.donotuse).format('YYYYMMDD') - new moment(b.donotuse).format('YYYYMMDD'))
+
 
                 return res.status(201).json({
                     success: true,
                     message: `Only User Activity`,
-                    activity
+                    activity: sortedArray
                 })
             });
         }
@@ -485,9 +486,6 @@ module.exports = {
                 });
             })
         }
-
-
-
     },
     challengeStepUpdate: (req, res) => {
         // const { uid, step } = req.body

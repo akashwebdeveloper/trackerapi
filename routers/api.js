@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { signup, phone, verify, register, register1, resendotp } = require('../controller/auth/phoneController')
 
 const { oneUser, multiUser } = require('../controller/notify')
-const { getalldata, getdata, update, emailverification, getAllUsername, syncNumber, getSyncNumber, deleteSyncNumber, friendsRanking} = require('../controller/users/users')
+const { getalldata, getdata, update, emailverification, getAllUsername, syncNumber, getSyncNumber, deleteSyncNumber, coinDetails, friendsRanking} = require('../controller/users/users')
 const { follow, unfollow } = require('../controller/users/followController')
 const { updatephoto, upload } = require('../controller/photos/profilephoto')
 const { free, appexclusive, accessories, apparel, electronics, food_beverage, footwear, health_wellness, jewellery, personalcare, sleepsolution, subscription, others } = require('../controller/bazar/bannerController')
@@ -45,11 +45,9 @@ router.post('/register', register)
 router.post('/updateprofile', update)
 router.post('/updatephoto', upload.single('photos'), updatephoto)
 
+
 // just for testing
 router.post('/emailverification', emailverification)
-
-
-
 
 
 // Banner data getting
@@ -98,6 +96,7 @@ router.post('/challengeStepUpdate', challengeStepUpdate)
 router.post('/totalstep', totalstep)
 router.post('/activity', getActivity)
 router.post('/reaction', reaction)
+router.post('/coindetails', coinDetails)
 
 
 // Challenges

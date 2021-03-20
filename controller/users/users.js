@@ -1,4 +1,5 @@
 const User = require('../../models/user')
+const Activity = require('../../models/activity')
 const moment = require('moment');
 const m = moment();
 
@@ -55,11 +56,16 @@ module.exports = {
                     message: "user doesn't exist"
                 })
             }
-            return res.status(200).json({
-                success: true,
-                status: 200,
-                message: "user data Available",
-                user: users
+
+            Activity.find({ userid: id }, (err, result) => {
+                const level = result[result.length - 1].for
+                return res.status(200).json({
+                    success: true,
+                    status: 200,
+                    message: "user data Available",
+                    user: users,
+                    level: level
+                })
             })
         })
     },
@@ -268,6 +274,75 @@ module.exports = {
                     success: true,
                     message: "mobile Number delete successfully from Sync Contact"
                 })
+            })
+        })
+    },
+    coinDetails: (req, res) => {
+        const { uid } = req.body
+
+        User.findById(uid, ['progress', 'spend'], (err, items) => {
+
+            var earnedcoin;
+            var spendcoin;
+            var currentcoin;
+            var transaction = [];
+
+
+            if (!items.progress.length) {
+                earnedcoin = 0;
+            } else {
+                var totalStep = 0;
+                items.progress.forEach((daily) => {
+                    
+                    var pushObj = {};
+                    pushObj.date = moment(daily.date).format('DD MMM YYYY')
+                    pushObj.content = daily.step
+                    pushObj.coin = (daily.step * 0.001).toFixed(2);
+                    pushObj.isEarned = true;
+                    pushObj.donotuse = daily.date;
+                    
+                    transaction.push(pushObj);
+                    
+                    // User total Steps
+                    totalStep += parseInt(daily.step)
+                });
+                // User Total earned coin
+                earnedcoin = parseInt((totalStep * 0.001).toFixed(2));
+            }
+
+            if (!items.spend.length) {
+                spendcoin = 0;
+            } else {
+                items.spend.forEach((daily) => {
+
+                    var pushObj = {};
+                    pushObj.date = moment(daily.date).format('DD MMM YYYY')
+                    pushObj.content = daily.product
+                    pushObj.coin = daily.coin;
+                    pushObj.isEarned = false;
+                    pushObj.donotuse = daily.date;
+
+                    transaction.push(pushObj);
+                    
+                    // User Total spend coin
+                    spendcoin += parseInt(daily.coin)
+                });
+            }
+
+            // Current Coin
+            currentcoin = earnedcoin - spendcoin;
+
+            const sortedArray = transaction.sort((a, b) => new moment(a.donotuse).format('YYYYMMDD') - new moment(b.donotuse).format('YYYYMMDD'));
+
+            return res.status(200).json({
+                success: true,
+                message: "Coin Details are here",
+                data: {
+                    transaction: sortedArray,
+                    currentcoin,
+                    earnedcoin,
+                    spendcoin
+                }
             })
         })
     },
