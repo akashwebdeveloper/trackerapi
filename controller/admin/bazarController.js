@@ -341,7 +341,7 @@ module.exports = {
     updatebazarform: (req, res) => {
         Bazar.find({ _id: req.params.id }, function (err, item) {
             if (err) throw err
-            return res.render('updatebazar', { page_name: 'form', item: item[0] })
+            return res.render('updatebazar', { page_name: 'form', sub_page: 'form',item: item[0] })
         });
     }
 }

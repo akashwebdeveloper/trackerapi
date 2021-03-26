@@ -1,0 +1,90 @@
+<div class="wrapper">
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-4">
+                        <h1>Category Add & Update</h1>
+                    </div>
+                    <div class="col-sm-4">
+                        <form action="/admin/addCategory/" method="post">
+                        <input type="text" name="id" value="<%= data._id %>" hidden>
+                        <input type="text" name="category" placeholder="Enter New Category" class="form-control ml-sm-n3"
+                            id="name">
+                    </div>
+                    <div class="col-sm-2">
+                            <button type="submit" class="btn btn-success ml-sm-n3 w-50">ADD</button>
+                        </form>
+                    </div>
+                    <div class="col-sm-2 ml-auto">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/admin">Home</a></li>
+                            <li class="breadcrumb-item">Category</li>
+                            <!-- <% if(page_name === 'form') { %>
+                            <% } %> -->
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-9">
+          <input class="form-control mb-1" type="text" id="myInput" onkeyup="filterTowns()"
+            placeholder="Search: Enter Challenge Name">
+          <div class="card">
+            <div class="card-body">
+                <% if(!data.category.length){ %>
+                    <h1 class="text-center" style="font-family: 'Tangerine', serif;font-size: 48px;text-shadow: 5px 5px 5px #aaa; color: rgb(247, 25, 25);">
+                        Category List is Empty
+                    </h1>
+                    <% } else {%>
+              <table class="table table-bordered table-hover sortable text-center" id="myTable">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Sr no</th>
+                    <th  style="padding: 10px 190px;">Category Name</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% data.category.forEach((challenge,index)=> { %>
+                    <tr>
+                      <td>
+                        <%= index + 1 %>
+                      </td>
+                      <td>
+                        <%= challenge %>
+                      </td>
+                      <td><a href="/admin/deletecategory/<%= data._id %>/<%= challenge %>" class="btn btn-danger" title="delete"
+                          alt="delete"><i class="fa fa-window-close"></i></a>&nbsp;
+                      </td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+              </table>
+              <% } %>
+            </div>
+            <!-- /.card-body -->
+          </div>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+    </div>
+</div>
+<!-- /.col -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+</section> -->
+</div>
+<script src=""></script>

@@ -470,20 +470,30 @@ module.exports = {
             })
         } else {
             User.findById(uid, ['following'], (err, data) => {
-                const FollowingArray = data.following
-                FollowingArray.push(uid);
 
-                Activity.find({ userid: { $in: FollowingArray } }, function (err, array) {
-                    if (err) {
-                        return res.status(502).json({
-                            success: false,
-                            message: "err from database",
-                            error: err
-                        })
-                    }
-                    // returning all activity user and his following
-                    activityDetails(uid, array)
-                });
+                // Finding that id which account is not private
+                User.find({ _id: { $in: data.following }, private: false }, ['_id'], (err, data1) => {
+                    const FollowingArray = [];
+
+                    // extracting from object
+                    data1.forEach(element => {
+                        FollowingArray.push(String(element._id));
+                    });
+                    // pushing Userid for getting user activity also
+                    FollowingArray.push(uid);
+
+                    Activity.find({ userid: { $in: FollowingArray } }, function (err, array) {
+                        if (err) {
+                            return res.status(502).json({
+                                success: false,
+                                message: "err from database",
+                                error: err
+                            })
+                        }
+                        // returning all activity user and his following
+                        activityDetails(uid, array)
+                    });
+                })
             })
         }
     },

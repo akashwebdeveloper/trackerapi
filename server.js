@@ -42,6 +42,12 @@ app.use(session({
 }))
 
 
+
+// app.get('*', function(req, res){
+//     res.status(404).send('what???');
+//   });
+
+
 // Passport config
 const passportInit = require('./config/passport')
 passportInit(passport)
@@ -75,9 +81,13 @@ app.set('views', path.join(__dirname, '/views'))
 app.set('view engine', 'ejs')
 
 
-
 // routes
 app.use('/', require('./routers/api'))
 app.use('/admin', require('./routers/web'))
+
+// Redirecting to error Page If page is not found
+app.use((req, res) => {
+    res.status(404).render('errors/404',{page_name: 'error', sub_page: ''})
+})
 
 app.listen(port, ()=> console.log(`Connected to port ${port}`))

@@ -24,7 +24,7 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-9">
                         <!-- general form elements -->
                         <div class="card card-primary">
                             <div class="card-header">
@@ -44,38 +44,66 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label for="status">Status</label>
-                                                <input type="text" name="status" class="form-control input-sm" id="status">
+                                                <input type="text" name="status" class="form-control input-sm"
+                                                    id="status">
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
-                                            <div class="form-group row" style="margin-left: 0.1rem;">
-                                                <div class="col-xs-3">
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
                                                     <label for="status">Goal</label>
-                                                    <input type="number" name="goal" class="form-control input-sm" id="status">
-                                                    <input type="text" class="" value="Steps" disabled >
-                                                </div>
-                                                <div class="col-xs-3 ml-1">
-                                                    <label for="status">Reward</label>
-                                                    <input type="number" name="reward" class="form-control input-sm" id="status">
-                                                    <input type="text" class="" value="UBS Coin" disabled >
-                                                </div>
-                                                <div class="col-xs-3 ml-1">
-                                                    <label for="status">Starting Time</label>
-                                                    <input type="datetime-local" min="<%= time %>" name="starttime" class="form-control input-sm"
+                                                    <input type="number" name="goal" class="form-control input-sm"
                                                         id="status">
+                                                    <input type="text" class="" value="Steps" disabled>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="status">Reward</label>
+                                                    <input type="number" name="reward" class="form-control input-sm"
+                                                        id="reward" readonly>
+                                                    <input type="text" class="" value="UBS Coin" disabled>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="status">Entry Fees:</label>
+                                                    <input type="number" min="0" oninput="rewardCal(this.value,'<%= userLength %>');" name="fee"
+                                                        class="form-control input-sm" id="fee">
+                                                    <input type="text" class="" value="₹" disabled>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label for="status">About</label>
-                                                <textarea id="" name="about" class="form-control" cols="30" rows="10"></textarea>
+                                                <textarea id="" style="resize:none;" rows="2" name="about"
+                                                    class="form-control" cols="30" rows="10"></textarea>
                                             </div>
-                                            <div class="form-group row" style="margin-left: 0.1rem;">
-                                                <div class="col-xs-3">
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <label for="status">Starting Time</label>
+                                                    <input type="datetime-local" min="<%= time %>" name="starttime"
+                                                        class="form-control input-sm" id="status">
+                                                </div>
+                                                <div class="col-md-6">
                                                     <label for="status">Expiry Time</label>
-                                                    <input type="datetime-local" min="<%= time %>" name="expiretime" class="form-control input-sm"
-                                                        id="status">
+                                                    <input type="datetime-local" min="<%= time %>" name="expiretime"
+                                                        class="form-control input-sm" id="status">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <label for="size">User Limit: </label>
+                                                    <select class="form-control input-sm" id="limit" name="size" onchange="yesnoCheck(this,'<%= userLength %>');">
+                                                        <option selected disabled>Select User Limit</option>
+                                                        <option value="unlimited">Unlimited</option>
+                                                        <option value="limited">Limited</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6" id="ifYes" style="display: none;">
+                                                    <label for="size" class="text-success">Enter Limit here  </label>
+                                                    <i class="fa fa-level-down-alt text-success"></i>
+                                                    <input type="number" min="1" name="size"
+                                                    class="form-control input-sm" id="size" placeholder="XXXX" oninput="rewardLimitCal(this.value);">
                                                 </div>
                                             </div>
                                         </div>
@@ -93,3 +121,4 @@
             </div>
         </section>
     </div>
+    <script src=""></script>

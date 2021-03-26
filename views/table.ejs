@@ -26,6 +26,11 @@
           <input class="form-control mb-1" type="text" id="myInput" onkeyup="filterTowns()" placeholder="Search: Enter Company Name">
           <div class="card">
             <div class="card-body">
+              <% if(!data.length){ %>
+                  <h1 class="text-center" style="font-family: 'Tangerine', serif;font-size: 48px;text-shadow: 5px 5px 5px #aaa; color: rgb(247, 25, 25);">
+                      Bazar List is Empty
+                  </h1>
+                  <% } else {%>
               <table class="table table-bordered table-hover sortable" id="myTable">
                 <thead>
                   <tr>
@@ -84,6 +89,7 @@
                   </tr>
                 </tfoot>
               </table>
+              <% } %>
               <div class="mt-3">
                 <div class="text-center">
                   <% if (pages > 0) { %>

@@ -7,7 +7,8 @@ const adminSchema = new Schema({
     lname: { type: String, default: 'Patel' },
     username: { type: String, default: 'jai@gmail.com' },
     password: { type: String },
-    referral: {type: Number}
+    referral: {type: Number},
+    category: {type: Array},
 }, { timestamps: true });
 
 

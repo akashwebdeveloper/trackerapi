@@ -8,6 +8,7 @@ const { updatephoto, upload } = require('../controller/photos/profilephoto')
 const { free, appexclusive, accessories, apparel, electronics, food_beverage, footwear, health_wellness, jewellery, personalcare, sleepsolution, subscription, others } = require('../controller/bazar/bannerController')
 const { addbookmark, removebookmark, bookmarklist } = require('../controller/bazar/bookmarkController')
 const { like, unlike } = require('../controller/bazar/likeController')
+const { setPrivate } = require('../controller/users/setting')
 const { productfullview, details } = require('../controller/bazar/fullviewController')
 const { todayprogress, updates, progressgraph, totalstep, challengeStepUpdate, getActivity, reaction} = require('../controller/users/steps')
 const { getAllChallenges, challengedetails, joinchallenge } = require('../controller/users/challenges')
@@ -94,10 +95,17 @@ router.post('/progressgraph', progressgraph)
 router.post('/challengeStepUpdate', challengeStepUpdate)
 // total step & average step
 router.post('/totalstep', totalstep)
+
+// All Activity List
 router.post('/activity', getActivity)
+// Sending reaction to activity
 router.post('/reaction', reaction)
+
+// Coin All transactions details
 router.post('/coindetails', coinDetails)
 
+// Changing Private Account
+router.post('/setprivate', setPrivate)
 
 // Challenges
 router.get('/challenges', getAllChallenges)

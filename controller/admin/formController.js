@@ -1,4 +1,5 @@
 const Admin = require('../../models/admin')
+const User = require('../../models/user')
 const Challenge = require('../../models/challenge')
 const moment = require('moment');
 const m = moment();
@@ -24,11 +25,16 @@ module.exports = {
         })
     },
     getchallengeform: (req, res) => {
-        return res.render('challengeform', {
-            page_name: 'form',
-            sub_page: 'challengeform',
-            time: todayDate
-        })
+        
+        User.countDocuments((err, count)=>{
+
+            return res.render('challengeform', {
+                page_name: 'form',
+                sub_page: 'challengeform',
+                time: todayDate,
+                userLength: count
+            })
+        });
     },
     createchallenge: (req, res) => {
         
@@ -43,7 +49,6 @@ module.exports = {
             expiretime: expiretime,
             about: about
         })
-
 
 
         challenge.save((err, items) => {
@@ -104,5 +109,30 @@ module.exports = {
         } catch (error) {
             console.log(error);
         }
+    },
+    getcategoryform: (req, res) => {
+        Admin.find((err,result)=>{
+            return res.render('categoryform', {
+                page_name: 'category',
+                sub_page: '',
+                data: result[0]
+                // time: todayDate
+            })
+        })
+    },
+    addCategory: (req, res) => {
+        const { id, category } = req.body;
+        Admin.findByIdAndUpdate(id, { $push: { category: category }}, (err,result)=>{
+            if (err) throw err;
+            res.redirect('/admin/category')
+            
+        })
+    },
+    deleteCategory: (req, res) => {
+        const { id, category } = req.params;
+        Admin.findByIdAndUpdate(id, { $pull: { category:   category} }, (err,result)=>{
+            if (err) throw err;
+            res.redirect('/admin/category')
+        })
     },
 }
