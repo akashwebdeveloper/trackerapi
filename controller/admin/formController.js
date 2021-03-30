@@ -5,6 +5,7 @@ const moment = require('moment');
 const m = moment();
 const todayDate = m.format('YYYY-MM-DDTHH:mm')
 
+
 module.exports = {
     getreferralform: (req, res) => {
         Admin.find({}, (err, data) => {
@@ -38,7 +39,7 @@ module.exports = {
     },
     createchallenge: (req, res) => {
         
-        const { name, status, goal, reward, starttime, about, expiretime } = req.body
+        const { name, status, goal, reward, starttime, about, expiretime, size, limit } = req.body
 
         const challenge = new Challenge({
             name: name,
@@ -47,7 +48,11 @@ module.exports = {
             reward: reward,
             starttime: starttime,
             expiretime: expiretime,
-            about: about
+            about: about,
+            size: {
+                isunlimited: (size === "unlimited") ? true  : false,
+                size: (size === "unlimited") ? 0  : limit
+            }
         })
 
 

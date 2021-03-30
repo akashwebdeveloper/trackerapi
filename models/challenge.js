@@ -12,6 +12,7 @@ const challengeSchema = new Schema({
     about: { type: String },
     startstatus: { type: String, default: 'coming'},
     joined:[{type: ObjectId, ref:"User"}],
+    size: { type: Object }
 }, { timestamps: true });
 
 module.exports = mongoose.model('challenge', challengeSchema)

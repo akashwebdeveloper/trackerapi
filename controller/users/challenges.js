@@ -3,10 +3,36 @@ const User = require('../../models/user')
 const moment = require('moment');
 const admin = require('../../models/admin');
 const m = moment();
+const schedule = require('node-schedule');
+
+schedule.scheduleJob('1 * * * * *', function(){
+    Challenge.find((err,data)=>{
+        if (err) throw err;
+        data.forEach((challenge,index) => {
+            if (challenge.startstatus === 'coming' && new Date(challenge.starttime).getTime() <= new Date().getTime()) {
+
+                Challenge.updateOne({ _id: challenge._id }, { $set: { startstatus: 'started' } }, (err) => {
+                    if (err) throw err;
+                })
+                console.log('StartStatus Successfully Updated');
+            }
+
+            if (challenge.startstatus === 'started' && new Date(challenge.expiretime).getTime() <= new Date().getTime()) {
+
+                Challenge.updateOne({ _id: challenge._id }, { $set: { startstatus: 'expired' } }, (err) => {
+                    if (err) throw err;
+                })
+                console.log('StartStatus Successfully Updated');
+            }
+        });
+    })
+});
+
+
 module.exports = {
     getAllChallenges: (req, res) => {
 
-        Challenge.find({}, (err, result) => {
+        Challenge.find({startstatus: 'coming'}, (err, result) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -31,21 +57,17 @@ module.exports = {
                 var time = "";
                 if (days > 0) {
                     time += `${days} Days ${hours} Hours`;
-                } else {
+                } else if (hours > 0){
                     time += `${hours} Hours ${minutes} Minutes `;
+                } else if (minutes > 0){
+                    time += `${minutes} Minutes `;
                 }
 
                 obj.remaining = time
 
 
                 if (new Date(challenge.starttime).getTime() >= new Date().getTime()) {
-
                     chall.push(obj)
-                } else {
-                    Challenge.updateOne({ _id: challenge._id }, { $set: { startstatus: 'started' } }, (err) => {
-                        if (err) throw err;
-                        console.log('StartStatus Successfully Updated');
-                    })
                 }
             });
 
@@ -178,20 +200,21 @@ module.exports = {
                         cid: result._id,
                         cname: result.name,
                         cgoal: result.goal,
-                        cstarttime: result.starttime,
+                        cstatus: 0,
                         cstep: 0
                     }
+ 
 
-
-                        
-                        
-                        User.findByIdAndUpdate(uid,)
+                        User.findByIdAndUpdate(uid,{ $push: {challenges: challengeStart}},(err, data)=>{
+                            if (err) throw err;
                         return res.status(200).json({
                             success: true,
                             status: 200,
                             message: `Joined successfully this Challenge`,
                             data: result.joined
                         })
+                        
+                    })
                 })
             }
         })

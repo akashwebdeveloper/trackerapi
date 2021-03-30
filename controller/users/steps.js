@@ -134,8 +134,23 @@ module.exports = {
         })
 
 
+
+
+
         // Updating Progress graph for step
         User.findOne({ _id: uid }, (err, items) => {
+
+
+            console.log('okkk');
+
+            // Challenge Updating
+            let userChallenge = items.challenges.filter(oneByOne => oneByOne.cstatus == 0);
+            console.log(userChallenge);
+            
+
+
+
+
 
             const todaysteps = { date: todayDate, step: step };
             var totalStep = 0;
@@ -173,7 +188,7 @@ module.exports = {
             User.findOneAndUpdate({ _id: uid }, { $set: { progress: allProgress, coin: coin } }, { new: true }, (err, items) => {
 
                 return res.status(201).json({
-                    success: false,
+                    success: true,
                     message: "succesfully Updated Steps data for graph",
                 })
             })
@@ -197,7 +212,7 @@ module.exports = {
             for (let index = 0; index < 7; index++) {
                 const li = {};
 
-                console.log(moment(new Date()).subtract(index, 'day').format('YYYY-MM-DD'));
+                // console.log(moment(new Date()).subtract(index, 'day').format('YYYY-MM-DD'));
 
                 // Find if the array contains an object by comparing the property value
                 if (result.progress.some((person) => moment(person.date).format('YYYY-MM-DD') === moment(new Date()).subtract(index, 'day').format('YYYY-MM-DD'))) {
