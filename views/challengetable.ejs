@@ -34,7 +34,7 @@
                     <th>Challenge Name</th>
                     <th>Status</th>
                     <th>Goal</th>
-                    <th>Reward</th>
+                    <th>Reward (UP TO)</th>
                     <th>Start In</th>
                     <th>Action</th>
                   </tr>
@@ -49,11 +49,13 @@
                     const minutes = (challengestart.diff(today, 'minutes') - (1440 * (days))) - (60 * hours);
 
                     var time = "";
-                    if (challenge.startstatus != 'started') {
+                    if (challenge.startstatus === 'coming') {
                       if (days > 0) {
                         time += `${days} Days ${hours} Hours`;
-                        } else {
-                        time += `${hours} Hours ${minutes} Minutes `;
+                        } else if (hours > 0){
+                          time += `${hours} Hours ${minutes} Minutes `;
+                      } else if (minutes > 0){
+                          time += `${minutes} Minutes `;
                       }
                     } else{
                       time += "Time is over"
@@ -68,8 +70,14 @@
                       <td>
                         <%= challenge.name %>
                       </td>
-                      <td>
-                        <%= challenge.startstatus %>
+                      <td class="text-center">
+                        <% if(challenge.startstatus === 'coming'){ %> 
+                        <i class="fas fa-circle text-warning" ></i>
+                        <%} else if(challenge.startstatus === 'started'){ %>
+                        <i class="fas fa-circle text-success"></i>
+                        <%} else { %>
+                          <i class="fas fa-circle text-danger"></i>
+                          <%} %>
                       </td>
                       <td>
                         <%= challenge.goal %> Steps
@@ -94,7 +102,7 @@
                     <th>Challenge Name</th>
                     <th>Status</th>
                     <th>Goal</th>
-                    <th>Reward</th>
+                    <th>Reward (UP TO)</th>
                     <th>Start In</th>
                     <th>Action</th>
                   </tr>

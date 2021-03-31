@@ -200,6 +200,7 @@ module.exports = {
                         cid: result._id,
                         cname: result.name,
                         cgoal: result.goal,
+                        cstart: result.starttime,
                         cstatus: 0,
                         cstep: 0
                     }
