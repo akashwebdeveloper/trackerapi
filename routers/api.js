@@ -111,7 +111,7 @@ router.post('/setprivate', setPrivate)
 router.get('/challenges', getAllChallenges)
 router.post('/challengedetails', challengedetails)
 router.post('/joinchallenge', joinchallenge)
-router.post('/userChallenge', userChallenges)
+router.post('/userchallenge', userChallenges)
 
 
 
