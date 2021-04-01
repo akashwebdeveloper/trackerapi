@@ -17,6 +17,15 @@ const level = [
     { level: 10, step: 380000 },
     { level: 11, step: 530000 },
 ]
+const schedule = require('node-schedule');
+
+schedule.scheduleJob('0 0 0 * * *', function(){
+    User.updateMany({},{$set: {
+        todaysteps: 0,
+        todaykm: 0,
+        calorie: 0
+    }},(err)=> {if (err) throw err})
+});
 
 // const todayDate = '2021.03.01'
 
@@ -25,21 +34,25 @@ module.exports = {
     todayprogress: (req, res) => {
         const { uid, step, km, calorie } = req.body
 
-        const user = new User({
-            todaysteps: step || "",
+        // const upsertData = {
+        //     todaysteps: parseInt(step) ,
+        //     todaykm: parseInt(km),
+        //     calorie: parseInt(calorie)
+        // };
+
+        // // Convert the Model instance to a simple object using Model's 'toObject' function
+        // // to prevent weirdness like infinite looping...
+        // var upsertData = user.toObject();
+
+        // // Delete the _id property, otherwise Mongo will return a "Mod on _id not allowed" error
+        // delete upsertData._id;
+
+
+        User.findOneAndUpdate({ _id: uid }, {$inc : {
+            todaysteps: parseInt(step) ,
             todaykm: km,
-            calorie: calorie || ""
-        })
-
-        // Convert the Model instance to a simple object using Model's 'toObject' function
-        // to prevent weirdness like infinite looping...
-        var upsertData = user.toObject();
-
-        // Delete the _id property, otherwise Mongo will return a "Mod on _id not allowed" error
-        delete upsertData._id;
-
-
-        User.findOneAndUpdate({ _id: uid }, upsertData, { new: true }, (err, items) => {
+            calorie: parseInt(calorie)
+        }} , { new: true }, (err, items) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -141,22 +154,16 @@ module.exports = {
         User.findOne({ _id: uid }, (err, items) => {
 
 
-            console.log('okkk');
-
             // Challenge Updating
-            let userChallenge = items.challenges.filter(oneByOne => oneByOne.cstatus == 0);
-            console.log(userChallenge);
+            User.updateMany({"challenges.cstatus" : 1},{ $inc: { 'challenges.$.cstep': parseInt(step) } },(err,d)=>{
+                if (err) throw err;  })
             
 
-
-
-
-
-            const todaysteps = { date: todayDate, step: step };
+            const todaysteps = { date: todayDate, step: parseInt(step) };
             var totalStep = 0;
             items.progress.forEach((daily, index) => {
                 // User total Steps
-                totalStep += parseInt(daily.step)
+                totalStep += daily.step
             });
 
 
@@ -181,11 +188,11 @@ module.exports = {
                 allProgress.forEach((element, index) => {
 
                     if (moment(element.date).format('YYYY-MM-DD') == m.format('YYYY-MM-DD')) {
-                        allProgress[index].step = step
+                        allProgress[index].step += parseInt(step)
                     }
                 });
             }
-            User.findOneAndUpdate({ _id: uid }, { $set: { progress: allProgress, coin: coin } }, { new: true }, (err, items) => {
+            User.findOneAndUpdate({ _id: uid }, { $set: { progress: allProgress, earnedcoin: coin } }, { new: true }, (err, items) => {
 
                 return res.status(201).json({
                     success: true,

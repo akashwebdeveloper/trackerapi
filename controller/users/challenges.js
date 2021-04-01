@@ -5,37 +5,37 @@ const admin = require('../../models/admin');
 const m = moment();
 const schedule = require('node-schedule');
 
-// schedule.scheduleJob('1 * * * * *', function(){
-//     Challenge.find((err,data)=>{
-//         if (err) throw err;
-//         data.forEach((challenge,index) => {
-//             if (challenge.startstatus === 'coming' && new Date(challenge.starttime).getTime() <= new Date().getTime()) {
+schedule.scheduleJob('1 * * * * *', function(){
+    Challenge.find((err,data)=>{
+        if (err) throw err;
+        data.forEach((challenge,index) => {
+            if (challenge.startstatus === 'coming' && new Date(challenge.starttime).getTime() <= new Date().getTime()) {
 
-//                 Challenge.updateOne({ _id: challenge._id }, { $set: { startstatus: 'started' } }, (err) => {
-//                     if (err) throw err; 
+                Challenge.updateOne({ _id: challenge._id }, { $set: { startstatus: 'started' } }, (err) => {
+                    if (err) throw err; 
                 
-//                     User.updateMany({"challenges.cid" : challenge._id}, {'$set': {
-//                         'challenges.$.cstatus': 1
-//                     }}, function(err) { if (err) throw err });
-//                     console.log('StartStatus started Successfully Updated');
-//                 })
+                    User.updateMany({"challenges.cid" : challenge._id}, {'$set': {
+                        'challenges.$.cstatus': 1
+                    }}, function(err) { if (err) throw err });
+                    console.log('StartStatus started Successfully Updated');
+                })
 
-//             }
+            }
 
-//             if (challenge.startstatus === 'started' && new Date(challenge.expiretime).getTime() <= new Date().getTime()) {
+            if (challenge.startstatus === 'started' && new Date(challenge.expiretime).getTime() <= new Date().getTime()) {
 
-//                 Challenge.updateOne({ _id: challenge._id }, { $set: { startstatus: 'expired' } }, (err) => {
-//                     if (err) throw err;
-//                 })
+                Challenge.updateOne({ _id: challenge._id }, { $set: { startstatus: 'expired' } }, (err) => {
+                    if (err) throw err;
+                })
 
-//                 User.updateMany({"challenges.cid" : challenge._id}, {'$set': {
-//                     'challenges.$.cstatus': 2
-//                 }}, function(err) { if (err) throw err });
-//                 console.log('StartStatus expired Successfully Updated');
-//             }
-//         });
-//     })
-// });
+                User.updateMany({"challenges.cid" : challenge._id}, {'$set': {
+                    'challenges.$.cstatus': 2
+                }}, function(err) { if (err) throw err });
+                console.log('StartStatus expired Successfully Updated');
+            }
+        });
+    })
+});
 
 
 module.exports = {
