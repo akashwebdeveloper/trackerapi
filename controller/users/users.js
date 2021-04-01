@@ -185,7 +185,7 @@ module.exports = {
     getAllUsername: (req, res) => {
         const { username } = req.body
 
-        User.find({ username: { '$regex': `^${username}`, '$options': 'i' } }, ['_id', 'username'], (err, result) => {
+        User.find({ username: { '$regex': `^${username}`, '$options': 'i' } }, ['_id', 'username', 'photos'], (err, result) => {
             if (err) {
                 return res.status(502).json({
                     success: false,

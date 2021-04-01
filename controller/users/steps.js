@@ -1,8 +1,11 @@
+require('dotenv').config()
 const User = require('../../models/user')
 const moment = require('moment');
 const m = moment();
 const todayDate = m.format()
 const Activity = require('../../models/activity')
+const base_url = process.env.base_url
+
 const level = [
     { level: 0, step: 1000 },
     { level: 1, step: 3000 },
@@ -88,7 +91,7 @@ module.exports = {
                         for: `level 0`,
                         achivement: `Welcome to United By Step Activity`,
                         reaction: [],
-                        photo: '',
+                        photo: `${base_url}/img/0.png`,
                         userid: uid,
                         username: result2.username
                     })
@@ -128,9 +131,9 @@ module.exports = {
 
                             const activity = new Activity({
                                 for: `level ${level[got].level}`,
-                                achivement: `Crossed Level ${level[got].level}`,
+                                achivement: `Crossed Level ${level[got].level-1}`,
                                 reaction: [],
-                                photo: '',
+                                photo: `${base_url}/img/${level[got].level}.png`,
                                 userid: uid,
                                 username: result1.username
                             })
