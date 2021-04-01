@@ -5,18 +5,20 @@ const admin = require('../../models/admin');
 const m = moment();
 const schedule = require('node-schedule');
 
-schedule.scheduleJob('1 * * * * *', function(){
-    Challenge.find((err,data)=>{
+schedule.scheduleJob('1 * * * * *', function () {
+    Challenge.find((err, data) => {
         if (err) throw err;
-        data.forEach((challenge,index) => {
+        data.forEach((challenge, index) => {
             if (challenge.startstatus === 'coming' && new Date(challenge.starttime).getTime() <= new Date().getTime()) {
 
                 Challenge.updateOne({ _id: challenge._id }, { $set: { startstatus: 'started' } }, (err) => {
-                    if (err) throw err; 
-                
-                    User.updateMany({"challenges.cid" : challenge._id}, {'$set': {
-                        'challenges.$.cstatus': 1
-                    }}, function(err) { if (err) throw err });
+                    if (err) throw err;
+
+                    User.updateMany({ "challenges.cid": challenge._id }, {
+                        '$set': {
+                            'challenges.$.cstatus': 1
+                        }
+                    }, function (err) { if (err) throw err });
                     console.log('StartStatus started Successfully Updated');
                 })
 
@@ -28,9 +30,11 @@ schedule.scheduleJob('1 * * * * *', function(){
                     if (err) throw err;
                 })
 
-                User.updateMany({"challenges.cid" : challenge._id}, {'$set': {
-                    'challenges.$.cstatus': 2
-                }}, function(err) { if (err) throw err });
+                User.updateMany({ "challenges.cid": challenge._id }, {
+                    '$set': {
+                        'challenges.$.cstatus': 2
+                    }
+                }, function (err) { if (err) throw err });
                 console.log('StartStatus expired Successfully Updated');
             }
         });
@@ -41,7 +45,7 @@ schedule.scheduleJob('1 * * * * *', function(){
 module.exports = {
     getAllChallenges: (req, res) => {
 
-        Challenge.find({startstatus: 'coming'}, (err, result) => {
+        Challenge.find({ startstatus: 'coming' }, (err, result) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -66,9 +70,9 @@ module.exports = {
                 var time = "";
                 if (days > 0) {
                     time += `${days} Days ${hours} Hours`;
-                } else if (hours > 0){
+                } else if (hours > 0) {
                     time += `${hours} Hours ${minutes} Minutes `;
-                } else if (minutes > 0){
+                } else if (minutes > 0) {
                     time += `${minutes} Minutes `;
                 }
 
@@ -123,7 +127,7 @@ module.exports = {
 
                             if (datas) {
                                 obj.joined = true
-                            }else {
+                            } else {
                                 obj.joined = false
 
                             }
@@ -213,20 +217,32 @@ module.exports = {
                         cstatus: 0,
                         cstep: 0
                     }
- 
 
-                        User.findByIdAndUpdate(uid,{ $push: {challenges: challengeStart}},(err, data)=>{
-                            if (err) throw err;
+
+                    User.findByIdAndUpdate(uid, { $push: { challenges: challengeStart } }, (err, data) => {
+                        if (err) throw err;
                         return res.status(200).json({
                             success: true,
                             status: 200,
                             message: `Joined successfully this Challenge`,
                             data: result.joined
                         })
-                        
                     })
                 })
             }
+        })
+    },
+    userChallenges: (req, res) => {
+        const { uid } = req.body
+
+        User.findById(uid, ['challenges'], (err, result) => {
+            if (err) throw err;
+            return res.status(200).json({
+                success: true,
+                status: 200,
+                message: `User All Challenges Update`,
+                challenges: result.challenges
+            })
         })
     },
 }
