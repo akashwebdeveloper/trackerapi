@@ -249,18 +249,16 @@ module.exports = {
     },
     challengeRanking: (req, res) => {
         const { cid } = req.body
-        console.log(cid);
 
         User.find({ "challenges.cid": mongoose.Types.ObjectId(`${cid}`) },['username','challenges'], (err, data) => {
-            console.log(data);
 
             const ranking = [];
             data.forEach(user => {
                 user.challenges.forEach(challenge => {
-                    console.log(challenge);
                     
                     if (String(challenge.cid) === cid) {
                         const pushObj = {
+                            _id: user._id,
                             username: user.username,
                             step: challenge.cstep
                         }
@@ -268,7 +266,14 @@ module.exports = {
                     }
                 });
             });
-            console.log(ranking);
+            
+            const sortedArray = ranking.sort((a, b) => b.step - a.step);
+            return res.status(200).json({
+                success: true,
+                status: 200,
+                message: `User All Challenges Update`,
+                ranking: sortedArray
+            })
             
 
         })
