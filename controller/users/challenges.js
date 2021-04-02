@@ -5,6 +5,8 @@ const admin = require('../../models/admin');
 const m = moment();
 const schedule = require('node-schedule');
 
+const mongoose = require('mongoose')
+
 schedule.scheduleJob('1 * * * * *', function () {
     Challenge.find((err, data) => {
         if (err) throw err;
@@ -243,6 +245,32 @@ module.exports = {
                 message: `User All Challenges Update`,
                 challenges: result.challenges
             })
+        })
+    },
+    challengeRanking: (req, res) => {
+        const { cid } = req.body
+        console.log(cid);
+
+        User.find({ "challenges.cid": mongoose.Types.ObjectId(`${cid}`) },['username','challenges'], (err, data) => {
+            console.log(data);
+
+            const ranking = [];
+            data.forEach(user => {
+                user.challenges.forEach(challenge => {
+                    console.log(challenge);
+                    
+                    if (String(challenge.cid) === cid) {
+                        const pushObj = {
+                            username: user.username,
+                            step: challenge.cstep
+                        }
+                        ranking.push(pushObj)
+                    }
+                });
+            });
+            console.log(ranking);
+            
+
         })
     },
 }

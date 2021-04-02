@@ -72,7 +72,7 @@ module.exports = {
     searchUserData: (req, res) => {
         const { uid, fid } = req.body
 
-        User.find({ _id:uid },['following', 'followers', 'earnedcoin', 'username', 'photos' ], (err, users) => {
+        User.find({ _id:fid },['following', 'followers', 'earnedcoin', 'username', 'photos' ], (err, users) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -97,7 +97,7 @@ module.exports = {
                 photos: users[0].photos,
             };
 
-            Activity.find({ userid: uid, for: { '$regex': `^level`, '$options': 'i' } }, (err, result) => {
+            Activity.find({ userid: fid, for: { '$regex': `^level`, '$options': 'i' } }, (err, result) => {
                 const level = result[result.length - 1].for
                 info.level = level;
 

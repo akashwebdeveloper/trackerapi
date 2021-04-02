@@ -11,7 +11,7 @@ const { like, unlike } = require('../controller/bazar/likeController')
 const { setPrivate } = require('../controller/users/setting')
 const { productfullview, details } = require('../controller/bazar/fullviewController')
 const { todayprogress, updates, progressgraph, totalstep, challengeStepUpdate, getActivity, reaction} = require('../controller/users/steps')
-const { getAllChallenges, challengedetails, joinchallenge, userChallenges } = require('../controller/users/challenges')
+const { getAllChallenges, challengedetails, joinchallenge, userChallenges, challengeRanking } = require('../controller/users/challenges')
 
 // Phone OTP verification
 router.get('/phone/', phone)
@@ -113,6 +113,7 @@ router.get('/challenges', getAllChallenges)
 router.post('/challengedetails', challengedetails)
 router.post('/joinchallenge', joinchallenge)
 router.post('/userchallenge', userChallenges)
+router.post('/challengeranking', challengeRanking)
 
 
 
