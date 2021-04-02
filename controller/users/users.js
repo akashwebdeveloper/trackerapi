@@ -6,7 +6,7 @@ const m = moment();
 module.exports = {
     getalldata: (req, res) => {
 
-        User.find({ type: { $ne: 'admin' } }, ['email', 'fname', 'lname', 'username', 'photos'], (err, users) => {
+        User.find({ }, ['email', 'fname', 'lname', 'username', 'photos'], (err, users) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -65,6 +65,54 @@ module.exports = {
                     message: "user data Available",
                     user: users,
                     level: level
+                })
+            })
+        })
+    },
+    searchUserData: (req, res) => {
+        const { uid, fid } = req.body
+
+        User.find({ _id:uid },['following', 'followers', 'earnedcoin', 'username', 'photos' ], (err, users) => {
+            if (err) {
+                return res.status(502).json({
+                    success: false,
+                    status: 502,
+                    message: "err from database"
+                })
+            }
+
+            if (!users[0]) {
+                return res.status(202).json({
+                    success: false,
+                    status: 202,
+                    message: "user doesn't exist"
+                })
+            }
+            const info ={
+                _id: users[0]._id,
+                following: users[0].following.length,
+                followers: users[0].followers.length,
+                earnedcoin: users[0].earnedcoin,
+                username: users[0].username,
+                photos: users[0].photos,
+            };
+
+            Activity.find({ userid: uid, for: { '$regex': `^level`, '$options': 'i' } }, (err, result) => {
+                const level = result[result.length - 1].for
+                info.level = level;
+
+
+                
+                if (users[0].following.includes(fid)) {
+                    info.isFollowed = true;
+                } else {
+                    info.isFollowed = false;
+                }
+                return res.status(200).json({
+                    success: true,
+                    status: 200,
+                    message: "user data Available",
+                    user: info
                 })
             })
         })

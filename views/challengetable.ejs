@@ -36,6 +36,7 @@
                     <th>Goal</th>
                     <th>Reward (UP TO)</th>
                     <th>Start In</th>
+                    <th>Joined</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -88,6 +89,9 @@
                       <td>
                         <%= time %>
                       </td>
+                      <td>
+                        <%= challenge.joined.length %>/<% if(challenge.size.isunlimited){ %>Unlimited <%} else { %> <%=challenge.size.size%> <% }%>
+                      </td>
                       <td><a href="/admin/updatebazar/<%= challenge._id %>" class="btn btn-success" title="Edit"
                           alt="Edit"><i class="fa fa-edit"></i></a>&nbsp;
                         <a href="/admin/deletebazar/<%= challenge._id %>" class="btn btn-danger" title="Delete"
@@ -104,6 +108,7 @@
                     <th>Goal</th>
                     <th>Reward (UP TO)</th>
                     <th>Start In</th>
+                    <th>Joined</th>
                     <th>Action</th>
                   </tr>
                 </tfoot>

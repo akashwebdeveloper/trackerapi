@@ -65,21 +65,6 @@ module.exports = {
         const {  } = req.body
     },
     challengetable: (req, res) => {
-        Challenge.find({}, (err, data) => {
-            data.forEach(challenge => {
-                if (new Date(challenge.starttime).getTime() >= new Date().getTime()) {
-                    Challenge.updateOne({_id: challenge._id},{new: true}, {$set: {startstatus: 'coming'}}, (err)=>{
-                        if (err) throw err;
-                        // console.log('coming Successfully Updated');
-                    })
-                }else {
-                    Challenge.updateOne({_id: challenge._id}, {$set: {startstatus: 'started'}}, (err)=>{
-                        if (err) throw err;
-                        // console.log('StartStatus Successfully Updated');
-                    })
-                }
-            })
-        })
         try {
             var query = {};
             var page = 1;
