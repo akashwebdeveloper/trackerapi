@@ -250,7 +250,7 @@ module.exports = {
     challengeRanking: (req, res) => {
         const { cid } = req.body
 
-        User.find({ "challenges.cid": mongoose.Types.ObjectId(`${cid}`) },['username','challenges'], (err, data) => {
+        User.find({ "challenges.cid": mongoose.Types.ObjectId(`${cid}`) },['username','photos','challenges'], (err, data) => {
 
             const ranking = [];
             data.forEach(user => {
@@ -259,6 +259,7 @@ module.exports = {
                     if (String(challenge.cid) === cid) {
                         const pushObj = {
                             _id: user._id,
+                            photo: user.photos,
                             username: user.username,
                             step: challenge.cstep
                         }
