@@ -440,6 +440,7 @@ module.exports = {
                     pushActivity.username = element1.username
                     pushActivity.achivement = element1.achivement
                     pushActivity.reaction = element1.reaction.length
+                    pushActivity.photo = element1.photo
                     pushActivity.donotuse = element1.createdAt
 
                     const postingTime = moment(element1.createdAt)
@@ -480,7 +481,7 @@ module.exports = {
 
         const activity = [];
         if (myactivityonly === true) {
-            Activity.find({ userid: uid }, ['achivement', 'username', 'createdAt', 'reaction'], (err, data1) => {
+            Activity.find({ userid: uid }, ['achivement', 'username', 'createdAt', 'reaction', 'photo'], (err, data1) => {
                 if (err) {
                     return res.status(502).json({
                         success: false,

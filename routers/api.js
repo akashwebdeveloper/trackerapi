@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const { signup, phone, verify, register, register1, resendotp } = require('../controller/auth/phoneController')
 
-const { oneUser, multiUser } = require('../controller/notify')
+const { oneUser } = require('../controller/notify')
+// const { oneUser, multiUser } = require('../controller/notify')
 const { getalldata, getdata, update, emailverification, getAllUsername, syncNumber, getSyncNumber, deleteSyncNumber, coinDetails, friendsRanking, searchUserData} = require('../controller/users/users')
 const { follow, unfollow } = require('../controller/users/followController')
 const { updatephoto, upload } = require('../controller/photos/profilephoto')
@@ -35,7 +36,7 @@ router.post('/deletesyncnumber', deleteSyncNumber)
 // Friends Activitty
 router.post('/friendsranking', friendsRanking)
 
-// router.post('/oneuser', oneUser)
+router.post('/oneuser', oneUser)
 // router.post('/multiuser', multiUser)
 
 

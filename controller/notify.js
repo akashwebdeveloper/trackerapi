@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 const path = require('path');
-const GOOGLE_APPLICATION_CREDENTIALS = path.join(__dirname, '/firebasefile.json');
+const GOOGLE_APPLICATION_CREDENTIALS = path.join(__dirname, '/united-by-steps-fb874-firebase-adminsdk-hre1t-0e3168e4ca.json');
 const FIREBASE_SERVER_KEY = process.env.FIREBASE_SERVER_KEY
 var admin = require("firebase-admin");
 const request = require('request');
@@ -10,6 +10,37 @@ var serviceAccount = require(GOOGLE_APPLICATION_CREDENTIALS);
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 });
+
+
+
+
+
+
+const sendNotifications = (data) => {
+
+
+    const headers = {
+        'Authorization': `key=${FIREBASE_SERVER_KEY}`,
+        'Content-Type': 'application/json'
+    }
+
+    const options = {
+        uri: 'https://fcm.googleapis.com/fcm/send',
+        method: 'POST',
+        headers: headers,
+        json: data
+    }
+
+    request(options, function (err, res, body) {
+        if (err) throw err
+        else console.log(body)
+    })
+}
+
+
+
+
+
 
 module.exports = {
     oneUser: (req, res) => {
@@ -70,42 +101,6 @@ module.exports = {
 
 
 
-function sendMessage(message) {
-    // Send a message to the device corresponding to the provided
-    // registration token.
-    admin.messaging().send(message)
-        .then((response) => {
-            // Response is a message ID string.
-            console.log('Successfully sent message:', response);
-        })
-        .catch((error) => {
-            console.log('Error sending message:', error);
-        });
-}
 
 
 
-
-
-
-
-const sendNotifications = (data) => {
-
-
-    const headers = {
-        'Authorization': `key=${FIREBASE_SERVER_KEY}`,
-        'Content-Type': 'application/json'
-    }
-
-    const options = {
-        uri: 'https://fcm.googleapis.com/fcm/send',
-        method: 'POST',
-        headers: headers,
-        json: data
-    }
-
-    request(options, function (err, res, body) {
-        if (err) throw err
-        else console.log(body)
-    })
-}
