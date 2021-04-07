@@ -22,12 +22,14 @@ const level = [
 ]
 const schedule = require('node-schedule');
 
-schedule.scheduleJob('0 0 0 * * *', function(){
-    User.updateMany({},{$set: {
-        todaysteps: 0,
-        todaykm: 0,
-        calorie: 0
-    }},(err)=> {if (err) throw err})
+schedule.scheduleJob('0 0 0 * * *', function () {
+    User.updateMany({}, {
+        $set: {
+            todaysteps: 0,
+            todaykm: 0,
+            calorie: 0
+        }
+    }, (err) => { if (err) throw err })
 });
 
 // const todayDate = '2021.03.01'
@@ -51,11 +53,13 @@ module.exports = {
         // delete upsertData._id;
 
 
-        User.findOneAndUpdate({ _id: uid }, {$inc : {
-            todaysteps: parseInt(step) ,
-            todaykm: km,
-            calorie: parseInt(calorie)
-        }} , { new: true }, (err, items) => {
+        User.findOneAndUpdate({ _id: uid }, {
+            $inc: {
+                todaysteps: parseInt(step),
+                todaykm: km,
+                calorie: parseInt(calorie)
+            }
+        }, { new: true }, (err, items) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -131,7 +135,7 @@ module.exports = {
 
                             const activity = new Activity({
                                 for: `level ${level[got].level}`,
-                                achivement: `Crossed Level ${level[got].level-1}`,
+                                achivement: `Crossed Level ${level[got].level - 1}`,
                                 reaction: [],
                                 photo: `${base_url}/img/${level[got].level}.png`,
                                 userid: uid,
@@ -158,9 +162,10 @@ module.exports = {
 
 
             // Challenge Updating
-            User.updateMany({"challenges.cstatus" : 1},{ $inc: { 'challenges.$.cstep': parseInt(step) } },(err,d)=>{
-                if (err) throw err;  })
-            
+            User.updateMany({ "challenges.cstatus": 1 }, { $inc: { 'challenges.$.cstep': parseInt(step) } }, (err, d) => {
+                if (err) throw err;
+            })
+
 
             const todaysteps = { date: todayDate, step: parseInt(step) };
             var totalStep = 0;
@@ -168,6 +173,7 @@ module.exports = {
                 // User total Steps
                 totalStep += daily.step
             });
+console.log(moment().format());
 
 
             // Adding Coins
@@ -218,6 +224,94 @@ module.exports = {
 
 
             const graph = [];
+
+            for (let index = 0; index < 7; index++) {
+                const li = {};
+
+                // console.log(moment(new Date()).subtract(index, 'day').format('YYYY-MM-DD'));
+
+                // Find if the array contains an object by comparing the property value
+                if (result.progress.some((person) => moment(person.date).format('YYYY-MM-DD') === moment(new Date()).subtract(index, 'day').format('YYYY-MM-DD'))) {
+                    // Finding index number which object date matched with last 7 days
+                    const got = result.progress.findIndex(person => moment(person.date).format('YYYY-MM-DD') === moment(new Date()).subtract(index, 'day').format('YYYY-MM-DD'));
+
+                    const din = moment(result.progress[got].date).format('ddd');
+                    li.date = result.progress[got].date;
+                    li.step = Number(result.progress[got].step);
+                    li.day = din;
+
+                    graph.push(li);
+
+                } else {
+                    li.date = moment(new Date()).subtract(index, 'd').format();
+                    li.step = 0;
+                    li.day = moment(new Date()).subtract(index, 'd').format('ddd');
+                    graph.push(li);
+                }
+            }
+
+            const sortedArray = graph.sort((a, b) => new moment(a.date).format('YYYYMMDD') - new moment(b.date).format('YYYYMMDD'))
+
+
+            return res.status(201).json({
+                success: true,
+                message: "weekly progress graph are here",
+                graph: sortedArray
+            })
+        })
+    },
+    weeklyProgressGraph: (req, res) => {
+        const { uid } = req.body
+
+        User.findById(uid, ['progress'], (err, result) => {
+            if (err) {
+                return res.status(502).json({
+                    success: false,
+                    message: "err from database",
+                    error: err
+                })
+            }
+
+            // Function For Getting weekDays 
+            function getWeekRange(week = 0) {
+                var weekStart = moment().add(week, 'weeks').startOf('week');
+                return [...Array(7)].map((_, i) =>
+                    weekStart.clone().add(i, 'day').format('YYYY-MM-DD')
+                );
+            }
+
+            const graph = [];
+
+// for Increase week days increase number of i 
+            for (let i = 0; i >= -3; i--) {
+
+                var currentWeek = getWeekRange(i);
+
+
+                const pushObj = {
+                    week: Math.abs(i)
+                };
+
+                var totalStepInWeek = 0;
+                currentWeek.forEach((date) => {
+                    // Find if the array contains an object by comparing the property value
+                    if (result.progress.some((person) => moment(person.date).format('YYYY-MM-DD') === date)) {
+                        // Finding index number which object date matched with last 7 days
+                        const got = result.progress.findIndex(person => moment(person.date).format('YYYY-MM-DD') === date);
+
+                        totalStepInWeek += Number(result.progress[got].step);
+                    }
+                });
+
+                pushObj.steps = totalStepInWeek;
+                graph.push(pushObj);
+            }
+
+
+            console.log(graph);
+
+
+
 
             for (let index = 0; index < 7; index++) {
                 const li = {};
