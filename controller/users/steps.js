@@ -2,7 +2,6 @@ require('dotenv').config()
 const User = require('../../models/user')
 const moment = require('moment');
 const m = moment();
-const todayDate = m.format()
 const Activity = require('../../models/activity')
 const base_url = process.env.base_url
 
@@ -32,7 +31,6 @@ schedule.scheduleJob('0 0 0 * * *', function () {
     }, (err) => { if (err) throw err })
 });
 
-// const todayDate = '2021.03.01'
 
 
 module.exports = {
@@ -167,13 +165,12 @@ module.exports = {
             })
 
 
-            const todaysteps = { date: todayDate, step: parseInt(step) };
+            const todaysteps = { date: moment().format(), step: parseInt(step) };
             var totalStep = 0;
             items.progress.forEach((daily, index) => {
                 // User total Steps
                 totalStep += daily.step
             });
-console.log(moment().format());
 
 
             // Adding Coins
@@ -181,7 +178,7 @@ console.log(moment().format());
 
 
             var allProgress;
-            let progress = items.progress.filter(prog => (moment(prog.date).format('YYYY-MM-DD') == m.format('YYYY-MM-DD')));
+            let progress = items.progress.filter(prog => (moment(prog.date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD')));
 
 
             if (items.progress.length === 0) {
@@ -196,7 +193,7 @@ console.log(moment().format());
                 allProgress = items.progress;
                 allProgress.forEach((element, index) => {
 
-                    if (moment(element.date).format('YYYY-MM-DD') == m.format('YYYY-MM-DD')) {
+                    if (moment(element.date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD')) {
                         allProgress[index].step += parseInt(step)
                     }
                 });
