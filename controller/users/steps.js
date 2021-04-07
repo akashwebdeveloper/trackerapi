@@ -37,20 +37,6 @@ module.exports = {
     todayprogress: (req, res) => {
         const { uid, step, km, calorie } = req.body
 
-        // const upsertData = {
-        //     todaysteps: parseInt(step) ,
-        //     todaykm: parseInt(km),
-        //     calorie: parseInt(calorie)
-        // };
-
-        // // Convert the Model instance to a simple object using Model's 'toObject' function
-        // // to prevent weirdness like infinite looping...
-        // var upsertData = user.toObject();
-
-        // // Delete the _id property, otherwise Mongo will return a "Mod on _id not allowed" error
-        // delete upsertData._id;
-
-
         User.findOneAndUpdate({ _id: uid }, {
             $inc: {
                 todaysteps: parseInt(step),
