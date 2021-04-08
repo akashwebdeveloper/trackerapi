@@ -152,40 +152,58 @@ module.exports = {
 
 
             const todaysteps = { date: moment().format(), step: parseInt(step) };
-            var totalStep = 0;
-            items.progress.forEach((daily, index) => {
-                // User total Steps
-                totalStep += daily.step
-            });
+            const todayEarning = { date: moment().format(), for: `${step} steps`, reason: 0, coin: parseFloat((parseInt(step) * 0.001),2) };
 
-
-            // Adding Coins
-            var coin = (totalStep * 0.001).toFixed(2);
 
 
             var allProgress;
+            var allEarning;
+            var oldStep;
             let progress = items.progress.filter(prog => (moment(prog.date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD')));
+            let earning = items.earnedcoin.filter(earn => (moment(earn.date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD')) && earn.reason == 0);
 
 
             if (items.progress.length === 0) {
                 allProgress = [];
-                allProgress.push(todaysteps)
+                allProgress.push(todaysteps);
 
             } else if (progress.length === 0) {
                 allProgress = items.progress;
-                allProgress.push(todaysteps)
+                allProgress.push(todaysteps);
 
             } else {
                 allProgress = items.progress;
                 allProgress.forEach((element, index) => {
-
                     if (moment(element.date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD')) {
-                        allProgress[index].step += parseInt(step)
+                        oldStep = allProgress[index].step;
+                        allProgress[index].step += parseInt(step);
+                    }
+                });
+            };
+            
+
+            if (!items.earnedcoin.length) {
+                allEarning = [];
+                allEarning.push(todayEarning)
+
+            } else if (!earning.length) {
+                allEarning = items.earnedcoin;
+                allEarning.push(todayEarning)
+
+            } else {
+                allEarning = items.earnedcoin;
+                allEarning.forEach((element, index) => {
+
+                    if (moment(element.date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD') && element.reason === 0) {
+                        allEarning[index].for = `${oldStep + parseInt(step)} steps`
+                        allEarning[index].coin += parseFloat((parseInt(step) * 0.001),2)
                     }
                 });
             }
-            User.findOneAndUpdate({ _id: uid }, { $set: { progress: allProgress, earnedcoin: coin } }, { new: true }, (err, items) => {
 
+
+            User.findOneAndUpdate({ _id: uid }, { $set: { progress: allProgress, earnedcoin: allEarning } }, { new: true }, (err) => {
+                if (err) throw err;
                 return res.status(201).json({
                     success: true,
                     message: "succesfully Updated Steps data for graph",
@@ -265,11 +283,10 @@ module.exports = {
 
             const graph = [];
 
-// for Increase week days increase number of i 
+            // for Increase week days increase number of i 
             for (let i = 0; i >= -3; i--) {
 
                 var currentWeek = getWeekRange(i);
-
 
                 const pushObj = {
                     week: Math.abs(i)
@@ -285,7 +302,6 @@ module.exports = {
                         totalStepInWeek += Number(result.progress[got].step);
                     }
                 });
-
                 pushObj.steps = totalStepInWeek;
                 graph.push(pushObj);
             }

@@ -27,9 +27,8 @@ const userSchema = new Schema({
     synccontact: { type: Array },
     progress: { type:Array },
     challenges: { type:Array },
-    earnedcoin: { type: Number, default: 0 },
-    spendcoin: { type: Number, default: 0 },
-    spend: { type:Array },
+    earnedcoin: { type:Array },
+    spendcoin: { type:Array },
 }, { timestamps: true });
 
 
