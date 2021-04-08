@@ -52,7 +52,7 @@ module.exports = {
                 })
             }
             return res.status(201).json({
-                success: false,
+                success: true,
                 message: "succesfully Updated Steps data",
                 data: items
             })
@@ -479,6 +479,14 @@ module.exports = {
                         })
                     }
 
+                    if (!result1) {
+                        return res.status(202).json({
+                            success: false,
+                            status: 202,
+                            message: "user doesn't exist"
+                        })
+                    }
+
                     if (result1.progress.length != 0) {
                         result1.progress.forEach((daily) => {
                             // User total Steps
@@ -523,6 +531,14 @@ module.exports = {
                         success: false,
                         message: "err from database",
                         error: err
+                    })
+                }
+
+                if (!data2) {
+                    return res.status(202).json({
+                        success: false,
+                        status: 202,
+                        message: "user doesn't exist"
                     })
                 }
 

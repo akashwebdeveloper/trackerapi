@@ -328,44 +328,41 @@ module.exports = {
     coinDetails: (req, res) => {
         const { uid } = req.body
 
-        User.findById(uid, ['progress', 'spend'], (err, items) => {
+        User.findById(uid, ['earnedcoin', 'spendcoin'], (err, items) => {
 
-            var earnedcoin;
+            var earnedcoin = 0;
             var spendcoin;
             var currentcoin;
             var transaction = [];
 
 
-            if (!items.progress.length) {
+            if (!items.earnedcoin.length) {
                 earnedcoin = 0;
             } else {
-                var totalStep = 0;
-                items.progress.forEach((daily) => {
-                    
+                items.earnedcoin.forEach(daily => {
                     var pushObj = {};
                     pushObj.date = moment(daily.date).format('DD MMM YYYY')
-                    pushObj.content = daily.step
-                    pushObj.coin = (daily.step * 0.001).toFixed(2);
+                    pushObj.content = daily.for
+                    pushObj.coin = daily.coin;
                     pushObj.isEarned = true;
                     pushObj.donotuse = daily.date;
                     
                     transaction.push(pushObj);
                     
                     // User total Steps
-                    totalStep += parseInt(daily.step)
+                    earnedcoin += daily.coin
                 });
-                // User Total earned coin
-                earnedcoin = parseInt((totalStep * 0.001).toFixed(2));
             }
 
-            if (!items.spend.length) {
+
+            if (!items.spendcoin.length) {
                 spendcoin = 0;
             } else {
                 items.spend.forEach((daily) => {
 
                     var pushObj = {};
                     pushObj.date = moment(daily.date).format('DD MMM YYYY')
-                    pushObj.content = daily.product
+                    pushObj.content = daily.for
                     pushObj.coin = daily.coin;
                     pushObj.isEarned = false;
                     pushObj.donotuse = daily.date;

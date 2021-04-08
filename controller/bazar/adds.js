@@ -2,9 +2,7 @@ const Challenge = require('../../models/challenge')
 const User = require('../../models/user')
 const moment = require('moment');
 const admin = require('../../models/admin');
-const m = moment();
 const schedule = require('node-schedule');
-
 const mongoose = require('mongoose')
 const perAdCoin = 0.50;
 
@@ -60,7 +58,6 @@ module.exports = {
             if (err) throw err;
 
 
-          
             let earning = items.earnedcoin.filter(earn => (moment(earn.date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD')) && earn.reason == 1);
 
             if (!earning.length) {
@@ -71,10 +68,6 @@ module.exports = {
                 })
 
             } else {
-
-
-                console.log(earning[0].coin);
-                
                 return res.status(200).json({
                     success: true,
                     status: 200,
