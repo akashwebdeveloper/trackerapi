@@ -10,7 +10,7 @@ const { free, appexclusive, accessories, apparel, electronics, food_beverage, fo
 const { addbookmark, removebookmark, bookmarklist } = require('../controller/bazar/bookmarkController')
 const { like, unlike } = require('../controller/bazar/likeController')
 const { setPrivate } = require('../controller/users/setting')
-const { addsEarning } = require('../controller/bazar/adds')
+const { addsEarning, adsCounter } = require('../controller/bazar/adds')
 const { productfullview, details } = require('../controller/bazar/fullviewController')
 const { todayprogress, updates, progressgraph,weeklyProgressGraph, totalstep, challengeStepUpdate, getActivity, reaction} = require('../controller/users/steps')
 const { getAllChallenges, challengedetails, joinchallenge, userChallenges, challengeRanking } = require('../controller/users/challenges')
@@ -120,5 +120,6 @@ router.post('/challengeranking', challengeRanking)
 
 // Earning By Adding Adds
 router.post('/addsearning', addsEarning)
+router.post('/adscounter', adsCounter)
 
 module.exports = router;
