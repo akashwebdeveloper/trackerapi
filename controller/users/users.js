@@ -375,7 +375,10 @@ module.exports = {
             }
 
             // Current Coin
-            currentcoin = earnedcoin - spendcoin;
+            currentcoin = (earnedcoin - spendcoin).toFixed(2);
+            earnedcoin = earnedcoin.toFixed(2);
+            spendcoin = spendcoin.toFixed(2);
+            
 
             const sortedArray = transaction.sort((a, b) => new moment(a.donotuse).format('YYYYMMDD') - new moment(b.donotuse).format('YYYYMMDD'));
 
