@@ -1,9 +1,9 @@
-require('dotenv').config({ path: require('find-config')('.env') })
+require('dotenv').config()
 const User = require('../../models/user')
 const moment = require('moment');
 const m = moment();
 const Activity = require('../../models/activity')
-const base_url = process.env.base_url
+const base_url = process.env.BASE_URL
 perStepCoin = 0.001;
 console.log(base_url);
 
