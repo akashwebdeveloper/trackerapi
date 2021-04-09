@@ -57,14 +57,11 @@ module.exports = {
                 })
             }
 
-            Activity.find({ userid: id }, (err, result) => {
-                const level = result[result.length - 1].for
-                return res.status(200).json({
-                    success: true,
-                    status: 200,
-                    message: "user data Available",
-                    user: users
-                })
+            return res.status(200).json({
+                success: true,
+                status: 200,
+                message: "user data Available",
+                user: users
             })
         })
     },

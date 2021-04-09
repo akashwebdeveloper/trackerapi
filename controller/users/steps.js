@@ -111,13 +111,59 @@ schedule.scheduleJob('0 5 0 * * *', function () {
 
 module.exports = {
     testing: (req, res) => {
+        User.find({}, ['stepstatus', 'level', 'fname'], (err, data) => {
+            data.forEach(user => {
+                const oneUser = user.stepstatus.slice(-3);
+                let dailyLimit = oneUser.filter(oneDay => oneDay.status === 0);
+                let doNotSafe = oneUser.filter(oneDay => oneDay.status === 2);
+                
+                console.log(dailyLimit.length);
+               
+                if (dailyLimit.length === 3 && user.level >= 1) {
+                    User.findByIdAndUpdate(user._id, { $inc: { level: 1 } }, (err) => {
+                        if (err) throw err;
+                    })
+                    
+    
+                    const activity = new Activity({
+                        activitytitle: `${user.fname} reached to Level ${user.level+1}`,
+                        for: `level`,
+                        reaction: [],
+                        photovalue: `${user.level+1}`,
+                        userid: user._id
+                    })
+    
+                    activity.save((err, items) => {
+                        if (err) { throw err }
+                        // console.log('Activity Added successfully');
+                    })
+                }
+    
+                if (doNotSafe.length === 3 && user.level > 1) {
+                    User.findByIdAndUpdate(user._id, { $inc: { level: -1 } }, (err) => {
+                        if (err) throw err;
+                    })
+                    const activity = new Activity({
+                        activitytitle: `${user.fname} down to Level ${user.level-1}`,
+                        for: `level`,
+                        reaction: [],
+                        photovalue: `-${user.level-1}`,
+                        userid: user._id
+                    })
+    
+                    activity.save((err, items) => {
+                        if (err) { throw err }
+                        // console.log('Activity Added successfully');
+                    })
+                }
+            });
+        })
 
-        
 
 
-        // return res.status(200).json({
-        //     status: true
-        // })
+        return res.status(200).json({
+            status: true
+        })
     },
     todayprogress: (req, res) => {
         const { uid, step, km, calorie } = req.body
@@ -471,7 +517,7 @@ module.exports = {
                     pushActivity.userid = data2._id
                     pushActivity.activitytitle = element1.activitytitle
                     pushActivity.reaction = element1.reaction.length
-                    pushActivity.photo = `${base_url}/${element1.photovalue}.png`
+                    pushActivity.photo = `${base_url}/img/${element1.photovalue}.png`
                     pushActivity.donotuse = element1.createdAt
 
                     const postingTime = moment(element1.createdAt)
