@@ -5,6 +5,7 @@ const m = moment();
 const Activity = require('../../models/activity')
 const base_url = process.env.base_url
 perStepCoin = 0.001;
+console.log(base_url);
 
 const level = [
     // 70% in safe point, daily limit depends on perStepCoin
