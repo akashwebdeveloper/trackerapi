@@ -95,8 +95,7 @@ router.post('/todayprogress', todayprogress)
 router.post('/updates', updates)
 router.post('/progressgraph', progressgraph)
 router.post('/weeklyprogressgraph', weeklyProgressGraph)
-// Updating challenge steps
-router.post('/challengeStepUpdate', challengeStepUpdate)
+
 // total step & average step
 router.post('/totalstep', totalstep)
 

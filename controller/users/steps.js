@@ -5,7 +5,6 @@ const m = moment();
 const Activity = require('../../models/activity')
 const base_url = process.env.BASE_URL
 perStepCoin = 0.001;
-console.log(base_url);
 
 const level = [
     // 70% in safe point, daily limit depends on perStepCoin
@@ -248,7 +247,15 @@ module.exports = {
 
                     if (moment(element.date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD') && element.reason === 0) {
                         allEarning[index].for = `${oldStep + parseInt(step)} steps`
-                        allEarning[index].coin += parseFloat((parseInt(step) * perStepCoin), 2)
+  
+                        
+                        if (oldStep < level[items.level-1].dailyLimit) {
+                            if ((oldStep + parseInt(step)) > level[items.level-1].dailyLimit) {
+                                allEarning[index].coin = level[items.level-1].maxCoin
+                            } else {
+                                allEarning[index].coin += parseFloat((parseInt(step) * perStepCoin), 2)
+                            }
+                        }
                     }
                 });
             }
@@ -595,65 +602,5 @@ module.exports = {
                 })
             })
         }
-    },
-    challengeStepUpdate: (req, res) => {
-        // const { uid, step } = req.body
-
-        //     Challenge.find({joined: { $in: [ uid ] } }, ['_id', 'name', 'startstatus', 'goal','starttime', 'expiretime'], (err, datas) => {
-        //     // User.findOne({ email: email }, (err, users) => {
-
-        //     if (err) {
-        //         return res.status(502).json({
-        //             success: false,
-        //             status: 502,
-        //             message: "err from database"
-        //         })
-        //     }
-
-        //     let challenges = datas.filter(challenge => (moment(challenge.starttime).format('YYYY-MM-DD hh:mm') <= m.format('YYYY-MM-DD hh:mm')));
-        //     console.log(challenges);
-
-
-
-
-        //     const todaysteps = { challenge_id: name, step: step };
-
-        //     // Adding Coins
-        //     var coin = (totalStep*0.001).toFixed(2);
-
-
-        //     var allProgress;
-        //     let progress = items.progress.filter(prog => (moment(prog.date).format('YYYY-MM-DD') == m.format('YYYY-MM-DD')));
-
-
-        //     if (items.progress.length === 0) {
-        //         allProgress = [];
-        //         allProgress.push(todaysteps)
-
-        //     } else if (progress.length === 0) {
-        //         allProgress = items.progress;
-        //         allProgress.push(todaysteps)
-
-        //     } else {
-        //         allProgress = items.progress;
-        //         allProgress.forEach((element, index) => {
-
-        //             if (moment(element.date).format('YYYY-MM-DD') == m.format('YYYY-MM-DD')) {
-        //                 allProgress[index].step = step
-        //             }
-        //         });
-
-        //     }
-        //     User.findOneAndUpdate({ _id: uid }, { $set: { progress: allProgress, coin: coin } }, { new: true }, (err, items) => {
-
-        //         return res.status(201).json({
-        //             success: false,
-        //             message: "succesfully Updated Steps data for graph",
-        //         })
-
-        //     })
-
-
-        // })  
     },
 }
