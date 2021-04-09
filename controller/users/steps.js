@@ -61,23 +61,25 @@ schedule.scheduleJob('0 0 0 * * *', function () {
 
 // Updating Level of User at 12:05 A.M.
 schedule.scheduleJob('0 5 0 * * *', function () {
-    User.find({}, ['stepstatus', 'level'], (err, data) => {
+    User.find({}, ['stepstatus', 'level', 'fname'], (err, data) => {
         data.forEach(user => {
             const oneUser = user.stepstatus.slice(-3);
             let dailyLimit = oneUser.filter(oneDay => oneDay.status === 0);
             let doNotSafe = oneUser.filter(oneDay => oneDay.status === 2);
-
+            
+           
             if (dailyLimit.length === 3 && user.level >= 1) {
                 User.findByIdAndUpdate(user._id, { $inc: { level: 1 } }, (err) => {
                     if (err) throw err;
                 })
+                
 
                 const activity = new Activity({
                     activitytitle: `${user.fname} reached to Level ${user.level+1}`,
                     for: `level`,
                     reaction: [],
                     photovalue: `${user.level+1}`,
-                    userid: uid
+                    userid: user._id
                 })
 
                 activity.save((err, items) => {
@@ -95,7 +97,7 @@ schedule.scheduleJob('0 5 0 * * *', function () {
                     for: `level`,
                     reaction: [],
                     photovalue: `-${user.level-1}`,
-                    userid: uid
+                    userid: user._id
                 })
 
                 activity.save((err, items) => {
@@ -117,7 +119,6 @@ module.exports = {
                 let dailyLimit = oneUser.filter(oneDay => oneDay.status === 0);
                 let doNotSafe = oneUser.filter(oneDay => oneDay.status === 2);
                 
-                console.log(dailyLimit.length);
                
                 if (dailyLimit.length === 3 && user.level >= 1) {
                     User.findByIdAndUpdate(user._id, { $inc: { level: 1 } }, (err) => {
@@ -526,7 +527,7 @@ module.exports = {
 
 
                     var time = "";
-                    if (days < 0) {
+                    if (days === 0) {
                         time += `Today`;
                     } else if(days< 31) {
                         time += `${days} d`;
