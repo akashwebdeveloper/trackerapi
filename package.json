@@ -16,6 +16,7 @@
     "express-ejs-layouts": "^2.5.0",
     "express-flash": "^0.0.2",
     "express-session": "^1.17.1",
+    "find-config": "^1.0.0",
     "firebase-admin": "^9.4.2",
     "moment": "^2.29.1",
     "mongoose": "^5.11.10",

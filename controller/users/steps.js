@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config({ path: require('find-config')('.env') })
 const User = require('../../models/user')
 const moment = require('moment');
 const m = moment();
