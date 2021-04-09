@@ -4,24 +4,24 @@ const moment = require('moment');
 const m = moment();
 const Activity = require('../../models/activity')
 const base_url = process.env.base_url
+perStepCoin = 0.001;
 
 const level = [
-    { level: 0, step: 1000 },
-    { level: 1, step: 3000 },
-    { level: 2, step: 7000 },
-    { level: 3, step: 15000 },
-    { level: 4, step: 25000 },
-    { level: 5, step: 40000 },
-    { level: 6, step: 65000 },
-    { level: 7, step: 105000 },
-    { level: 8, step: 165000 },
-    { level: 9, step: 255000 },
-    { level: 10, step: 380000 },
-    { level: 11, step: 530000 },
-]
-const schedule = require('node-schedule');
+    // 70% in safe point, daily limit depends on perStepCoin
+    { level: 1, safePoint: ((2 / perStepCoin) * (70 / 100)), dailyLimit: 2 / perStepCoin, maxCoin: 2 },
+    { level: 2, safePoint: ((5 / perStepCoin) * (70 / 100)), dailyLimit: 5 / perStepCoin, maxCoin: 5 },
+    { level: 3, safePoint: ((10 / perStepCoin) * (70 / 100)), dailyLimit: 10 / perStepCoin, maxCoin: 10 },
+    { level: 4, safePoint: ((15 / perStepCoin) * (70 / 100)), dailyLimit: 15 / perStepCoin, maxCoin: 15 },
+    { level: 5, safePoint: ((20 / perStepCoin) * (70 / 100)), dailyLimit: 20 / perStepCoin, maxCoin: 20 }
+];
 
+
+
+
+const schedule = require('node-schedule');
+const { json } = require('body-parser');
 schedule.scheduleJob('0 0 0 * * *', function () {
+    // Reset All today data at midnight
     User.updateMany({}, {
         $set: {
             todaysteps: 0,
@@ -29,11 +29,96 @@ schedule.scheduleJob('0 0 0 * * *', function () {
             calorie: 0
         }
     }, (err) => { if (err) throw err })
+
+
+    // Updating PerDay Achievment Status at 12:00 A.M.
+    User.find({}, ['progress', 'level'], (err, data) => {
+        data.forEach(user => {
+            const oneUser = user.progress[user.progress.length - 1];
+
+            if (level[user.level - 1].dailyLimit < oneUser.step) {
+                //  status is declare 0 if dailyLimit crossed
+                User.findByIdAndUpdate(user._id, { $push: { stepstatus: { date: moment().subtract(1, 'day').format(), status: 0 } } }, (err) => {
+                    if (err) throw err;
+                })
+            } else if (level[user.level - 1].safePoint < oneUser.step) {
+                //  status is declare 1 if step achive safe point
+                User.findByIdAndUpdate(user._id, { $push: { stepstatus: { date: moment().subtract(1, 'day').format(), status: 1 } } }, (err) => {
+                    if (err) throw err;
+                })
+            } else {
+                //  status is declare 2 if step failed to achive safe point
+                User.findByIdAndUpdate(user._id, { $push: { stepstatus: { date: moment().subtract(1, 'day').format(), status: 2 } } }, (err) => {
+                    if (err) throw err;
+                })
+            }
+        });
+    })
+});
+
+
+
+
+// Updating Level of User at 12:05 A.M.
+schedule.scheduleJob('0 5 0 * * *', function () {
+    User.find({}, ['stepstatus', 'level'], (err, data) => {
+        data.forEach(user => {
+            const oneUser = user.stepstatus.slice(-3);
+            let dailyLimit = oneUser.filter(oneDay => oneDay.status === 0);
+            let doNotSafe = oneUser.filter(oneDay => oneDay.status === 2);
+
+            if (dailyLimit.length === 3 && user.level >= 1) {
+                User.findByIdAndUpdate(user._id, { $inc: { level: 1 } }, (err) => {
+                    if (err) throw err;
+                })
+
+                const activity = new Activity({
+                    activitytitle: `${user.fname} reached to Level ${user.level+1}`,
+                    for: `level`,
+                    reaction: [],
+                    photovalue: `${user.level+1}`,
+                    userid: uid
+                })
+
+                activity.save((err, items) => {
+                    if (err) { throw err }
+                    // console.log('Activity Added successfully');
+                })
+            }
+
+            if (doNotSafe.length === 3 && user.level > 1) {
+                User.findByIdAndUpdate(user._id, { $inc: { level: -1 } }, (err) => {
+                    if (err) throw err;
+                })
+                const activity = new Activity({
+                    activitytitle: `${user.fname} down to Level ${user.level-1}`,
+                    for: `level`,
+                    reaction: [],
+                    photovalue: `-${user.level-1}`,
+                    userid: uid
+                })
+
+                activity.save((err, items) => {
+                    if (err) { throw err }
+                    // console.log('Activity Added successfully');
+                })
+            }
+        });
+    })
 });
 
 
 
 module.exports = {
+    testing: (req, res) => {
+
+        
+
+
+        // return res.status(200).json({
+        //     status: true
+        // })
+    },
     todayprogress: (req, res) => {
         const { uid, step, km, calorie } = req.body
 
@@ -61,98 +146,17 @@ module.exports = {
     updates: (req, res) => {
         const { uid, step } = req.body
 
-        // Updating Activity level
-        Activity.find({ userid: uid }, (err, result) => {
-
-            if (err) {
-                return res.status(502).json({
-                    success: false,
-                    message: "err from database in Activity",
-                    error: err
-                })
-            }
-
-            if (result.length === 0) {
-                User.findById(uid, (err, result2) => {
-
-                    const activity = new Activity({
-                        for: `level 0`,
-                        achivement: `Welcome to United By Step Activity`,
-                        reaction: [],
-                        photo: `${base_url}/img/0.png`,
-                        userid: uid,
-                        username: result2.username
-                    })
-
-                    activity.save((err, items) => {
-                        if (err) { throw err }
-                        // console.log('Activity Added successfully');
-
-                    })
-                })
-            } else {
-                var totalStep = 0;
-                User.findById(uid, (err, result1) => {
-                    if (err) {
-                        return res.status(502).json({
-                            success: false,
-                            message: "err from database",
-                            error: err
-                        })
-                    }
-
-                    if (result1.progress.length != 0) {
-                        result1.progress.forEach((daily) => {
-                            // User total Steps
-                            totalStep += parseInt(daily.step)
-                        });
-                    }
-
-
-
-                    if (level.some((upgrade) => upgrade.step > totalStep)) {
-                        // Finding index number which object date matched with last 7 days
-                        const got = level.findIndex(upgrade => upgrade.step > totalStep);
-
-                        const found = result.some(activity => activity.for === `level ${level[got].level}`);
-                        if (!found) {
-
-                            const activity = new Activity({
-                                for: `level ${level[got].level}`,
-                                achivement: `Crossed Level ${level[got].level - 1}`,
-                                reaction: [],
-                                photo: `${base_url}/img/${level[got].level}.png`,
-                                userid: uid,
-                                username: result1.username
-                            })
-
-
-                            activity.save((err, items) => {
-                                if (err) { throw err }
-                                // console.log('Activity Added successfully');
-                            })
-                        };
-                    }
-                })
-            }
-        })
-
-
-
-
-
         // Updating Progress graph for step
         User.findOne({ _id: uid }, (err, items) => {
 
-
             // Challenge Updating
-            User.updateMany({ "challenges.cstatus": 1 }, { $inc: { 'challenges.$.cstep': parseInt(step) } }, (err, d) => {
+            User.updateMany({ "challenges.cstatus": 1 }, { $inc: { 'challenges.$.cstep': parseInt(step) } }, (err) => {
                 if (err) throw err;
             })
 
 
             const todaysteps = { date: moment().format(), step: parseInt(step) };
-            const todayEarning = { date: moment().format(), for: `${step} steps`, reason: 0, coin: parseFloat((parseInt(step) * 0.001),2) };
+            const todayEarning = { date: moment().format(), for: `${step} steps`, reason: 0, coin: parseFloat((parseInt(step) * perStepCoin), 2) };
 
 
 
@@ -180,7 +184,7 @@ module.exports = {
                     }
                 });
             };
-            
+
 
             if (!items.earnedcoin.length) {
                 allEarning = [];
@@ -196,7 +200,7 @@ module.exports = {
 
                     if (moment(element.date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD') && element.reason === 0) {
                         allEarning[index].for = `${oldStep + parseInt(step)} steps`
-                        allEarning[index].coin += parseFloat((parseInt(step) * 0.001),2)
+                        allEarning[index].coin += parseFloat((parseInt(step) * perStepCoin), 2)
                     }
                 });
             }
@@ -439,93 +443,10 @@ module.exports = {
     getActivity: (req, res) => {
         const { uid, myactivityonly } = req.body
 
-        // Updating Activity level
-        Activity.find({ userid: uid }, (err, result) => {
-
-            if (err) {
-                return res.status(502).json({
-                    success: false,
-                    message: "err from database in Activity",
-                    error: err
-                })
-            }
-
-            if (result.length === 0) {
-                User.findById(uid, (err, result2) => {
-
-                    const activity = new Activity({
-                        for: `level 0`,
-                        achivement: `Welcome to United By Step Activity`,
-                        reaction: [],
-                        photo: '',
-                        userid: uid,
-                        username: result2.username
-                    })
-
-                    activity.save((err, items) => {
-                        if (err) { throw err }
-                        // console.log('Activity Added successfully');
-
-                    })
-                })
-            } else {
-                var totalStep = 0;
-                User.findById(uid, (err, result1) => {
-                    if (err) {
-                        return res.status(502).json({
-                            success: false,
-                            message: "err from database",
-                            error: err
-                        })
-                    }
-
-                    if (!result1) {
-                        return res.status(202).json({
-                            success: false,
-                            status: 202,
-                            message: "user doesn't exist"
-                        })
-                    }
-
-                    if (result1.progress.length != 0) {
-                        result1.progress.forEach((daily) => {
-                            // User total Steps
-                            totalStep += parseInt(daily.step)
-                        });
-                    }
-
-
-
-                    if (level.some((upgrade) => upgrade.step > totalStep)) {
-                        // Finding index number which object date matched with last 7 days
-                        const got = level.findIndex(upgrade => upgrade.step > totalStep);
-
-                        const found = result.some(activity => activity.for === `level ${level[got].level}`);
-                        if (!found) {
-
-                            const activity = new Activity({
-                                for: `level ${level[got].level}`,
-                                achivement: `Crossed Level ${level[got].level}`,
-                                reaction: [],
-                                photo: '',
-                                userid: uid,
-                                username: result1.username
-                            })
-
-
-                            activity.save((err, items) => {
-                                if (err) { throw err }
-                                // console.log('Activity Added successfully');
-                            })
-                        };
-                    }
-                })
-            }
-        })
 
         // Function for returning all the activity data
         function activityDetails(uid, array) {
-            User.findById(uid, ['photos'], (err, data2) => {
+            User.findById(uid, ['photos','username'], (err, data2) => {
                 if (err) {
                     return res.status(502).json({
                         success: false,
@@ -546,30 +467,26 @@ module.exports = {
                     const pushActivity = {};
                     pushActivity.profile = data2.photos
                     pushActivity.activityid = element1._id
-                    pushActivity.username = element1.username
-                    pushActivity.achivement = element1.achivement
+                    pushActivity.username = data2.username
+                    pushActivity.userid = data2._id
+                    pushActivity.activitytitle = element1.activitytitle
                     pushActivity.reaction = element1.reaction.length
-                    pushActivity.photo = element1.photo
+                    pushActivity.photo = `${base_url}/${element1.photovalue}.png`
                     pushActivity.donotuse = element1.createdAt
 
                     const postingTime = moment(element1.createdAt)
-                    const today = moment()
 
-                    const days = today.diff(postingTime, 'days')
-                    const hours = today.diff(postingTime, 'hours') - (24 * (days));
-                    const minutes = (today.diff(postingTime, 'minutes') - (1440 * (days))) - (60 * hours);
+                    const days = moment().diff(postingTime, 'days')
 
 
                     var time = "";
-                    if (days > 0) {
+                    if (days < 0) {
+                        time += `Today`;
+                    } else if(days< 31) {
                         time += `${days} d`;
-                    } else if (hours > 0) {
-                        time += `${hours} h`;
-                    } else if (minutes > 0) {
-                        time += `${minutes} m`;
                     } else {
-                        time += `just a second ago`;
-                    }
+                        time += `${Math.trunc(days/31)} mn`;
+                    } 
 
                     pushActivity.timeago = time
                     activity.push(pushActivity)
@@ -580,7 +497,7 @@ module.exports = {
 
                 return res.status(201).json({
                     success: true,
-                    message: `Only User Activity`,
+                    message: myactivityonly ? 'Only User Activity' : 'All Activity',
                     activity: sortedArray
                 })
             });
@@ -590,7 +507,7 @@ module.exports = {
 
         const activity = [];
         if (myactivityonly === true) {
-            Activity.find({ userid: uid }, ['achivement', 'username', 'createdAt', 'reaction', 'photo'], (err, data1) => {
+            Activity.find({ userid: uid }, ['activitytitle', 'for', 'reaction', 'photovalue', 'userid'], (err, data1) => {
                 if (err) {
                     return res.status(502).json({
                         success: false,
@@ -601,7 +518,6 @@ module.exports = {
 
                 // returning all activity user and his following
                 activityDetails(uid, data1)
-
             })
         } else {
             User.findById(uid, ['following'], (err, data) => {

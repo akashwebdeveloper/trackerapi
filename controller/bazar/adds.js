@@ -69,9 +69,8 @@ module.exports = {
 
             } else {
                 return res.status(200).json({
-                    success: true,
-                    status: 200,
-                    counter: earning[0].coin/perAdCoin
+                    success: (earning[0].coin/perAdCoin < 6) ? true : false,
+                    status: 200
                 })
             }  
         })

@@ -13,6 +13,7 @@ const userSchema = new Schema({
     weight: { type: Number },
     height: { type: Number },
     gender: { type: String },
+    stepstatus: { type: Array },
     email: { type: String, unique: false },
     photos: { type: String },
     countrycode: { type: String },
@@ -29,6 +30,7 @@ const userSchema = new Schema({
     challenges: { type:Array },
     earnedcoin: { type:Array },
     spendcoin: { type:Array },
+    level: { type:Number, default: 1 },
 }, { timestamps: true });
 
 

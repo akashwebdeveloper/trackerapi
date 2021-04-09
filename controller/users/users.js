@@ -33,14 +33,14 @@ module.exports = {
     getdata: (req, res) => {
         const { id } = req.body
 
-        if (id.substr(id.length - 3) == 'com') {
-            var EMAIL = req.body.id
-        } else if (id.substr(id.length - 2) == 'in') {
-            var EMAIL = req.body.id
-        } else {
-            var ID = req.body.id
-        }
-        User.find({ $or: [{ _id: ID }, { email: EMAIL }] }, (err, users) => {
+        // if (id.substr(id.length - 3) == 'com') {
+        //     var EMAIL = req.body.id
+        // } else if (id.substr(id.length - 2) == 'in') {
+        //     var EMAIL = req.body.id
+        // } else {
+        //     var ID = req.body.id
+        // }
+        User.find({ _id: id },{ '_id': 0, 'earnedcoin' :0, 'spendcoin': 0, 'challenges': 0, 'progress': 0, 'synccontact': 0}, (err, users) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -63,8 +63,7 @@ module.exports = {
                     success: true,
                     status: 200,
                     message: "user data Available",
-                    user: users,
-                    level: level
+                    user: users
                 })
             })
         })
@@ -347,8 +346,10 @@ module.exports = {
                     pushObj.isEarned = true;
                     pushObj.donotuse = daily.date;
                     
+                    
                     transaction.push(pushObj);
                     
+
                     // User total Steps
                     earnedcoin += daily.coin
                 });

@@ -3,11 +3,10 @@ const {ObjectId} = mongoose.Schema.Types
 const Schema = mongoose.Schema
 
 const activitySchema = new Schema({
-    for: {type: String},
-    achivement: { type: String },
+    activitytitle: {type: String},
+    for: { type: String },
+    photovalue: { type: String },
     reaction: [],
-    photo: { type: String },
-    username: { type: String },
     userid:{type: ObjectId, ref:"User"},
 }, { timestamps: true });
 
