@@ -6,7 +6,7 @@ const m = moment();
 module.exports = {
     getalldata: (req, res) => {
 
-        User.find({ }, ['email', 'fname', 'lname', 'username', 'photos'], (err, users) => {
+        User.find({}, ['email', 'fname', 'lname', 'username', 'photos'], (err, users) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -40,7 +40,7 @@ module.exports = {
         // } else {
         //     var ID = req.body.id
         // }
-        User.find({ _id: id },{ '_id': 0, 'earnedcoin' :0, 'spendcoin': 0, 'challenges': 0, 'progress': 0, 'synccontact': 0}, (err, users) => {
+        User.find({ _id: id }, { '_id': 0, 'earnedcoin': 0, 'spendcoin': 0, 'challenges': 0, 'progress': 0, 'synccontact': 0 }, (err, users) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -68,7 +68,7 @@ module.exports = {
     searchUserData: (req, res) => {
         const { uid, fid } = req.body
 
-        User.find({ _id:fid },['following', 'followers', 'earnedcoin', 'username', 'photos' ], (err, users) => {
+        User.find({ _id: fid }, ['following', 'followers', 'earnedcoin', 'username', 'photos'], (err, users) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -84,14 +84,14 @@ module.exports = {
                     message: "user doesn't exist"
                 })
             }
-var earnedcoin = 0;
+            var earnedcoin = 0;
             users[0].earnedcoin.forEach(daily => {
                 earnedcoin += daily.coin
             });
-            
-            
-            
-            const info ={
+
+
+
+            const info = {
                 _id: users[0]._id,
                 following: users[0].following.length,
                 followers: users[0].followers.length,
@@ -338,10 +338,10 @@ var earnedcoin = 0;
                     pushObj.coin = daily.coin;
                     pushObj.isEarned = true;
                     pushObj.donotuse = daily.date;
-                    
-                    
+
+
                     transaction.push(pushObj);
-                    
+
 
                     // User total Steps
                     earnedcoin += daily.coin
@@ -362,7 +362,7 @@ var earnedcoin = 0;
                     pushObj.donotuse = daily.date;
 
                     transaction.push(pushObj);
-                    
+
                     // User Total spend coin
                     spendcoin += parseInt(daily.coin)
                 });
@@ -372,7 +372,7 @@ var earnedcoin = 0;
             currentcoin = (earnedcoin - spendcoin).toFixed(2);
             earnedcoin = earnedcoin.toFixed(2);
             spendcoin = spendcoin.toFixed(2);
-            
+
 
             const sortedArray = transaction.sort((a, b) => new moment(a.donotuse).format('YYYYMMDD') - new moment(b.donotuse).format('YYYYMMDD'));
 
