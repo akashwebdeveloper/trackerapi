@@ -84,32 +84,28 @@ module.exports = {
                     message: "user doesn't exist"
                 })
             }
+var earnedcoin = 0;
+            users[0].earnedcoin.forEach(daily => {
+                earnedcoin += daily.coin
+            });
+            
+            
+            
             const info ={
                 _id: users[0]._id,
                 following: users[0].following.length,
                 followers: users[0].followers.length,
-                earnedcoin: users[0].earnedcoin,
+                earnedcoin: earnedcoin,
                 username: users[0].username,
                 photos: users[0].photos,
+                photos: users[0].level,
             };
 
-            Activity.find({ userid: fid, for: { '$regex': `^level`, '$options': 'i' } }, (err, result) => {
-                const level = result[result.length - 1].for
-                info.level = level;
-
-
-                
-                if (users[0].following.includes(fid)) {
-                    info.isFollowed = true;
-                } else {
-                    info.isFollowed = false;
-                }
-                return res.status(200).json({
-                    success: true,
-                    status: 200,
-                    message: "user data Available",
-                    user: info
-                })
+            return res.status(200).json({
+                success: true,
+                status: 200,
+                message: "user data Available",
+                user: info
             })
         })
     },

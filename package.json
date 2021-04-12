@@ -24,6 +24,7 @@
     "node-schedule": "^2.0.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
+    "razorpay": "^2.0.6",
     "referral-code-generator": "^1.0.8",
     "request": "^2.88.2",
     "serve-favicon": "^2.5.0",
