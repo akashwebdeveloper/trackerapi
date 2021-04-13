@@ -66,19 +66,19 @@ schedule.scheduleJob('0 5 0 * * *', function () {
             const oneUser = user.stepstatus.slice(-3);
             let dailyLimit = oneUser.filter(oneDay => oneDay.status === 0);
             let doNotSafe = oneUser.filter(oneDay => oneDay.status === 2);
-            
-           
+
+
             if (dailyLimit.length === 3 && user.level >= 1) {
                 User.findByIdAndUpdate(user._id, { $inc: { level: 1 } }, (err) => {
                     if (err) throw err;
                 })
-                
+
 
                 const activity = new Activity({
-                    activitytitle: `${user.fname} reached to Level ${user.level+1}`,
+                    activitytitle: `${user.fname} reached to Level ${user.level + 1}`,
                     for: `level`,
                     reaction: [],
-                    photovalue: `${user.level+1}`,
+                    photovalue: `${user.level + 1}`,
                     userid: user._id
                 })
 
@@ -93,10 +93,10 @@ schedule.scheduleJob('0 5 0 * * *', function () {
                     if (err) throw err;
                 })
                 const activity = new Activity({
-                    activitytitle: `${user.fname} down to Level ${user.level-1}`,
+                    activitytitle: `${user.fname} down to Level ${user.level - 1}`,
                     for: `level`,
                     reaction: [],
-                    photovalue: `-${user.level-1}`,
+                    photovalue: `-${user.level - 1}`,
                     userid: user._id
                 })
 
@@ -118,40 +118,40 @@ module.exports = {
                 const oneUser = user.stepstatus.slice(-3);
                 let dailyLimit = oneUser.filter(oneDay => oneDay.status === 0);
                 let doNotSafe = oneUser.filter(oneDay => oneDay.status === 2);
-                
-               
+
+
                 if (dailyLimit.length === 3 && user.level >= 1) {
                     User.findByIdAndUpdate(user._id, { $inc: { level: 1 } }, (err) => {
                         if (err) throw err;
                     })
-                    
-    
+
+
                     const activity = new Activity({
-                        activitytitle: `${user.fname} reached to Level ${user.level+1}`,
+                        activitytitle: `${user.fname} reached to Level ${user.level + 1}`,
                         for: `level`,
                         reaction: [],
-                        photovalue: `${user.level+1}`,
+                        photovalue: `${user.level + 1}`,
                         userid: user._id
                     })
-    
+
                     activity.save((err, items) => {
                         if (err) { throw err }
                         // console.log('Activity Added successfully');
                     })
                 }
-    
+
                 if (doNotSafe.length === 3 && user.level > 1) {
                     User.findByIdAndUpdate(user._id, { $inc: { level: -1 } }, (err) => {
                         if (err) throw err;
                     })
                     const activity = new Activity({
-                        activitytitle: `${user.fname} down to Level ${user.level-1}`,
+                        activitytitle: `${user.fname} down to Level ${user.level - 1}`,
                         for: `level`,
                         reaction: [],
-                        photovalue: `-${user.level-1}`,
+                        photovalue: `-${user.level - 1}`,
                         userid: user._id
                     })
-    
+
                     activity.save((err, items) => {
                         if (err) { throw err }
                         // console.log('Activity Added successfully');
@@ -247,11 +247,11 @@ module.exports = {
 
                     if (moment(element.date).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD') && element.reason === 0) {
                         allEarning[index].for = `${oldStep + parseInt(step)} steps`
-  
-                        
-                        if (oldStep < level[items.level-1].dailyLimit) {
-                            if ((oldStep + parseInt(step)) > level[items.level-1].dailyLimit) {
-                                allEarning[index].coin = level[items.level-1].maxCoin
+
+
+                        if (oldStep < level[items.level - 1].dailyLimit) {
+                            if ((oldStep + parseInt(step)) > level[items.level - 1].dailyLimit) {
+                                allEarning[index].coin = level[items.level - 1].maxCoin
                             } else {
                                 allEarning[index].coin += parseFloat((parseInt(step) * perStepCoin), 2)
                             }
@@ -500,8 +500,9 @@ module.exports = {
 
 
         // Function for returning all the activity data
-        function activityDetails(uid, array) {
-            User.findById(uid, ['photos','username'], (err, data2) => {
+        function activityDetails(userArray, activityArray) {
+
+            User.find({ _id: { $in: userArray } }, ['photos', 'username'], (err, data2) => {
                 if (err) {
                     return res.status(502).json({
                         success: false,
@@ -518,30 +519,34 @@ module.exports = {
                     })
                 }
 
-                array.forEach(element1 => {
+                activityArray.forEach(element1 => {
                     const pushActivity = {};
-                    pushActivity.profile = data2.photos
                     pushActivity.activityid = element1._id
-                    pushActivity.username = data2.username
-                    pushActivity.userid = data2._id
+                    pushActivity.userid = element1.userid
                     pushActivity.activitytitle = element1.activitytitle
                     pushActivity.reaction = element1.reaction.length
                     pushActivity.photo = `${base_url}/img/${element1.photovalue}.png`
                     pushActivity.donotuse = element1.createdAt
 
-                    const postingTime = moment(element1.createdAt)
+                    data2.forEach(elem1 => {
+                        if (String(elem1._id) === String(element1.userid)) {
+                            pushActivity.username = elem1.username
+                            pushActivity.profile = elem1.photos
+                        }
+                    });
 
+                    const postingTime = moment(element1.createdAt)
                     const days = moment().diff(postingTime, 'days')
 
 
                     var time = "";
                     if (days === 0) {
                         time += `Today`;
-                    } else if(days< 31) {
+                    } else if (days < 31) {
                         time += `${days} d`;
                     } else {
-                        time += `${Math.trunc(days/31)} mn`;
-                    } 
+                        time += `${Math.trunc(days / 31)} mn`;
+                    }
 
                     pushActivity.timeago = time
                     activity.push(pushActivity)
@@ -572,7 +577,7 @@ module.exports = {
                 }
 
                 // returning all activity user and his following
-                activityDetails(uid, data1)
+                activityDetails([uid], data1)
             })
         } else {
             User.findById(uid, ['following'], (err, data) => {
@@ -596,8 +601,9 @@ module.exports = {
                                 error: err
                             })
                         }
+
                         // returning all activity user and his following
-                        activityDetails(uid, array)
+                        activityDetails(FollowingArray, array)
                     });
                 })
             })
