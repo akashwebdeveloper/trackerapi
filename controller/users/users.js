@@ -40,7 +40,7 @@ module.exports = {
         // } else {
         //     var ID = req.body.id
         // }
-        User.find({ _id: id }, { '_id': 0, 'earnedcoin': 0, 'spendcoin': 0, 'challenges': 0, 'progress': 0, 'synccontact': 0 }, (err, users) => {
+        User.findById( id, { '_id': 0, 'earnedcoin': 0, 'spendcoin': 0, 'challenges': 0, 'progress': 0, 'synccontact': 0 }, (err, users) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -49,26 +49,61 @@ module.exports = {
                 })
             }
 
-            if (!users[0]) {
+            if (!users) {
                 return res.status(202).json({
                     success: false,
                     status: 202,
                     message: "user doesn't exist"
                 })
             }
+const stepStatus =[];
+            users.stepstatus.forEach(status => {
+                var pushObj  = {};
+                pushObj.date = moment(status.date).format('ddd')
+                pushObj.status = status.status
+
+                stepStatus.push(pushObj);
+                
+            });
+console.log(stepStatus);
+
+
+            const data = {
+                private: users.private,
+                status: users.status,
+                following: users.following,
+                followers: users.followers,
+                todaysteps: users.todaysteps,
+                todaykm: users.todaykm,
+                calorie: users.calorie,
+                level: users.level,
+                fname: users.fname,
+                lname: users.lname,
+                username: users.username,
+                dob: users.dob,
+                gender: users.gender,
+                email: users.email,
+                photos: users.photos,
+                weight: users.weight,
+                height: users.height,
+                countrycode: users.countrycode,
+                referralcode: users.referralcode,
+                phone: users.phone,
+                stepStatus
+            };
 
             return res.status(200).json({
                 success: true,
                 status: 200,
                 message: "user data Available",
-                user: users
+                user: data
             })
         })
     },
     searchUserData: (req, res) => {
         const { uid, fid } = req.body
 
-        User.find({ _id: fid }, ['following', 'followers', 'earnedcoin', 'username', 'photos'], (err, users) => {
+        User.find({ _id: fid }, ['following', 'followers', 'earnedcoin', 'username', 'photos','level'], (err, users) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -84,12 +119,14 @@ module.exports = {
                     message: "user doesn't exist"
                 })
             }
+
             var earnedcoin = 0;
             users[0].earnedcoin.forEach(daily => {
                 earnedcoin += daily.coin
             });
 
-
+            // checking that fid is followed by user or not
+            const found = users[0].followers.some(searchingUser => String(searchingUser)  === String(uid) )
 
             const info = {
                 _id: users[0]._id,
@@ -98,7 +135,8 @@ module.exports = {
                 earnedcoin: earnedcoin,
                 username: users[0].username,
                 photos: users[0].photos,
-                photos: users[0].level,
+                level: users[0].level,
+                isfollow: found ? true : false,
             };
 
             return res.status(200).json({
