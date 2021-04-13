@@ -40,7 +40,7 @@ module.exports = {
         // } else {
         //     var ID = req.body.id
         // }
-        User.findById( id, { '_id': 0, 'earnedcoin': 0, 'spendcoin': 0, 'challenges': 0, 'progress': 0, 'synccontact': 0 }, (err, users) => {
+        User.findById(id, { '_id': 0, 'earnedcoin': 0, 'spendcoin': 0, 'challenges': 0, 'progress': 0, 'synccontact': 0 }, (err, users) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -56,17 +56,15 @@ module.exports = {
                     message: "user doesn't exist"
                 })
             }
-const stepStatus =[];
+            const stepStatus = [];
             users.stepstatus.forEach(status => {
-                var pushObj  = {};
+                var pushObj = {};
                 pushObj.date = moment(status.date).format('ddd')
                 pushObj.status = status.status
 
                 stepStatus.push(pushObj);
-                
-            });
-console.log(stepStatus);
 
+            });
 
             const data = {
                 private: users.private,
@@ -103,7 +101,7 @@ console.log(stepStatus);
     searchUserData: (req, res) => {
         const { uid, fid } = req.body
 
-        User.find({ _id: fid }, ['following', 'followers', 'earnedcoin', 'username', 'photos','level'], (err, users) => {
+        User.find({ _id: fid }, ['following', 'followers', 'earnedcoin', 'username', 'photos', 'level'], (err, users) => {
             if (err) {
                 return res.status(502).json({
                     success: false,
@@ -126,7 +124,7 @@ console.log(stepStatus);
             });
 
             // checking that fid is followed by user or not
-            const found = users[0].followers.some(searchingUser => String(searchingUser)  === String(uid) )
+            const found = users[0].followers.some(searchingUser => String(searchingUser) === String(uid))
 
             const info = {
                 _id: users[0]._id,
