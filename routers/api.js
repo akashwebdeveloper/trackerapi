@@ -10,7 +10,7 @@ const { free, appexclusive, accessories, apparel, electronics, food_beverage, fo
 const { addbookmark, removebookmark, bookmarklist } = require('../controller/bazar/bookmarkController')
 const { like, unlike } = require('../controller/bazar/likeController')
 const { setPrivate } = require('../controller/users/setting')
-const { order } = require('../controller/razor_pay/razorPayController')
+const { order, paymentCapture } = require('../controller/razor_pay/razorPayController')
 const { addsEarning, adsCounter } = require('../controller/bazar/adds')
 const { productfullview, details } = require('../controller/bazar/fullviewController')
 const { testing, todayprogress, updates, progressgraph,weeklyProgressGraph, totalstep, challengeStepUpdate, getActivity, reaction} = require('../controller/users/steps')
@@ -122,7 +122,10 @@ router.post('/challengeranking', challengeRanking)
 router.post('/addsearning', addsEarning)
 router.post('/adscounter', adsCounter)
 
+
+// Payment
 router.post('/order', order)
+router.post('/paymentcapture', paymentCapture)
 
 router.post('/testing', testing)
 
