@@ -56,31 +56,19 @@ module.exports = {
     paymentCapture: (req, res) => {
 
         const { paymentId, ammount } = req.body
-        try{
-            return request(
-              {
-                method : "POST",
-                url : `https://${keyId}:${secretKey}@api.razorpay.com/v1/payments/${paymentId}/capture`,
-                form:{
-                  amount : parseInt(ammount) *100,
-                  currency: "INR"
-                },
-              },
-              async function(err,response,body){
-                if(err){
-                  return res.status(500).json({
-                    message: "Something error!s"
-                  })
-                }
-                return res.status(200).json(body)
-              }
-            )
-          }
-          catch(err){
-            return res.status(500).json({
-              message: err.message
+
+
+        instance.payments.capture(paymentId, ammount, 'INR', (err) => {
+            if (err) {
+                return res.status(400).json({
+                    success: false
+                })
+            }
+            return res.status(200).json({
+                success: true
             })
-          }
+        })
+
     },
 
 }
