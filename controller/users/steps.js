@@ -554,7 +554,6 @@ module.exports = {
                     const postingTime = moment(element1.createdAt)
                     const days = moment().diff(postingTime, 'days')
 
-
                     var time = "";
                     if (days === 0) {
                         time += `Today`;
@@ -568,7 +567,7 @@ module.exports = {
                     activity.push(pushActivity)
                 })
 
-                const sortedArray = activity.sort((a, b) => new moment(a.donotuse).format('YYYYMMDD') - new moment(b.donotuse).format('YYYYMMDD'))
+                const sortedArray = activity.sort((a, b) =>  new moment(b.donotuse).format('YYYYMMDD') - new moment(a.donotuse).format('YYYYMMDD'))
 
 
                 return res.status(201).json({
@@ -583,7 +582,7 @@ module.exports = {
 
         const activity = [];
         if (myactivityonly === true) {
-            Activity.find({ userid: uid }, ['activitytitle', 'for', 'reaction', 'photovalue', 'userid'], (err, data1) => {
+            Activity.find({ userid: uid }, ['activitytitle', 'for', 'reaction', 'photovalue', 'userid', 'createdAt'], (err, data1) => {
                 if (err) {
                     return res.status(502).json({
                         success: false,
