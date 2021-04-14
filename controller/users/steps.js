@@ -119,18 +119,14 @@ module.exports = {
                 let dailyLimit = oneUser.filter(oneDay => oneDay.status === 0);
                 let doNotSafe = oneUser.filter(oneDay => oneDay.status === 2);
 
-
-                if (dailyLimit.length === 3 && user.level >= 1) {
-                    User.findByIdAndUpdate(user._id, { $inc: { level: 1 } }, (err) => {
-                        if (err) throw err;
-                    })
-
-
+                // Daily Limit Achieve Activity Update
+                const lastDateStep = user.stepstatus.slice(-1);
+                if (lastDateStep[0].status === 1) {
                     const activity = new Activity({
-                        activitytitle: `${user.fname} reached to Level ${user.level + 1}`,
+                        activitytitle: `${user.fname} reached his Daily Limit!`,
                         for: `level`,
                         reaction: [],
-                        photovalue: `${user.level + 1}`,
+                        photovalue: `DLR`,
                         userid: user._id
                     })
 
@@ -140,23 +136,43 @@ module.exports = {
                     })
                 }
 
-                if (doNotSafe.length === 3 && user.level > 1) {
-                    User.findByIdAndUpdate(user._id, { $inc: { level: -1 } }, (err) => {
-                        if (err) throw err;
-                    })
-                    const activity = new Activity({
-                        activitytitle: `${user.fname} down to Level ${user.level - 1}`,
-                        for: `level`,
-                        reaction: [],
-                        photovalue: `-${user.level - 1}`,
-                        userid: user._id
-                    })
 
-                    activity.save((err, items) => {
-                        if (err) { throw err }
-                        // console.log('Activity Added successfully');
-                    })
-                }
+                // if (dailyLimit.length === 3 && user.level >= 1) {
+                //     User.findByIdAndUpdate(user._id, { $inc: { level: 1 } }, (err) => {
+                //         if (err) throw err;
+                //     })
+
+                //     const activity = new Activity({
+                //         activitytitle: `${user.fname} reached to Level ${user.level + 1}`,
+                //         for: `level`,
+                //         reaction: [],
+                //         photovalue: `${user.level + 1}`,
+                //         userid: user._id
+                //     })
+
+                //     activity.save((err, items) => {
+                //         if (err) { throw err }
+                //         // console.log('Activity Added successfully');
+                //     })
+                // }
+
+                // if (doNotSafe.length === 3 && user.level > 1) {
+                //     User.findByIdAndUpdate(user._id, { $inc: { level: -1 } }, (err) => {
+                //         if (err) throw err;
+                //     })
+                //     const activity = new Activity({
+                //         activitytitle: `${user.fname} down to Level ${user.level - 1}`,
+                //         for: `level`,
+                //         reaction: [],
+                //         photovalue: `-${user.level - 1}`,
+                //         userid: user._id
+                //     })
+
+                //     activity.save((err, items) => {
+                //         if (err) { throw err }
+                //         // console.log('Activity Added successfully');
+                //     })
+                // }
             });
         })
 
@@ -172,7 +188,7 @@ module.exports = {
         User.findOneAndUpdate({ _id: uid }, {
             $inc: {
                 todaysteps: parseInt(step),
-                todaykm: km,
+                todaykm: parseInt(km) / 1000,
                 calorie: parseInt(calorie)
             }
         }, { new: true }, (err, items) => {
