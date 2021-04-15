@@ -56,9 +56,8 @@ module.exports = {
     paymentCapture: (req, res) => {
 
         const { paymentId, ammount } = req.body
-
-
-        instance.payments.capture(paymentId, ammount*100, 'INR', (err) => {
+        
+        instance.payments.capture(paymentId, ammount, 'INR', (err) => {
             if (err) {
                 return res.status(400).json({
                     success: false
