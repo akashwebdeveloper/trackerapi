@@ -67,12 +67,28 @@ schedule.scheduleJob('0 5 0 * * *', function () {
             let dailyLimit = oneUser.filter(oneDay => oneDay.status === 0);
             let doNotSafe = oneUser.filter(oneDay => oneDay.status === 2);
 
+            // Daily Limit Achieve Activity Update
+            const lastDateStep = user.stepstatus.slice(-1);
+            if (lastDateStep[0].status === 1) {
+                const activity = new Activity({
+                    activitytitle: `${user.fname} reached his Daily Limit!`,
+                    for: `level`,
+                    reaction: [],
+                    photovalue: `DLR`,
+                    userid: user._id
+                })
+
+                activity.save((err, items) => {
+                    if (err) { throw err }
+                    // console.log('Activity Added successfully');
+                })
+            }
+
 
             if (dailyLimit.length === 3 && user.level >= 1) {
                 User.findByIdAndUpdate(user._id, { $inc: { level: 1 } }, (err) => {
                     if (err) throw err;
                 })
-
 
                 const activity = new Activity({
                     activitytitle: `${user.fname} reached to Level ${user.level + 1}`,
@@ -137,42 +153,42 @@ module.exports = {
                 }
 
 
-                // if (dailyLimit.length === 3 && user.level >= 1) {
-                //     User.findByIdAndUpdate(user._id, { $inc: { level: 1 } }, (err) => {
-                //         if (err) throw err;
-                //     })
+                if (dailyLimit.length === 3 && user.level >= 1) {
+                    User.findByIdAndUpdate(user._id, { $inc: { level: 1 } }, (err) => {
+                        if (err) throw err;
+                    })
 
-                //     const activity = new Activity({
-                //         activitytitle: `${user.fname} reached to Level ${user.level + 1}`,
-                //         for: `level`,
-                //         reaction: [],
-                //         photovalue: `${user.level + 1}`,
-                //         userid: user._id
-                //     })
+                    const activity = new Activity({
+                        activitytitle: `${user.fname} reached to Level ${user.level + 1}`,
+                        for: `level`,
+                        reaction: [],
+                        photovalue: `${user.level + 1}`,
+                        userid: user._id
+                    })
 
-                //     activity.save((err, items) => {
-                //         if (err) { throw err }
-                //         // console.log('Activity Added successfully');
-                //     })
-                // }
+                    activity.save((err, items) => {
+                        if (err) { throw err }
+                        // console.log('Activity Added successfully');
+                    })
+                }
 
-                // if (doNotSafe.length === 3 && user.level > 1) {
-                //     User.findByIdAndUpdate(user._id, { $inc: { level: -1 } }, (err) => {
-                //         if (err) throw err;
-                //     })
-                //     const activity = new Activity({
-                //         activitytitle: `${user.fname} down to Level ${user.level - 1}`,
-                //         for: `level`,
-                //         reaction: [],
-                //         photovalue: `-${user.level - 1}`,
-                //         userid: user._id
-                //     })
+                if (doNotSafe.length === 3 && user.level > 1) {
+                    User.findByIdAndUpdate(user._id, { $inc: { level: -1 } }, (err) => {
+                        if (err) throw err;
+                    })
+                    const activity = new Activity({
+                        activitytitle: `${user.fname} down to Level ${user.level - 1}`,
+                        for: `level`,
+                        reaction: [],
+                        photovalue: `-${user.level - 1}`,
+                        userid: user._id
+                    })
 
-                //     activity.save((err, items) => {
-                //         if (err) { throw err }
-                //         // console.log('Activity Added successfully');
-                //     })
-                // }
+                    activity.save((err, items) => {
+                        if (err) { throw err }
+                        // console.log('Activity Added successfully');
+                    })
+                }
             });
         })
 
@@ -218,8 +234,17 @@ module.exports = {
             })
 
 
-            const todaysteps = { date: moment().format(), step: parseInt(step) };
-            const todayEarning = { date: moment().format(), for: `${step} steps`, reason: 0, coin: parseFloat((parseInt(step) * perStepCoin), 2) };
+            const todaysteps = { 
+                date: moment().format(),
+                step: parseInt(step) 
+            };
+
+            const todayEarning = {
+                date: moment().format(),
+                for: `${step} steps`,
+                reason: 0,
+                coin: parseFloat((parseInt(step) * perStepCoin), 2)
+            };
 
 
 
@@ -435,15 +460,16 @@ module.exports = {
             }
 
             var totalStep = 0;
-            result.progress.forEach((daily, index) => {
+            var averageStep = 0;
+            if (result.progress.length) {
+                result.progress.forEach((daily, index) => {
+                    // User total Steps
+                    totalStep += parseInt(daily.step)
+                });
+                // User Average Steps
+                averageStep = (Math.round(totalStep / result.progress.length) < 0) ? 0 : Math.round(totalStep / result.progress.length);
+            }
 
-                // User total Steps
-                totalStep += parseInt(daily.step)
-
-            });
-
-            // User Average Steps
-            const averageStep = Math.round(totalStep / result.progress.length);
 
             return res.status(201).json({
                 success: true,
@@ -451,8 +477,6 @@ module.exports = {
                 totalStep,
                 averageStep
             })
-
-
         })
     },
     reaction: (req, res) => {
@@ -567,7 +591,7 @@ module.exports = {
                     activity.push(pushActivity)
                 })
 
-                const sortedArray = activity.sort((a, b) =>  new moment(b.donotuse).format('YYYYMMDD') - new moment(a.donotuse).format('YYYYMMDD'))
+                const sortedArray = activity.sort((a, b) => new moment(b.donotuse).format('YYYYMMDD') - new moment(a.donotuse).format('YYYYMMDD'))
 
 
                 return res.status(201).json({

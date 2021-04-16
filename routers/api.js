@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const { signup, phone, verify, register, register1, resendotp } = require('../controller/auth/phoneController')
+const { signup } = require('../controller/auth/phoneController')
+// const { signup, phone, verify, register, register1, resendotp } = require('../controller/auth/phoneController')
 
 const { oneUser } = require('../controller/notify')
 // const { oneUser, multiUser } = require('../controller/notify')
@@ -17,9 +18,9 @@ const { testing, todayprogress, updates, progressgraph,weeklyProgressGraph, tota
 const { getAllChallenges, challengedetails, joinchallenge, userChallenges, challengeRanking } = require('../controller/users/challenges')
 
 // Phone OTP verification
-router.get('/phone/', phone)
-router.get('/verify/', verify)
-router.get('/resendotp/', resendotp)
+// router.get('/phone/', phone)
+// router.get('/verify/', verify)
+// router.get('/resendotp/', resendotp)
 
 // Insert data into database
 router.post('/signup', signup)
@@ -43,7 +44,7 @@ router.post('/oneuser', oneUser)
 
 
 // if number is register then send otp
-router.post('/register', register)
+// router.post('/register', register)
 
 
 // Update user data

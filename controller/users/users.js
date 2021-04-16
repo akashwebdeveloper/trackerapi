@@ -57,7 +57,8 @@ module.exports = {
                 })
             }
             const stepStatus = [];
-            users.stepstatus.forEach(status => {
+            const stepstatus = users.stepstatus.slice(-7);
+            stepstatus.forEach(status => {
                 var pushObj = {};
                 pushObj.date = moment(status.date).format('ddd')
                 pushObj.status = status.status
@@ -84,9 +85,9 @@ module.exports = {
                 photos: users.photos,
                 weight: users.weight,
                 height: users.height,
-                countrycode: users.countrycode,
+                // countrycode: users.countrycode,
                 referralcode: users.referralcode,
-                phone: users.phone,
+                // phone: users.phone,
                 stepStatus
             };
 
