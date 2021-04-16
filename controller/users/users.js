@@ -57,6 +57,8 @@ module.exports = {
                 })
             }
             const stepStatus = [];
+
+            // Last Seven Days data 
             const stepstatus = users.stepstatus.slice(-7);
             stepstatus.forEach(status => {
                 var pushObj = {};
@@ -64,7 +66,6 @@ module.exports = {
                 pushObj.status = status.status
 
                 stepStatus.push(pushObj);
-
             });
 
             const data = {
@@ -372,7 +373,7 @@ module.exports = {
                     var pushObj = {};
                     pushObj.date = moment(daily.date).format('DD MMM YYYY')
                     pushObj.content = daily.for
-                    pushObj.coin = daily.coin;
+                    pushObj.coin = daily.coin.toFixed(2);
                     pushObj.isEarned = true;
                     pushObj.donotuse = daily.date;
 
