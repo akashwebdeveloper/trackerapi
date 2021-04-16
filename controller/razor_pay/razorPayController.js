@@ -4,6 +4,7 @@ const Razorpay = require('razorpay');
 const keyId = process.env.RAZOR_PAY_KEY_ID
 const secretKey = process.env.RAZOR_PAY_SECRET
 const Order = require('../../models/order')
+const User = require('../../models/user')
 var instance = new Razorpay({
     key_id: keyId,
     key_secret: secretKey,
@@ -20,7 +21,7 @@ module.exports = {
             try {
 
                 var options = {
-                    amount: order_ammount * 100,   // amount in the smallest currency unit  
+                    amount: parseInt(order_ammount) * 100,   // amount in the smallest currency unit  
                     currency: "INR",
                     receipt: `UBS_money_${order_length}`,
                     payment_capture: 0
@@ -70,9 +71,17 @@ module.exports = {
                 })
             }
 
-            Order.updateOne({ order_id: orderId }, { $set: { payment_id: paymentId, status: 'Success' } }, (err) => {
+            Order.updateOne({ order_id: orderId }, { $set: { payment_id: paymentId, status: 'Success' } }, (err, data) => {
                 if (err) throw err;
 
+                const moneyAdd = {
+                    date: moment().format(),
+                    for: `Added ${ammount/100} Real Coin`,
+                    reason: 'add_money',
+                    coin: (parseInt(ammount)/100)
+                };
+
+                User.find({_id : data.user_id}, )
                 return res.status(200).json({
                     success: true
                 })
