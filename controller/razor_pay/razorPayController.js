@@ -43,7 +43,10 @@ module.exports = {
                     })
 
                     newOrder.save().then(data => {
-                        return res.status(200).json(order)
+                        return res.status(200).json({
+                            keyId,
+                            order
+                        })
                     })
                 });
             } catch (err) {
@@ -55,7 +58,7 @@ module.exports = {
     },
     paymentCapture: (req, res) => {
 
-        const { paymentId, ammount } = req.body
+        const { paymentId, ammount, orderId } = req.body
         
         instance.payments.capture(paymentId, ammount, 'INR', (err) => {
             if (err) {
@@ -63,10 +66,15 @@ module.exports = {
                     success: false
                 })
             }
-            return res.status(200).json({
-                success: true
+
+            Order.updateOne({order_id:orderId}, {$set: {payment_id: paymentId, status: 'Success'}}, (err)=>{
+                if (err) throw err;
+
+                return res.status(200).json({
+                    success: true
+                })
             })
+            
         })
     },
-
 }

@@ -7,6 +7,7 @@ const orderSchema = new Schema({
     receipt: { type: String },
     status: { type: String },
     order_ammount: { type: Number },
+    payment_id: { type: String },
     user_id:{type: ObjectId, ref:"User"},
 }, { timestamps: true });
 
