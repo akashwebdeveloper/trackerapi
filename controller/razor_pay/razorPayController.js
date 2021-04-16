@@ -59,22 +59,24 @@ module.exports = {
     paymentCapture: (req, res) => {
 
         const { paymentId, ammount, orderId } = req.body
-        
+
         instance.payments.capture(paymentId, ammount, 'INR', (err) => {
             if (err) {
-                return res.status(400).json({
-                    success: false
+                Order.updateOne({ order_id: orderId }, { $set: { payment_id: paymentId, status: 'failed' } }, (err) => {
+                    if (err) throw err;
+                    return res.status(400).json({
+                        success: false
+                    })
                 })
             }
 
-            Order.updateOne({order_id:orderId}, {$set: {payment_id: paymentId, status: 'Success'}}, (err)=>{
+            Order.updateOne({ order_id: orderId }, { $set: { payment_id: paymentId, status: 'Success' } }, (err) => {
                 if (err) throw err;
 
                 return res.status(200).json({
                     success: true
                 })
             })
-            
         })
     },
 }

@@ -30,6 +30,8 @@ const userSchema = new Schema({
     challenges: { type:Array },
     earnedcoin: { type:Array },
     spendcoin: { type:Array },
+    earnedrealcoin: { type:Array },
+    spendrealcoin: { type:Array },
     level: { type:Number, default: 1 },
 }, { timestamps: true });
 
