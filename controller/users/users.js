@@ -148,7 +148,7 @@ module.exports = {
         })
     },
     update: (req, res) => {
-        const { id, type, fname, lname, username, weight, height, token, status } = req.body
+        const { id, fname, lname, username, weight, height, status } = req.body
 
         if (id.substr(id.length - 3) == 'com') {
             var EMAIL = req.body.id
@@ -176,15 +176,11 @@ module.exports = {
             }
 
             const user = new User({
-                type: type || users[0].type,
                 fname: fname || users[0].fname,
                 lname: lname || users[0].lname,
                 username: username || users[0].username,
-                // dob: dob || users[0].dob,
-                // gender: gender || users[0].gender,
                 weight: weight || users[0].weight,
                 height: height || users[0].height,
-                token: token || users[0].token,
                 status: status || users[0].status,
             })
 
