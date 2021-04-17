@@ -73,6 +73,8 @@ module.exports = {
             } else {
                 Order.updateOne({ order_id: orderId }, { $set: { payment_id: paymentId, status: 'Success' } }, (err, data) => {
                     if (err) throw err;
+                    console.log(data);
+                    
 
                     const moneyAdd = {
                         date: moment().format(),
@@ -81,8 +83,11 @@ module.exports = {
                         coin: (parseInt(ammount) / 100)
                     };
 
-                    User.findOneAndUpdate({ _id: data.user_id }, { $push: { realcoin: moneyAdd } }, (err) => {
+                    User.findOneAndUpdate({ _id: data.user_id }, { $push: { realcoin: moneyAdd } }, (err, data) => {
                         if (err) throw err;
+                        console.log(err);
+                        console.log(data);
+                        
                         return res.status(200).json({
                             success: true
                         })
