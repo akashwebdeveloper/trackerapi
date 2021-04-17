@@ -129,74 +129,91 @@ schedule.scheduleJob('0 5 0 * * *', function () {
 
 module.exports = {
     testing: (req, res) => {
-        User.find({}, ['stepstatus', 'level', 'fname'], (err, data) => {
-            data.forEach(user => {
-                const oneUser = user.stepstatus.slice(-3);
-                let dailyLimit = oneUser.filter(oneDay => oneDay.status === 0);
-                let doNotSafe = oneUser.filter(oneDay => oneDay.status === 2);
+        // User.find({}, ['stepstatus', 'level', 'fname'], (err, data) => {
+        //     data.forEach(user => {
+        //         const oneUser = user.stepstatus.slice(-3);
+        //         let dailyLimit = oneUser.filter(oneDay => oneDay.status === 0);
+        //         let doNotSafe = oneUser.filter(oneDay => oneDay.status === 2);
 
-                // Daily Limit Achieve Activity Update
-                const lastDateStep = user.stepstatus.slice(-1);
-                if (lastDateStep[0].status === 1) {
-                    const activity = new Activity({
-                        activitytitle: `${user.fname} reached his Daily Limit!`,
-                        for: `level`,
-                        reaction: [],
-                        photovalue: `DLR`,
-                        userid: user._id
-                    })
+        //         // Daily Limit Achieve Activity Update
+        //         const lastDateStep = user.stepstatus.slice(-1);
+        //         if (lastDateStep[0].status === 1) {
+        //             const activity = new Activity({
+        //                 activitytitle: `${user.fname} reached his Daily Limit!`,
+        //                 for: `level`,
+        //                 reaction: [],
+        //                 photovalue: `DLR`,
+        //                 userid: user._id
+        //             })
 
-                    activity.save((err, items) => {
-                        if (err) { throw err }
-                        // console.log('Activity Added successfully');
-                    })
-                }
+        //             activity.save((err, items) => {
+        //                 if (err) { throw err }
+        //                 // console.log('Activity Added successfully');
+        //             })
+        //         }
 
 
-                if (dailyLimit.length === 3 && user.level >= 1) {
-                    User.findByIdAndUpdate(user._id, { $inc: { level: 1 } }, (err) => {
-                        if (err) throw err;
-                    })
+        //         if (dailyLimit.length === 3 && user.level >= 1) {
+        //             User.findByIdAndUpdate(user._id, { $inc: { level: 1 } }, (err) => {
+        //                 if (err) throw err;
+        //             })
 
-                    const activity = new Activity({
-                        activitytitle: `${user.fname} reached to Level ${user.level + 1}`,
-                        for: `level`,
-                        reaction: [],
-                        photovalue: `${user.level + 1}`,
-                        userid: user._id
-                    })
+        //             const activity = new Activity({
+        //                 activitytitle: `${user.fname} reached to Level ${user.level + 1}`,
+        //                 for: `level`,
+        //                 reaction: [],
+        //                 photovalue: `${user.level + 1}`,
+        //                 userid: user._id
+        //             })
 
-                    activity.save((err, items) => {
-                        if (err) { throw err }
-                        // console.log('Activity Added successfully');
-                    })
-                }
+        //             activity.save((err, items) => {
+        //                 if (err) { throw err }
+        //                 // console.log('Activity Added successfully');
+        //             })
+        //         }
 
-                if (doNotSafe.length === 3 && user.level > 1) {
-                    User.findByIdAndUpdate(user._id, { $inc: { level: -1 } }, (err) => {
-                        if (err) throw err;
-                    })
-                    const activity = new Activity({
-                        activitytitle: `${user.fname} down to Level ${user.level - 1}`,
-                        for: `level`,
-                        reaction: [],
-                        photovalue: `-${user.level - 1}`,
-                        userid: user._id
-                    })
+        //         if (doNotSafe.length === 3 && user.level > 1) {
+        //             User.findByIdAndUpdate(user._id, { $inc: { level: -1 } }, (err) => {
+        //                 if (err) throw err;
+        //             })
+        //             const activity = new Activity({
+        //                 activitytitle: `${user.fname} down to Level ${user.level - 1}`,
+        //                 for: `level`,
+        //                 reaction: [],
+        //                 photovalue: `-${user.level - 1}`,
+        //                 userid: user._id
+        //             })
 
-                    activity.save((err, items) => {
-                        if (err) { throw err }
-                        // console.log('Activity Added successfully');
-                    })
-                }
-            });
+        //             activity.save((err, items) => {
+        //                 if (err) { throw err }
+        //                 // console.log('Activity Added successfully');
+        //             })
+        //         }
+        //     });
+        // })
+const {uid , ammount} = req.body
+        const moneyAdd = {
+            date: moment().format(),
+            for: `Added ${ammount/100} Real Coin`,
+            reason: 'add_money',
+            coin: (parseInt(ammount)/100)
+        };
+
+        User.findOneAndUpdate({_id : uid}, {$push: {realcoin : moneyAdd}}, (err, data)=>{
+            if (err) throw err;
+            console.log(data);
+            
+            
+            return res.status(200).json({
+                success: true
+            })
         })
 
 
 
-        return res.status(200).json({
-            status: true
-        })
+        // return res.status(200).json({
+        //     status: true
+        // })
     },
     todayprogress: (req, res) => {
         const { uid, step, km, calorie } = req.body
