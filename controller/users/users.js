@@ -483,5 +483,72 @@ module.exports = {
             })
         })
     },
+    realCoinDetails: (req, res) => {
+        const { uid } = req.body
+
+        User.findById(uid, ['realcoin', 'spendrealcoin'], (err, items) => {
+
+            var addedRealCoin = 0;
+            var spendRealcoin = 0;
+            var currentcoin;
+            var transaction = [];
+
+
+            if (items.realcoin) {
+                items.realcoin.forEach(daily => {
+                    var pushObj = {};
+                    pushObj.date = moment(daily.date).format('DD MMM YYYY')
+                    pushObj.content = daily.for
+                    pushObj.coin = daily.coin.toFixed(2);
+                    pushObj.isEarned = true;
+                    pushObj.donotuse = daily.date;
+
+
+                    transaction.push(pushObj);
+
+
+                    // User total Real Coin
+                    addedRealCoin += daily.coin
+                });
+            } 
+
+
+            if (items.spendrealcoin) {
+                items.spendrealcoin.forEach((daily) => {
+
+                    var pushObj = {};
+                    pushObj.date = moment(daily.date).format('DD MMM YYYY')
+                    pushObj.content = daily.for
+                    pushObj.coin = daily.coin;
+                    pushObj.isEarned = false;
+                    pushObj.donotuse = daily.date;
+
+                    transaction.push(pushObj);
+
+                    // User Total spend coin
+                    spendRealcoin += parseInt(daily.coin)
+                });
+            } 
+
+            // Current Coin
+            currentRealCoin = (addedRealCoin - spendrealcoin).toFixed(2);
+            realCoin = addedRealCoin.toFixed(2);
+            spendRealCoin = spendrealcoin.toFixed(2);
+
+
+            const sortedArray = transaction.sort((a, b) => new moment(a.donotuse).format('YYYYMMDD') - new moment(b.donotuse).format('YYYYMMDD'));
+
+            return res.status(200).json({
+                success: true,
+                message: "Coin Details are here",
+                data: {
+                    transaction: sortedArray,
+                    currentcoin,
+                    addedRealCoin,
+                    spendrealcoin
+                }
+            })
+        })
+    },
 }
 

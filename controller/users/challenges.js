@@ -221,43 +221,54 @@ module.exports = {
                             success: false,
                             status: 202,
                             message: `You have to Add Minimum ${result.entryfee - currentRealCoin} to join the challenge`,
-                            add_minimum: result.entryfee - currentRealCoin
+                            add_minimum: result.entryfee - currentRealCoin,
+                            data: ''
                         })
                     }
 
-                    // User.findByIdAndUpdate(uid, {$set: {}})
+                    const moneySpend = {
+                        date: moment().format(),
+                        for: `Spend ${result.entryfee} Real Coin for join challenge`,
+                        reason: 'Join_challenege',
+                        coin: result.entryfee
+                    };
 
-                    Challenge.findByIdAndUpdate(cid, {
-                        $push: { joined: uid }
-                    }, {
-                        new: true
-                    }).exec((err, result) => {
-                        if (err) {
-                            return res.status(502).json({
-                                success: false,
-                                status: 502,
-                                message: "err from database",
-                                error: err
-                            })
-                        }
+                    User.findByIdAndUpdate(uid, {$push: {spendrealcoin : moneySpend}}, (err)=>{
+                        if (err) throw err;
 
-                        const challengeStart = {
-                            cid: result._id,
-                            cname: result.name,
-                            cgoal: result.goal,
-                            cstart: result.starttime,
-                            cstatus: 0,
-                            cstep: 0
-                        }
-
-
-                        User.findByIdAndUpdate(uid, { $push: { challenges: challengeStart } }, (err, data) => {
-                            if (err) throw err;
-                            return res.status(200).json({
-                                success: true,
-                                status: 200,
-                                message: `Joined successfully this Challenge`,
-                                data: result.joined
+                        Challenge.findByIdAndUpdate(cid, {
+                            $push: { joined: uid }
+                        }, {
+                            new: true
+                        }).exec((err, result) => {
+                            if (err) {
+                                return res.status(502).json({
+                                    success: false,
+                                    status: 502,
+                                    message: "err from database",
+                                    error: err
+                                })
+                            }
+    
+                            const challengeStart = {
+                                cid: result._id,
+                                cname: result.name,
+                                cgoal: result.goal,
+                                cstart: result.starttime,
+                                cstatus: 0,
+                                cstep: 0
+                            }
+    
+    
+                            User.findByIdAndUpdate(uid, { $push: { challenges: challengeStart } }, (err, data) => {
+                                if (err) throw err;
+                                return res.status(200).json({
+                                    success: true,
+                                    status: 200,
+                                    message: `Joined successfully this Challenge`,
+                                    add_minimum: 0,
+                                    data: result.joined
+                                })
                             })
                         })
                     })
