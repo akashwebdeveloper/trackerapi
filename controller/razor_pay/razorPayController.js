@@ -39,7 +39,7 @@ module.exports = {
                     const newOrder = new Order({
                         order_id: order.id,
                         receipt: order.receipt,
-                        order_ammount: order.amount,
+                        order_ammount: order.amount / 100,
                         user_id: uid,
                         status: order.status
                     })
@@ -67,14 +67,13 @@ module.exports = {
                 Order.updateOne({ order_id: orderId }, { $set: { payment_id: paymentId, status: 'failed' } }, (err) => {
                     if (err) throw err;
                     return res.status(400).json({
-                        success: false
+                        success: false,
+                        message: 'message from database'
                     })
                 })
             } else {
-                Order.updateOne({ order_id: orderId }, { $set: { payment_id: paymentId, status: 'Success' } }, (err, data) => {
+                Order.findOneAndUpdate({ order_id: orderId }, { $set: { payment_id: paymentId, status: 'Success' } }, (err, data) => {
                     if (err) throw err;
-                    console.log(data);
-                    
 
                     const moneyAdd = {
                         date: moment().format(),
@@ -83,11 +82,9 @@ module.exports = {
                         coin: (parseInt(ammount) / 100)
                     };
 
-                    User.findOneAndUpdate({ _id: data.user_id }, { $push: { realcoin: moneyAdd } }, (err, data) => {
-                        if (err) throw err;
-                        console.log(err);
-                        console.log(data);
-                        
+                    User.findOneAndUpdate({ _id: data.user_id }, { $push: { realcoin: moneyAdd } }, { new: true }, (err, data) => {
+                        if(err) throw err;
+
                         return res.status(200).json({
                             success: true
                         })
