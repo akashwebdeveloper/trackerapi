@@ -222,7 +222,7 @@ module.exports = {
                             status: 202,
                             message: `You have to Add Minimum ${result.entryfee - currentRealCoin} to join the challenge`,
                             add_minimum: result.entryfee - currentRealCoin,
-                            data: ''
+                            // data: ''
                         })
                     }
 
@@ -267,7 +267,7 @@ module.exports = {
                                     status: 200,
                                     message: `Joined successfully this Challenge`,
                                     add_minimum: 0,
-                                    data: result.joined
+                                    // data: result.joined
                                 })
                             })
                         })
