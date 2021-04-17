@@ -81,9 +81,11 @@ module.exports = {
                     coin: (parseInt(ammount)/100)
                 };
 
-                User.find({_id : data.user_id}, )
-                return res.status(200).json({
-                    success: true
+                User.findOneAndUpdate({_id : data.user_id}, {$push: {realcoin : moneyAdd}}, (err)=>{
+                    if (err) throw err;
+                    return res.status(200).json({
+                        success: true
+                    })
                 })
             })
         })

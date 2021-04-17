@@ -39,11 +39,12 @@ module.exports = {
     },
     createchallenge: (req, res) => {
         
-        const { name, status, goal, reward, starttime, about, expiretime, size, limit } = req.body
+        const { name, status, goal, reward, starttime, about, expiretime, size, limit, fee } = req.body
 
         const challenge = new Challenge({
             name: name,
             status: status,
+            entryfee: fee,
             goal: goal,
             reward: reward,
             starttime: starttime,

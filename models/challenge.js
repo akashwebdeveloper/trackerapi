@@ -5,6 +5,7 @@ const Schema = mongoose.Schema
 const challengeSchema = new Schema({
     name: { type: String },
     status: { type: String },
+    entryfee: { type: Number },
     goal: { type: String },
     reward: { type: String },
     starttime: { type: String },

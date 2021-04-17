@@ -187,7 +187,7 @@ module.exports = {
     joinchallenge: (req, res) => {
         const { uid, cid } = req.body
 
-        Challenge.findById(cid, ['joined'], (err, result) => {
+        Challenge.findById(cid, ['joined', 'entryfee'], (err, result) => {
             if (err) throw err
             if (result.joined.indexOf(uid) !== -1) {
                 return res.status(202).json({
@@ -197,37 +197,67 @@ module.exports = {
                     data: result.joined
                 })
             } else {
-                Challenge.findByIdAndUpdate(cid, {
-                    $push: { joined: uid }
-                }, {
-                    new: true
-                }).exec((err, result) => {
-                    if (err) {
-                        return res.status(502).json({
+                var addedRealCoin = 0;
+                var spendRealCoin = 0;
+                User.findById(uid, ['realcoin', 'spendrealcoin'], (err, data) => {
+                    if (data.realcoin.length) {
+                        data.realcoin.forEach(ecoin => {
+                            addedRealCoin += ecoin.coin
+                        });
+                    }
+
+                    if (data.spendrealcoin.length) {
+                        data.spendrealcoin.forEach(scoin => {
+                            spendRealCoin += scoin.coin
+                        });
+                    }
+
+                    var currentRealCoin = addedRealCoin - spendRealCoin;
+
+                    // Checking that enough balace to join challenge
+                    if (currentRealCoin < result.entryfee) {
+                        return res.status(202).json({
                             success: false,
-                            status: 502,
-                            message: "err from database",
-                            error: err
+                            status: 202,
+                            message: `You have to Add Minimum ${result.entryfee - currentRealCoin} to join the challenge`,
+                            add_minimum: result.entryfee - currentRealCoin
                         })
                     }
 
-                    const challengeStart = {
-                        cid: result._id,
-                        cname: result.name,
-                        cgoal: result.goal,
-                        cstart: result.starttime,
-                        cstatus: 0,
-                        cstep: 0
-                    }
+                    // User.findByIdAndUpdate(uid, {$set: {}})
+
+                    Challenge.findByIdAndUpdate(cid, {
+                        $push: { joined: uid }
+                    }, {
+                        new: true
+                    }).exec((err, result) => {
+                        if (err) {
+                            return res.status(502).json({
+                                success: false,
+                                status: 502,
+                                message: "err from database",
+                                error: err
+                            })
+                        }
+
+                        const challengeStart = {
+                            cid: result._id,
+                            cname: result.name,
+                            cgoal: result.goal,
+                            cstart: result.starttime,
+                            cstatus: 0,
+                            cstep: 0
+                        }
 
 
-                    User.findByIdAndUpdate(uid, { $push: { challenges: challengeStart } }, (err, data) => {
-                        if (err) throw err;
-                        return res.status(200).json({
-                            success: true,
-                            status: 200,
-                            message: `Joined successfully this Challenge`,
-                            data: result.joined
+                        User.findByIdAndUpdate(uid, { $push: { challenges: challengeStart } }, (err, data) => {
+                            if (err) throw err;
+                            return res.status(200).json({
+                                success: true,
+                                status: 200,
+                                message: `Joined successfully this Challenge`,
+                                data: result.joined
+                            })
                         })
                     })
                 })
@@ -250,12 +280,12 @@ module.exports = {
     challengeRanking: (req, res) => {
         const { cid } = req.body
 
-        User.find({ "challenges.cid": mongoose.Types.ObjectId(`${cid}`) },['username','photos','challenges'], (err, data) => {
+        User.find({ "challenges.cid": mongoose.Types.ObjectId(`${cid}`) }, ['username', 'photos', 'challenges'], (err, data) => {
 
             const ranking = [];
             data.forEach(user => {
                 user.challenges.forEach(challenge => {
-                    
+
                     if (String(challenge.cid) === cid) {
                         const pushObj = {
                             _id: user._id,
@@ -267,7 +297,7 @@ module.exports = {
                     }
                 });
             });
-            
+
             const sortedArray = ranking.sort((a, b) => b.step - a.step);
             return res.status(200).json({
                 success: true,
@@ -275,7 +305,7 @@ module.exports = {
                 message: `User All Challenges Update`,
                 ranking: sortedArray
             })
-            
+
 
         })
     },
