@@ -200,13 +200,14 @@ module.exports = {
                 var addedRealCoin = 0;
                 var spendRealCoin = 0;
                 User.findById(uid, ['realcoin', 'spendrealcoin'], (err, data) => {
-                    if (data.realcoin.length) {
+                    
+                    if (data.realcoin) {
                         data.realcoin.forEach(ecoin => {
                             addedRealCoin += ecoin.coin
                         });
                     }
 
-                    if (data.spendrealcoin.length) {
+                    if (data.spendrealcoin) {
                         data.spendrealcoin.forEach(scoin => {
                             spendRealCoin += scoin.coin
                         });
