@@ -4,7 +4,7 @@ const { signup } = require('../controller/auth/phoneController')
 
 const { oneUser } = require('../controller/notify')
 // const { oneUser, multiUser } = require('../controller/notify')
-const { getalldata, getdata, update, emailverification, getAllUsername, syncNumber, getSyncNumber, deleteSyncNumber, coinDetails, friendsRanking, searchUserData} = require('../controller/users/users')
+const { getalldata, getdata, update, emailverification, getAllUsername, syncNumber, getSyncNumber, deleteSyncNumber, coinDetails, realCoinDetails, friendsRanking, searchUserData} = require('../controller/users/users')
 const { follow, unfollow } = require('../controller/users/followController')
 const { updatephoto, upload } = require('../controller/photos/profilephoto')
 const { free, appexclusive, accessories, apparel, electronics, food_beverage, footwear, health_wellness, jewellery, personalcare, sleepsolution, subscription, others } = require('../controller/bazar/bannerController')
@@ -108,6 +108,9 @@ router.post('/reaction', reaction)
 
 // Coin All transactions details
 router.post('/coindetails', coinDetails)
+
+// Real Coin All transactions details
+router.post('/realcoindetails', realCoinDetails)
 
 // Changing Private Account
 router.post('/setprivate', setPrivate)

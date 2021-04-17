@@ -131,10 +131,7 @@ module.exports = {
                                 obj.joined = true
                             } else {
                                 obj.joined = false
-
                             }
-
-
 
 
                             obj._id = challenge._id

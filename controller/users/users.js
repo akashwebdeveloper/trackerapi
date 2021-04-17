@@ -489,7 +489,7 @@ module.exports = {
         User.findById(uid, ['realcoin', 'spendrealcoin'], (err, items) => {
 
             var addedRealCoin = 0;
-            var spendRealcoin = 0;
+            var spendRealCoin = 0;
             var currentcoin;
             var transaction = [];
 
@@ -526,14 +526,14 @@ module.exports = {
                     transaction.push(pushObj);
 
                     // User Total spend coin
-                    spendRealcoin += parseInt(daily.coin)
+                    spendRealCoin += parseInt(daily.coin)
                 });
             } 
 
             // Current Coin
-            currentRealCoin = (addedRealCoin - spendrealcoin).toFixed(2);
-            realCoin = addedRealCoin.toFixed(2);
-            spendRealCoin = spendrealcoin.toFixed(2);
+            currentRealCoin = (addedRealCoin - spendRealCoin).toFixed(2);
+            addedRealCoin = addedRealCoin.toFixed(2);
+            spendRealCoin = spendRealCoin.toFixed(2);
 
 
             const sortedArray = transaction.sort((a, b) => new moment(a.donotuse).format('YYYYMMDD') - new moment(b.donotuse).format('YYYYMMDD'));
@@ -543,9 +543,9 @@ module.exports = {
                 message: "Coin Details are here",
                 data: {
                     transaction: sortedArray,
-                    currentcoin,
+                    currentRealCoin,
                     addedRealCoin,
-                    spendrealcoin
+                    spendRealCoin
                 }
             })
         })

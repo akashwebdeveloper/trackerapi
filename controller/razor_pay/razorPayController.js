@@ -5,6 +5,7 @@ const keyId = process.env.RAZOR_PAY_KEY_ID
 const secretKey = process.env.RAZOR_PAY_SECRET
 const Order = require('../../models/order')
 const User = require('../../models/user')
+const moment = require('moment');
 var instance = new Razorpay({
     key_id: keyId,
     key_secret: secretKey,
@@ -69,25 +70,25 @@ module.exports = {
                         success: false
                     })
                 })
-            }
-
-            Order.updateOne({ order_id: orderId }, { $set: { payment_id: paymentId, status: 'Success' } }, (err, data) => {
-                if (err) throw err;
-
-                const moneyAdd = {
-                    date: moment().format(),
-                    for: `Added ${ammount/100} Real Coin`,
-                    reason: 'add_money',
-                    coin: (parseInt(ammount)/100)
-                };
-
-                User.findOneAndUpdate({_id : data.user_id}, {$push: {realcoin : moneyAdd}}, (err)=>{
+            } else {
+                Order.updateOne({ order_id: orderId }, { $set: { payment_id: paymentId, status: 'Success' } }, (err, data) => {
                     if (err) throw err;
-                    return res.status(200).json({
-                        success: true
+
+                    const moneyAdd = {
+                        date: moment().format(),
+                        for: `Added ${ammount / 100} Real Coin`,
+                        reason: 'add_money',
+                        coin: (parseInt(ammount) / 100)
+                    };
+
+                    User.findOneAndUpdate({ _id: data.user_id }, { $push: { realcoin: moneyAdd } }, (err) => {
+                        if (err) throw err;
+                        return res.status(200).json({
+                            success: true
+                        })
                     })
                 })
-            })
+            }
         })
     },
 }
