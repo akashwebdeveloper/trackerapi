@@ -14,11 +14,13 @@ module.exports = {
     order: (req, res) => {
 
         const { uid, order_ammount } = req.body
-        var order_length = 0;
+        var order_length = 1;
         Order.find({}, async (err, result) => {
             if (err) throw err;
-            await (result.length) ? order_length = result.length + 1 : order_length = 1
-
+            if (result) {
+                order_length = result.length + 1
+            }
+            
             try {
 
                 var options = {

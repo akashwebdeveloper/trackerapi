@@ -5,7 +5,7 @@ const admin = require('../../models/admin');
 const m = moment();
 const schedule = require('node-schedule');
 
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 schedule.scheduleJob('1 * * * * *', function () {
     Challenge.find((err, data) => {
@@ -36,12 +36,54 @@ schedule.scheduleJob('1 * * * * *', function () {
                     '$set': {
                         'challenges.$.cstatus': 2
                     }
-                }, function (err) { if (err) throw err });
-                console.log('StartStatus expired Successfully Updated');
+                }, function (err) {
+                    if (err) throw err;
+
+                    // It will contain all User All Winner User Id of challenege
+                    var winnersId = [];
+
+                    User.find({ "challenges.cid": challenge._id }, ['challenges'], (err, users) => {
+                        if (err) throw err;
+
+                        users.forEach(user => {
+                            user.challenges.forEach(chall => {
+                                if (String(chall.cid) === String(challenge._id) && chall.cstep >= parseInt(challenge.goal)) {
+                                    winnersId.push(String(user._id))
+                                }
+                            })
+                        })
+
+                        // Checking that Is any user win the Challenge or Not
+                        if (winnersId.length) {
+
+                            // Challenge winning ammount for each person
+                            var winningAmmountForEach = ((challenge.joined.length * challenge.entryfee) - ((challenge.joined.length * challenge.entryfee) * 5 / 100)) / winnersId.length
+
+                            // Winning Object
+                            const moneyWin = {
+                                date: moment().format(),
+                                for: `Added ${winningAmmountForEach} Real Coin for winning ${challenge.name} challenge`,
+                                reason: 'win_money',
+                                coin: winningAmmountForEach
+                            };
+
+                            // Adding Winning ammount to all Winning users
+                            User.updateMany({ _id: { $in: winnersId } }, { $push: { realcoin: moneyWin } }, (err) => {
+                                if (err) throw err;
+                                console.log('winnig Ammount Added Successfully');
+                            })
+                        }
+                    })
+                    console.log('StartStatus expired Successfully Updated');
+                });
             }
         });
     })
 });
+
+
+
+
 
 
 module.exports = {
@@ -197,7 +239,7 @@ module.exports = {
                 var addedRealCoin = 0;
                 var spendRealCoin = 0;
                 User.findById(uid, ['realcoin', 'spendrealcoin'], (err, data) => {
-                    
+
                     if (data.realcoin) {
                         data.realcoin.forEach(ecoin => {
                             addedRealCoin += ecoin.coin
@@ -230,7 +272,7 @@ module.exports = {
                         coin: result.entryfee
                     };
 
-                    User.findByIdAndUpdate(uid, {$push: {spendrealcoin : moneySpend}}, (err)=>{
+                    User.findByIdAndUpdate(uid, { $push: { spendrealcoin: moneySpend } }, (err) => {
                         if (err) throw err;
 
                         Challenge.findByIdAndUpdate(cid, {
@@ -246,7 +288,7 @@ module.exports = {
                                     error: err
                                 })
                             }
-    
+
                             const challengeStart = {
                                 cid: result._id,
                                 cname: result.name,
@@ -255,8 +297,8 @@ module.exports = {
                                 cstatus: 0,
                                 cstep: 0
                             }
-    
-    
+
+
                             User.findByIdAndUpdate(uid, { $push: { challenges: challengeStart } }, (err, data) => {
                                 if (err) throw err;
                                 return res.status(200).json({
