@@ -57,7 +57,7 @@ schedule.scheduleJob('1 * * * * *', function () {
                         if (winnersId.length) {
 
                             // Challenge winning ammount for each person
-                            var winningAmmountForEach = ((challenge.joined.length * challenge.entryfee) - ((challenge.joined.length * challenge.entryfee) * 5 / 100)) / winnersId.length
+                            var winningAmmountForEach = (challenge.joined.length < 2) ? challenge.entryfee : ((challenge.joined.length * challenge.entryfee) - ((challenge.joined.length * challenge.entryfee) * 5 / 100)) / winnersId.length
 
                             // Winning Object
                             const moneyWin = {

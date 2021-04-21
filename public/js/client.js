@@ -96,3 +96,42 @@ function rewardLimitCal(userLength) {
 
 
 
+
+
+
+
+
+// ------- F.A.Q. -----------
+  // For Answer of F.A.Q.
+  $(document).ready(function () {
+    var max_input = 20;
+    var x = 1;
+    $('.add-faq').click(function (e) {
+      e.preventDefault();
+      if (x < max_input) { 
+        x++;
+        $('.wrapper1').append(`
+        <div class="input-box">
+          <div class="row">
+          <div class="col-md-11">
+          <textarea class="form-control mb-2" name="answer" placeholder="Step ${x}" id=""></textarea>
+            </div>
+            <a href="#" class="remove-lnk1 mx-auto" alt="Remove" title="Remove"><i class="fa fa-minus minus"></i></a>
+            </div>
+          </div>
+        `);
+      }
+    });
+    $('.wrapper').on("click", ".remove-lnk1", function (e) {
+      e.preventDefault();
+      $(this).parent('div').remove();
+      x--;
+    })
+  });
+// ------- F.A.Q. -----------
+
+
+
+
+
+

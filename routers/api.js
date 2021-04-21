@@ -7,10 +7,10 @@ const { oneUser } = require('../controller/notify')
 const { getalldata, getdata, update, emailverification, getAllUsername, syncNumber, getSyncNumber, deleteSyncNumber, coinDetails, realCoinDetails, friendsRanking, searchUserData} = require('../controller/users/users')
 const { follow, unfollow } = require('../controller/users/followController')
 const { updatephoto, upload } = require('../controller/photos/profilephoto')
-const { free, appexclusive, accessories, apparel, electronics, food_beverage, footwear, health_wellness, jewellery, personalcare, sleepsolution, subscription, others } = require('../controller/bazar/bannerController')
+const { couponcode, free, appexclusive, accessories, apparel, electronics, food_beverage, footwear, health_wellness, jewellery, personalcare, sleepsolution, subscription, others } = require('../controller/bazar/bannerController')
 const { addbookmark, removebookmark, bookmarklist } = require('../controller/bazar/bookmarkController')
 const { like, unlike } = require('../controller/bazar/likeController')
-const { setPrivate } = require('../controller/users/setting')
+const { setPrivate, FAQ } = require('../controller/users/setting')
 const { order, paymentCapture } = require('../controller/razor_pay/razorPayController')
 const { addsEarning, adsCounter } = require('../controller/bazar/adds')
 const { productfullview, details } = require('../controller/bazar/fullviewController')
@@ -70,13 +70,14 @@ router.post('/bannerpersonalcare', personalcare)
 router.post('/bannersleepsolution', sleepsolution)
 router.post('/bannersubscription', subscription)
 router.post('/bannerothers', others)
+router.post('/couponcode', couponcode)
 
 
 // Banner Full view data
 router.post('/productinfo', productfullview)
 
 // Company details
-router.post('/companyinfo', details)
+router.post('/details', details)
 
 // Bookmarks
 router.post('/addbookmark', addbookmark)
@@ -114,6 +115,8 @@ router.post('/realcoindetails', realCoinDetails)
 
 // Changing Private Account
 router.post('/setprivate', setPrivate)
+// FAQ
+router.get('/faq', FAQ)
 
 // Challenges
 router.get('/challenges', getAllChallenges)

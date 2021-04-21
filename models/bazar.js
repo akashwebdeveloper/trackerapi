@@ -32,6 +32,8 @@ const bazarSchema = new Schema({
         offerprice: { type: String },
         website: { type: String }
     },
+    couponcode: { type: String },
+    redeemcoupon:[{type: ObjectId, ref:"User"}],
     expireAt: {
         type: Date,
         default: null,

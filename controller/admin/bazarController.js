@@ -29,7 +29,7 @@ module.exports = {
         return res.render('form', { page_name: 'form', sub_page: 'bazarform' })
     },
     bazar: (req, res, next) => {
-        const { category, itemtype, companyname, discount, discounttitle, discription, website, about, notes, instruction, tc, offerprice, pa, pb, pc, pd, ed } = req.body
+        const { category, itemtype, companyname, discount, discounttitle, discription, website, about, notes, instruction, tc, offerprice, pa, pb, pc, pd, ed, couponcode } = req.body
 
 
         //   for replacing slash 
@@ -81,6 +81,7 @@ module.exports = {
                 instruction: instruction || "",
                 tc: tc || "",
                 offerprice: offerprice || "",
+                couponcode: couponcode || ""
             },
             expireAt: ed
         })

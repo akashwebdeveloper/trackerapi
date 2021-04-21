@@ -490,7 +490,6 @@ module.exports = {
 
             var addedRealCoin = 0;
             var spendRealCoin = 0;
-            var currentcoin;
             var transaction = [];
 
 

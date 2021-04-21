@@ -3,7 +3,7 @@ const { ObjectId } = mongoose.Schema.Types
 const Schema = mongoose.Schema
 
 const userSchema = new Schema({
-    type: { type: String },
+    // type: { type: String },
     private: { type: Boolean, default: false },
     fname: { type: String },
     lname: { type: String },

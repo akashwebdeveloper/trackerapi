@@ -5,6 +5,7 @@ const router = require('express').Router();
 const { login, postLogin, logout  } = require('../controller/admin/authController')
 const { home } = require('../controller/admin/homeController')
 const { usertable } = require('../controller/admin/userController')
+const { getFAQForm, addFAQ } = require('../controller/admin/settingController')
 const { getreferralform, updatereferral } = require('../controller/admin/formController')
 const { getchallengeform, createchallenge, updatechallenge, challengetable, getcategoryform, addCategory, deleteCategory } = require('../controller/admin/formController')
 const { getbazarform, bazar, updatebazar, deletebazar, bazartable, updatebazarform, upload, } = require('../controller/admin/bazarController')
@@ -43,6 +44,12 @@ router.get('/bazartable',auth, bazartable)
 router.get('/usertable',auth, usertable)
 router.get('/challengetable',auth, challengetable)
 // router.get('/bazartable', bazartable)
+
+
+// Settings
+router.get('/getfaqform',auth, getFAQForm)
+router.post('/addfaq', addFAQ)
+
 
 
 router.get('/deletebazar/:id',upload, deletebazar)

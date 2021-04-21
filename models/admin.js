@@ -9,6 +9,7 @@ const adminSchema = new Schema({
     password: { type: String },
     referral: {type: Number},
     category: {type: Array},
+    f_a_q: { type: Array },
 }, { timestamps: true });
 
 

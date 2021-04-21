@@ -47,9 +47,9 @@ module.exports = {
         })
     },
     details: (req, res) => {
-        const { pid } = req.body
+        const { pid, uid } = req.body
 
-        Bazar.findById({ _id: pid }, ['category', 'details'], (err, data) => {
+        Bazar.findById({ _id: pid }, ['category', 'details', 'redeemcoupon', 'couponcode'], (err, data) => {
             // User.findOne({ email: email }, (err, users) => {
 
             if (err) {
@@ -68,12 +68,19 @@ module.exports = {
                 })
             }
 
+            var isRedeem = false;
+            if (data.redeemcoupon.indexOf(uid) !== -1) {
+                isRedeem = true;
+            }
+
 
             return res.status(200).json({
                 success: true,
                 status: 200,
                 message: `data available in ${data.category}`,
-                data: data.details
+                data: data.details,
+                isRedeem,
+                couponcode: isRedeem ? data.couponcode : ''
             })
         })
     }

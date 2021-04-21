@@ -1,4 +1,6 @@
 const Bazar = require('../../models/bazar')
+const User = require('../../models/user')
+const moment = require('moment');
 const multer = require('multer');
 fs = require('fs')
 
@@ -546,4 +548,66 @@ module.exports = {
             })
         })
     },
+    couponcode: (req, res) => {
+        const { uid, bid } = req.body
+        Bazar.findById(bid, ['redeemcoupon', 'couponcode', 'details'], (err, result) => {
+            console.log(result);
+            
+            if (err) throw err
+
+                var earnedCoin = 0;
+                var spendCoin = 0;
+                User.findById(uid, ['earnedcoin', 'spendcoin'], (err, data) => {
+
+                    if (data.realcoin) {
+                        data.realcoin.forEach(ecoin => {
+                            earnedCoin += ecoin.coin
+                        });
+                    }
+
+                    if (data.spendcoin) {
+                        data.spendcoin.forEach(scoin => {
+                            spendCoin += scoin.coin
+                        });
+                    }
+
+                    var currentCoin = earnedCoin - spendCoin;
+
+                    // Checking that enough balace to join challenge
+                    if (currentCoin < result.entryfee) {
+                        return res.status(202).json({
+                            success: false,
+                            status: 202,
+                            message: `You have to earned Minimum ${parseInt(result.details.offerprice) - currentCoin} to Redeem the coupon`,
+                            data: ''
+                        })
+                    }
+
+                    const moneySpend = {
+                        date: moment().format(),
+                        for: `Spend ${result.details.offerprice} Coin for Redeem coupon`,
+                        reason: 'redeem_coupon',
+                        coin: parseInt(result.details.offerprice)
+                    };
+
+                    User.findByIdAndUpdate(uid, { $push: { spendcoin: moneySpend } }, (err) => {
+                        if (err) throw err;
+
+                        Bazar.findByIdAndUpdate(bid, {
+                            $push: { redeemcoupon: uid }
+                        }, {
+                            new: true
+                        }).exec((err, result) => {
+                            if (err) throw err;
+                            return res.status(200).json({
+                                success: true,
+                                status: 200,
+                                message: `coupon code`,
+                                data: result.couponcode
+                            })
+                        })
+                    })
+                })
+        })
+    }
 }
