@@ -32,7 +32,6 @@ module.exports = {
                     req.flash('error', info.message)
                     return next(err)
                 }
-
                 return res.redirect(_getRedirectUrl(req))
             })
         })(req, res, next)
