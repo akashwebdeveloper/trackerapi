@@ -386,7 +386,7 @@ module.exports = {
             if (!items.spendcoin.length) {
                 spendcoin = 0;
             } else {
-                items.spend.forEach((daily) => {
+                items.spendcoin.forEach((daily) => {
 
                     var pushObj = {};
                     pushObj.date = moment(daily.date).format('DD MMM YYYY')

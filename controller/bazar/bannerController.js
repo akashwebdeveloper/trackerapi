@@ -559,8 +559,8 @@ module.exports = {
                 var spendCoin = 0;
                 User.findById(uid, ['earnedcoin', 'spendcoin'], (err, data) => {
 
-                    if (data.realcoin) {
-                        data.realcoin.forEach(ecoin => {
+                    if (data.earnedcoin) {
+                        data.earnedcoin.forEach(ecoin => {
                             earnedCoin += ecoin.coin
                         });
                     }
@@ -574,11 +574,11 @@ module.exports = {
                     var currentCoin = earnedCoin - spendCoin;
 
                     // Checking that enough balace to join challenge
-                    if (currentCoin < result.entryfee) {
+                    if (currentCoin < result.details.offerprice) {
                         return res.status(202).json({
                             success: false,
                             status: 202,
-                            message: `You have to earned Minimum ${parseInt(result.details.offerprice) - currentCoin} to Redeem the coupon`,
+                            message: `You have to earned Minimum ${(parseInt(result.details.offerprice) - currentCoin).toFixed(2)} to Redeem the coupon`,
                             data: ''
                         })
                     }

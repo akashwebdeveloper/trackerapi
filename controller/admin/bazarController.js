@@ -48,24 +48,24 @@ module.exports = {
 
         var element = []
         for (let i = 0; i < req.files.photos.length; i++) {
-            element.push(`http://13.213.4.147/${invertSlashes(req.files.photos[i].path)}`)
+            element.push(`http://13.232.51.12/${invertSlashes(req.files.photos[i].path)}`)
         }
 
         var element1 = []
         for (let i = 0; i < req.files.productphoto.length; i++) {
-            element1.push(`http://13.213.4.147/${invertSlashes(req.files.productphoto[i].path)}`)
+            element1.push(`http://13.232.51.12/${invertSlashes(req.files.productphoto[i].path)}`)
         }
 
 
         const bazar = new Bazar({
             category: category || "",
-            disscountbanner: `http://13.213.4.147/${invertSlashes(req.files.disscountbanner[0].path)}` || "",
+            disscountbanner: `http://13.232.51.12/${invertSlashes(req.files.disscountbanner[0].path)}` || "",
             itemtype: itemtype || "",
             companyname: companyname || "",
             discount: discount || "",
             fullview: {
                 productphoto: element1,
-                // companyicon: `http://13.213.4.147/${invertSlashes(req.files.companyicon[0].path)}` || "",
+                // companyicon: `http://13.232.51.12/${invertSlashes(req.files.companyicon[0].path)}` || "",
                 companyname: companyname || "",
                 discounttitle: discounttitle || "",
                 discription: discription || "",
@@ -124,17 +124,17 @@ module.exports = {
 
 
             // Deleting file
-            // var ci = items[0].fullview.companyicon.substr(('http://13.213.4.147/').length, items[0].fullview.companyicon.length);
-            var db = items[0].disscountbanner.substr(('http://13.213.4.147/').length, items[0].disscountbanner.length);
+            // var ci = items[0].fullview.companyicon.substr(('http://13.232.51.12/').length, items[0].fullview.companyicon.length);
+            var db = items[0].disscountbanner.substr(('http://13.232.51.12/').length, items[0].disscountbanner.length);
             var element = []
             var element1 = []
             var disb;
             if (req.files.photos) {
                 for (let i = 0; i < req.files.photos.length; i++) {
-                    element.push(`http://13.213.4.147/${req.files.photos[i].path}`)
+                    element.push(`http://13.232.51.12/${req.files.photos[i].path}`)
                 }
                 for (let i = 0; i < items[0].details.photos.length; i++) {
-                    fs.unlink(items[0].details.photos[i].substr(('http://13.213.4.147/').length, items[0].details.photos[i].length), function (err) {
+                    fs.unlink(items[0].details.photos[i].substr(('http://13.232.51.12/').length, items[0].details.photos[i].length), function (err) {
                         if (err) throw err;
                         console.log(`${i + 1} deleted successfully`);
                     })
@@ -143,10 +143,10 @@ module.exports = {
 
             if (req.files.productphoto) {
                 for (let i = 0; i < req.files.productphoto.length; i++) {
-                    element1.push(`http://13.213.4.147/${req.files.productphoto[i].path}`)
+                    element1.push(`http://13.232.51.12/${req.files.productphoto[i].path}`)
                 }
                 for (let i = 0; i < items[0].fullview.productphoto.length; i++) {
-                    fs.unlink(items[0].fullview.productphoto[i].substr(('http://13.213.4.147/').length, items[0].fullview.productphoto[i].length), function (err) {
+                    fs.unlink(items[0].fullview.productphoto[i].substr(('http://13.232.51.12/').length, items[0].fullview.productphoto[i].length), function (err) {
                         if (err) throw err;
                         console.log(`${i + 1} deleted successfully`);
                     })
@@ -154,7 +154,7 @@ module.exports = {
             }
 
             if (req.files.disscountbanner) {
-                disb = `http://13.213.4.147/${req.files.disscountbanner[0].path}`
+                disb = `http://13.232.51.12/${req.files.disscountbanner[0].path}`
                 if (fs.existsSync(db)) {
                     fs.unlink(db, function (err) {
                         if (err) throw err;
@@ -168,7 +168,7 @@ module.exports = {
             }
 
             // if (req.files.companyicon) {
-            //     coi = `http://13.213.4.147/${req.files.companyicon[0].path}`
+            //     coi = `http://13.232.51.12/${req.files.companyicon[0].path}`
             //     if (fs.existsSync(ci)) {
             //         fs.unlink(ci, function (err) {
             //             if (err) throw err;
@@ -225,13 +225,13 @@ module.exports = {
                 }
 
                 // // Deleting file
-                // var pp = items.fullview.productphoto.substr(('http://13.213.4.147/').length, items.fullview.productphoto.length);
-                // var ci = items.fullview.companyicon.substr(('http://13.213.4.147/').length, items.fullview.companyicon.length);
-                // var db = items.disscountbanner.substr(('http://13.213.4.147/').length, items.disscountbanner.length);
+                // var pp = items.fullview.productphoto.substr(('http://13.232.51.12/').length, items.fullview.productphoto.length);
+                // var ci = items.fullview.companyicon.substr(('http://13.232.51.12/').length, items.fullview.companyicon.length);
+                // var db = items.disscountbanner.substr(('http://13.232.51.12/').length, items.disscountbanner.length);
 
 
                 // for (let i = 0; i < items.details.photos.length; i++) {
-                //     fs.unlink(items.details.photos[i].substr(('http://13.213.4.147/').length, items.details.photos[i].length), function (err) {
+                //     fs.unlink(items.details.photos[i].substr(('http://13.232.51.12/').length, items.details.photos[i].length), function (err) {
                 //         if (err) throw err;
                 //         console.log(`${i + 1} deleted successfully`);
                 //     })
@@ -276,17 +276,17 @@ module.exports = {
             if (err) throw err
 
             // Deleting file
-            var db = items.disscountbanner.substr(('http://13.213.4.147/').length, items.disscountbanner.length);
+            var db = items.disscountbanner.substr(('http://13.232.51.12/').length, items.disscountbanner.length);
 
             for (let i = 0; i < items.details.photos.length; i++) {
-                fs.unlink(items.details.photos[i].substr(('http://13.213.4.147/').length, items.details.photos[i].length), function (err) {
+                fs.unlink(items.details.photos[i].substr(('http://13.232.51.12/').length, items.details.photos[i].length), function (err) {
                     if (err) throw err;
                     console.log(`${i + 1} deleted successfully`);
                 })
             }
 
             for (let i = 0; i < items.fullview.productphoto.length; i++) {
-                fs.unlink(items.fullview.productphoto[i].substr(('http://13.213.4.147/').length, items.fullview.productphoto[i].length), function (err) {
+                fs.unlink(items.fullview.productphoto[i].substr(('http://13.232.51.12/').length, items.fullview.productphoto[i].length), function (err) {
                     if (err) throw err;
                     console.log(`${i + 1} deleted successfully`);
                 })
