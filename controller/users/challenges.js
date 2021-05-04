@@ -140,12 +140,9 @@ module.exports = {
         const { cid, uid } = req.body
 
         Challenge.findOne({ _id: cid }, (err, challenge) => {
+            if (err) throw err;
 
-            if (new Date(challenge.starttime).getTime() >= new Date().getTime()) {
-
-                Challenge.updateOne({ _id: challenge._id }, { $set: { startstatus: 'coming' } }, (err) => {
-                    if (err) throw err;
-
+            if (challenge.startstatus === 'coming') {
                     Challenge.findOne({ _id: cid }, (err, challenge) => {
                         if (err) {
                             return res.status(502).json({
@@ -155,7 +152,7 @@ module.exports = {
                             })
                         }
 
-                        Challenge.find({ _id: cid, joined: { $in: [uid] } }, ['_id'], (err, datas) => {
+                        Challenge.findOne({ _id: cid, joined: { $in: [uid] } }, ['_id'], (err, exist) => {
                             // User.findOne({ email: email }, (err, users) => {
 
                             if (err) {
@@ -169,7 +166,7 @@ module.exports = {
                             const chall = [];
                             const obj = {};
 
-                            if (datas) {
+                            if (exist) {
                                 obj.joined = true
                             } else {
                                 obj.joined = false
@@ -182,6 +179,7 @@ module.exports = {
                             obj.goal = challenge.goal
                             obj.reward = challenge.reward
                             obj.about = challenge.about
+                            obj.entryfee = challenge.entryfee
 
                             const challengeStart = moment(challenge.starttime)
                             const challengeExpire = moment(challenge.expiretime)
@@ -211,11 +209,7 @@ module.exports = {
                             })
                         })
                     })
-                })
             } else {
-                Challenge.updateOne({ _id: challenge._id }, { $set: { startstatus: 'started' } }, (err) => {
-                    if (err) throw err;
-                })
                 return res.status(200).json({
                     success: true,
                     message: `Challenges Has been Started`
