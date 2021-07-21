@@ -1,3 +1,4 @@
+// This is mongodb database connection file
 require('dotenv').config();
 const mongoose = require('mongoose')
 
