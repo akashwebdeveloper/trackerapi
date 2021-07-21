@@ -5,7 +5,6 @@ const m = moment();
 const Activity = require('../../models/activity')
 const base_url = process.env.BASE_URL
 perStepCoin = 0.001;
-
 const level = [
     // 70% in safe point, daily limit depends on perStepCoin
     { level: 1, safePoint: ((2 / perStepCoin) * (70 / 100)), dailyLimit: 2 / perStepCoin, maxCoin: 2 },
@@ -14,7 +13,6 @@ const level = [
     { level: 4, safePoint: ((15 / perStepCoin) * (70 / 100)), dailyLimit: 15 / perStepCoin, maxCoin: 15 },
     { level: 5, safePoint: ((20 / perStepCoin) * (70 / 100)), dailyLimit: 20 / perStepCoin, maxCoin: 20 }
 ];
-
 
 
 
@@ -129,91 +127,19 @@ schedule.scheduleJob('0 5 0 * * *', function () {
 
 module.exports = {
     testing: (req, res) => {
-        // User.find({}, ['stepstatus', 'level', 'fname'], (err, data) => {
-        //     data.forEach(user => {
-        //         const oneUser = user.stepstatus.slice(-3);
-        //         let dailyLimit = oneUser.filter(oneDay => oneDay.status === 0);
-        //         let doNotSafe = oneUser.filter(oneDay => oneDay.status === 2);
-
-        //         // Daily Limit Achieve Activity Update
-        //         const lastDateStep = user.stepstatus.slice(-1);
-        //         if (lastDateStep[0].status === 1) {
-        //             const activity = new Activity({
-        //                 activitytitle: `${user.fname} reached his Daily Limit!`,
-        //                 for: `level`,
-        //                 reaction: [],
-        //                 photovalue: `DLR`,
-        //                 userid: user._id
-        //             })
-
-        //             activity.save((err, items) => {
-        //                 if (err) { throw err }
-        //                 // console.log('Activity Added successfully');
-        //             })
-        //         }
-
-
-        //         if (dailyLimit.length === 3 && user.level >= 1) {
-        //             User.findByIdAndUpdate(user._id, { $inc: { level: 1 } }, (err) => {
-        //                 if (err) throw err;
-        //             })
-
-        //             const activity = new Activity({
-        //                 activitytitle: `${user.fname} reached to Level ${user.level + 1}`,
-        //                 for: `level`,
-        //                 reaction: [],
-        //                 photovalue: `${user.level + 1}`,
-        //                 userid: user._id
-        //             })
-
-        //             activity.save((err, items) => {
-        //                 if (err) { throw err }
-        //                 // console.log('Activity Added successfully');
-        //             })
-        //         }
-
-        //         if (doNotSafe.length === 3 && user.level > 1) {
-        //             User.findByIdAndUpdate(user._id, { $inc: { level: -1 } }, (err) => {
-        //                 if (err) throw err;
-        //             })
-        //             const activity = new Activity({
-        //                 activitytitle: `${user.fname} down to Level ${user.level - 1}`,
-        //                 for: `level`,
-        //                 reaction: [],
-        //                 photovalue: `-${user.level - 1}`,
-        //                 userid: user._id
-        //             })
-
-        //             activity.save((err, items) => {
-        //                 if (err) { throw err }
-        //                 // console.log('Activity Added successfully');
-        //             })
-        //         }
-        //     });
-        // })
-const {uid , ammount} = req.body
-        const moneyAdd = {
-            date: moment().format(),
-            for: `Added ${ammount/100} Real Coin`,
-            reason: 'add_money',
-            coin: (parseInt(ammount)/100)
-        };
-
-        User.findOneAndUpdate({_id : uid}, {$push: {realcoin : moneyAdd}}, (err, data)=>{
-            if (err) throw err;
-            console.log(data);
-            
-            
-            return res.status(200).json({
-                success: true
-            })
-        })
-
-
-
-        // return res.status(200).json({
-        //     status: true
-        // })
+// ! ********************************
+        if (req.body) {
+            console.log(req.body);
+            // Emit event
+            const eventEmitter = req.app.get('eventEmitter');
+            eventEmitter.emit('testupdate', {data: req.body})
+            return res.status(200).json(req.body)
+        }
+        
+    },
+    gettesting: (req, res) => {
+    // ! ********************************
+        res.render('test', {page_name: '',sub_page: '', data: {}})
     },
     todayprogress: (req, res) => {
         const { uid, step, km, calorie } = req.body
@@ -251,9 +177,9 @@ const {uid , ammount} = req.body
             })
 
 
-            const todaysteps = { 
+            const todaysteps = {
                 date: moment().format(),
-                step: parseInt(step) 
+                step: parseInt(step)
             };
 
             const todayEarning = {

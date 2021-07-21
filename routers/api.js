@@ -14,7 +14,7 @@ const { setPrivate, FAQ } = require('../controller/users/setting')
 const { order, paymentCapture } = require('../controller/razor_pay/razorPayController')
 const { addsEarning, adsCounter } = require('../controller/bazar/adds')
 const { productfullview, details } = require('../controller/bazar/fullviewController')
-const { testing, todayprogress, updates, progressgraph,weeklyProgressGraph, totalstep, challengeStepUpdate, getActivity, reaction} = require('../controller/users/steps')
+const { testing, gettesting, todayprogress, updates, progressgraph,weeklyProgressGraph, totalstep, challengeStepUpdate, getActivity, reaction} = require('../controller/users/steps')
 const { getAllChallenges, challengedetails, joinchallenge, userChallenges, challengeRanking } = require('../controller/users/challenges')
 
 // Phone OTP verification
@@ -135,6 +135,7 @@ router.post('/order', order)
 router.post('/paymentcapture', paymentCapture)
 
 router.post('/testing', testing)
+router.get('/testing', gettesting)
 
 
 module.exports = router;

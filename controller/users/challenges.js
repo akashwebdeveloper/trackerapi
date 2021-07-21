@@ -23,7 +23,6 @@ schedule.scheduleJob('1 * * * * *', function () {
                     }, function (err) { if (err) throw err });
                     console.log('StartStatus started Successfully Updated');
                 })
-
             }
 
             if (challenge.startstatus === 'started' && new Date(challenge.expiretime).getTime() <= new Date().getTime()) {

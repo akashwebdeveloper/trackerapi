@@ -15,7 +15,7 @@ const flash = require('express-flash')
 const passport = require('passport')
 var admin = require("firebase-admin")
 var favicon = require('serve-favicon');
-
+const Emitter = require('events');
 
 // Favicon
 app.use(favicon(__dirname + '/public/img/favicon.ico'));
@@ -31,6 +31,10 @@ connectDB();
 const twilioInit = require('./controller/auth/phoneController')
 twilioInit(client)
 
+// ! ********************************
+// EventEmitter
+const eventEmitter = new Emitter();
+app.set('eventEmitter', eventEmitter);
 
 
 app.use(session({
@@ -90,4 +94,18 @@ app.use((req, res) => {
     res.status(404).render('errors/404',{page_name: 'error', sub_page: ''})
 })
 
-app.listen(port, ()=> console.log(`Connected to port ${port}`))
+
+
+// ! ********************************
+var server = app.listen(port, ()=> console.log(`Connected to port ${port}`))
+
+const io = require('socket.io')(server);
+
+io.on("connection", socket => {
+   console.log('connected to socket');
+   
+  });
+
+  eventEmitter.on('testupdate', data =>{
+      io.emit('testupdate', data)
+  })

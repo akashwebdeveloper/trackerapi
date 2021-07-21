@@ -10,6 +10,8 @@ const { getreferralform, updatereferral } = require('../controller/admin/formCon
 const { getchallengeform, createchallenge, updatechallenge, challengetable, getcategoryform, addCategory, deleteCategory } = require('../controller/admin/formController')
 const { getbazarform, bazar, updatebazar, deletebazar, bazartable, updatebazarform, upload, } = require('../controller/admin/bazarController')
 
+
+
 router.get('/', auth, home)
 // router.get('/', home)
 router.get('/login',guest , login)

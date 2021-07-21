@@ -1,5 +1,21 @@
-
+// ! ********************************
+let socket = io();
 // for menu bar expand 
+
+
+// ! ********************************
+socket.on('testupdate', data => {
+  // console.log(data);
+  str = JSON.stringify(data.data);
+  str = JSON.stringify(data.data, null, 4); // (Optional) beautiful indented output.
+  console.log(str); // Logs output to dev tools console.
+  // alert(str); // Displays output using window.alert()
+  document.write(str);
+})
+
+
+
+
 
 document.getElementById('sid').addEventListener("click", function () {
   if (document.getElementById('bo').classList[1] == "sidebar-collapse") {
@@ -42,10 +58,10 @@ function yesnoCheck(that, userLength) {
   if (that.value == "limited") {
     document.getElementById("ifYes").style.display = "block";
     document.getElementById("reward").value = "";
-    
+
     if (size && parseInt(size) > 0 && joinFee && parseInt(joinFee) > 0) {
       document.getElementById("reward").value = parseInt(joinFee) + ((size - 1) * joinFee) - (((size - 1) * joinFee) * 5 / 100)
-    }else{
+    } else {
       document.getElementById("reward").value = '';
     }
   } else {
@@ -62,7 +78,7 @@ function rewardCal(joinFee, userLength) {
   if (limit === "unlimited") {
     if (joinFee && parseInt(joinFee) > 0) {
       document.getElementById("reward").value = parseInt(joinFee) + ((userLength - 1) * joinFee) - (((userLength - 1) * joinFee) * 5 / 100)
-    }else{
+    } else {
       document.getElementById("reward").value = '';
     }
   }
@@ -71,7 +87,7 @@ function rewardCal(joinFee, userLength) {
     var size = document.getElementById("size").value;
     if (size && parseInt(size) > 0 && joinFee && parseInt(joinFee) > 0) {
       document.getElementById("reward").value = parseInt(joinFee) + ((size - 1) * joinFee) - (((size - 1) * joinFee) * 5 / 100)
-    }else{
+    } else {
       document.getElementById("reward").value = '';
     }
   }
@@ -80,11 +96,11 @@ function rewardCal(joinFee, userLength) {
 
 function rewardLimitCal(userLength) {
   var joinFee = parseInt(document.getElementById("fee").value);
-    if (parseInt(userLength) > 0 && joinFee) {
-      document.getElementById("reward").value = joinFee + ((userLength - 1) * joinFee) - (((userLength - 1) * joinFee) * 5 / 100)
-    }else {
-      document.getElementById("reward").value = '';
-    }
+  if (parseInt(userLength) > 0 && joinFee) {
+    document.getElementById("reward").value = joinFee + ((userLength - 1) * joinFee) - (((userLength - 1) * joinFee) * 5 / 100)
+  } else {
+    document.getElementById("reward").value = '';
+  }
 }
 
 // ------ CHALLENGE FORM END--------
@@ -102,15 +118,15 @@ function rewardLimitCal(userLength) {
 
 
 // ------- F.A.Q. -----------
-  // For Answer of F.A.Q.
-  $(document).ready(function () {
-    var max_input = 20;
-    var x = 1;
-    $('.add-faq').click(function (e) {
-      e.preventDefault();
-      if (x < max_input) { 
-        x++;
-        $('.wrapper1').append(`
+// For Answer of F.A.Q.
+$(document).ready(function () {
+  var max_input = 20;
+  var x = 1;
+  $('.add-faq').click(function (e) {
+    e.preventDefault();
+    if (x < max_input) {
+      x++;
+      $('.wrapper1').append(`
         <div class="input-box">
           <div class="row">
           <div class="col-md-11">
@@ -120,14 +136,14 @@ function rewardLimitCal(userLength) {
             </div>
           </div>
         `);
-      }
-    });
-    $('.wrapper').on("click", ".remove-lnk1", function (e) {
-      e.preventDefault();
-      $(this).parent('div').remove();
-      x--;
-    })
+    }
   });
+  $('.wrapper').on("click", ".remove-lnk1", function (e) {
+    e.preventDefault();
+    $(this).parent('div').remove();
+    x--;
+  })
+});
 // ------- F.A.Q. -----------
 
 
